@@ -76,6 +76,17 @@
     .effect-json { margin:4px 0 0; white-space:normal; overflow-wrap:anywhere; font:inherit; color:var(--text); line-height:1.5; }
     .effect-values { display:block; color:var(--text); }
     .effect-item + .effect-item::before { content:" · "; color:var(--muted); }
+    .gap-panel,.plain-explain { border-top:1px solid var(--line); margin-top:17px; padding-top:15px; }
+    .gap-panel h4,.plain-explain h4 { margin:0 0 5px; color:var(--accent); font-family:Georgia,"Times New Roman",serif; font-weight:500; font-size:1rem; }
+    .gap-panel > p,.plain-explain > p { margin:0 0 10px; color:var(--muted); font-size:.82rem; }
+    .gap-table td,.plain-explain td { min-width:120px; }
+    .gap-table td:nth-child(1) { min-width:130px; white-space:nowrap; }
+    .gap-table td:nth-child(2) { min-width:58px; white-space:nowrap; color:var(--accent); font-weight:600; }
+    .gap-list { margin:0; padding-left:18px; }
+    .gap-list li + li { margin-top:5px; }
+    .raise-score { color:var(--muted); }
+    .plain-explain table td:first-child { min-width:150px; color:var(--accent); font-weight:600; }
+    .plain-explain table td:nth-child(2) { min-width:165px; color:var(--muted); }
     th { color:var(--muted); font-weight:500; white-space:nowrap; } td { overflow-wrap:anywhere; }
     .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:7px; }
     .radar-wrap { display:grid; grid-template-columns:minmax(310px,340px) 1fr; gap:22px; align-items:center; }
@@ -132,7 +143,7 @@
   "schema_version": "0.1.0",
   "library_version": "0.1.0",
   "rubric_version": "0.1.0",
-  "generated_at": "2026-08-15T00:41:47.360484+00:00",
+  "generated_at": "2026-08-15T03:06:24.525574+00:00",
   "records": [
     {
       "schema_version": "0.1.0",
@@ -204,7 +215,8 @@
             "source": "paper PDF",
             "location": "pp.1-2, Materials and Methods; Level of Evidence: Prognostic IV",
             "status": "reported"
-          }
+          },
+          "axis": "design"
         },
         {
           "claim": "完全WOMAC症例46人のみを解析し、非応答群が疼痛12人・機能10人と小さい。交絡調整は限定的",
@@ -212,7 +224,8 @@
             "source": "paper PDF",
             "location": "pp.2-4, Fig.1 and Statistical Analysis",
             "status": "reported"
-          }
+          },
+          "axis": "internal_validity"
         },
         {
           "claim": "探索的解析で多重比較補正なし、p<0.05を採用。大きなCIとtype-I errorを著者自身が認める",
@@ -220,7 +233,8 @@
             "source": "paper PDF",
             "location": "pp.4, 9, Discussion/limitations",
             "status": "reported"
-          }
+          },
+          "axis": "statistical_credibility"
         },
         {
           "claim": "疼痛・機能のMCIDをアウトカム定義に使用したが、相対リスクとr2は小さく、絶対効果の予測モデルではない",
@@ -228,7 +242,8 @@
             "source": "paper PDF",
             "location": "pp.3, 7, Table III",
             "status": "reported"
-          }
+          },
+          "axis": "effect_practical"
         },
         {
           "claim": "全例が同一の標準TKAを受けた単施設系で、歩行可能な患者に限定されるため他施設・重症例への移送は制約",
@@ -236,7 +251,8 @@
             "source": "paper PDF",
             "location": "pp.2, 9, Patients and Surgery; limitations",
             "status": "reported"
-          }
+          },
+          "axis": "external_validity"
         },
         {
           "claim": "3Dマーカー、2,000 Hz床反力、100 Hz光学計測、4歩行試行以上、PCA投影は再現可能だが臨床現場には設備が必要",
@@ -244,7 +260,8 @@
             "source": "paper PDF",
             "location": "pp.2-3, Gait Biomechanics",
             "status": "reported"
-          }
+          },
+          "axis": "feasibility"
         },
         {
           "claim": "PCAモデルは既報の標準化母集団から作成し補遺を参照できるが、解析コード・外部検証データは本文にない",
@@ -252,7 +269,8 @@
             "source": "paper PDF",
             "location": "pp.3, 10, PCA description and Appendix",
             "status": "reported"
-          }
+          },
+          "axis": "transparency_reproducibility"
         },
         {
           "claim": "歩行課題そのものの有害事象は報告されず、安全性は決定的介入ではなく未評価に近い",
@@ -260,7 +278,8 @@
             "source": "paper PDF",
             "location": "pp.2-3, gait protocol; no adverse-event section",
             "status": "not_reported"
-          }
+          },
+          "axis": "safety_burden"
         }
       ],
       "tier": {
@@ -429,7 +448,186 @@
         "audit_notes": [
           "前向き単施設の予後コホート（PDF明記）で、PCAは予測候補の探索。手術・アライメントを変更する因果効果ではない。"
         ]
-      }
+      },
+      "radar_gap_analysis": [
+        {
+          "axis": "design",
+          "score": 3,
+          "gaps": [
+            "観察コホートなので、歩行特徴を変える介入を無作為に割り付けていない。",
+            "WOMACが完全な46人だけを解析しており、登録された全患者をそのまま代表していない。",
+            "術後の理学療法の内容・量が統一されておらず、歩行特徴以外の差が結果に混ざりうる。"
+          ],
+          "what_would_raise_score": "全適格例を追跡し、事前に決めた予後モデルを別の施設で検証する。治療法を変える因果効果を知るには無作為化比較が必要。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-2, Materials and Methods; Level of Evidence: Prognostic IV",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "internal_validity",
+          "score": 2,
+          "gaps": [
+            "完全例だけを残したため、欠測のある患者が系統的に外れている可能性がある。",
+            "非応答群が疼痛12人・機能10人と小さく、交絡因子を十分に調整しにくい。",
+            "歩行特徴とWOMAC改善の関連は見えても、他の治療・自然経過を分離できない。"
+          ],
+          "what_would_raise_score": "欠測を扱う解析、十分な症例数、重要な交絡因子を含む事前モデル、独立した検証を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, Fig.1 and Statistical Analysis",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "statistical_credibility",
+          "score": 2,
+          "gaps": [
+            "探索的に多数の歩行成分を調べ、多重比較の補正がない。偶然の陽性が混ざる余地がある。",
+            "MCIDを達成したかの二値化で情報を失い、絶対的な改善量や個人の成功確率を直接示していない。",
+            "信頼区間が広く、予測モデルの校正・識別能・内部検証がない。"
+          ],
+          "what_would_raise_score": "解析計画・主要変数を事前登録し、多重比較、連続アウトカム、絶対リスク、ブートストラップまたは外部検証を追加する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4, 9, Discussion/limitations",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "effect_practical",
+          "score": 3,
+          "gaps": [
+            "WOMACのMCIDを超えたかは患者に意味がある目安だが、歩行PCAを変えたときの治療効果ではない。",
+            "相対リスクとR²は小さく、個人の手術方法やリハ内容を決めるほどの精度ではない。",
+            "歩行の相関変化は示すが、痛み・生活機能をMCID以上に改善する因果効果は測っていない。"
+          ],
+          "what_would_raise_score": "絶対効果、患者が感じる改善、害と負担を含む外部検証済みの予測モデル、または介入試験を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3, 7, Table III",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "external_validity",
+          "score": 2,
+          "gaps": [
+            "単施設・高容量施設で、6 mを介助なしで歩ける一次TKA患者に限られる。",
+            "歩行不能、神経疾患、重い認知・安全上の問題、別の手術・リハ制度への一般化が不明である。",
+            "年齢・重症度・施設・術後ケアの幅が狭く、他集団で同じPCの意味になる保証がない。"
+          ],
+          "what_would_raise_score": "異なる施設・重症度・歩行能力の患者を含め、外部コホートで性能と閾値を確認する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2, 9, Patients and Surgery; limitations",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "feasibility",
+          "score": 2,
+          "gaps": [
+            "2,000 Hz床反力計、光学モーションキャプチャ、標準マーカー、PCA計算環境が必要である。",
+            "専門スタッフが準備・品質管理・PCA投影を行い、術前と1年の2回、各4試行以上を要する。",
+            "費用、検査時間、通常診療への組み込み方、簡易な代替測定が検証されていない。"
+          ],
+          "what_would_raise_score": "必要機器・人員・費用・時間を明示した臨床ワークフローと、低コスト機器での再現性を検証する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-3, Gait Biomechanics",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "transparency_reproducibility",
+          "score": 3,
+          "gaps": [
+            "PCAの標準化母集団と補遺には依存するが、解析コード・生データ・外部検証データが公開されていない。",
+            "別のカメラ・床反力計・操作者でも同じ特徴量になるか不明である。",
+            "個人予測のカットオフや校正式が確立していない。"
+          ],
+          "what_would_raise_score": "コード・匿名化データ・完全な前処理手順を公開し、別施設・別装置で再現と校正を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3, 10, PCA description and Appendix",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "safety_burden",
+          "score": 3,
+          "gaps": [
+            "歩行計測中の有害事象を体系的に集計していない。",
+            "歩行特徴を使って手術方針やリハを変更した場合の害・費用・遅れが検証されていない。",
+            "疲労、疼痛、転倒リスクへの監視基準が研究プロトコルとして定量化されていない。"
+          ],
+          "what_would_raise_score": "有害事象・検査負担・意思決定を変えた場合の利益と害を前向きに記録する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-3, gait protocol; no adverse-event section",
+            "status": "not_reported"
+          }
+        }
+      ],
+      "plain_language_explanations": [
+        {
+          "term": "PCA（主成分分析）",
+          "category": "解析",
+          "plain_language": "歩くときの関節角度や床反力の波形を、似た動きのまとまりに圧縮する方法です。PC1やPC4は「歩き方の特徴を表す新しい物差し」で、体の部位そのものではありません。",
+          "why_it_matters": "多くの波形を少数の数字にできますが、その数字を変えれば治るという意味ではありません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-3, PCA description",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "WOMACのMCID／レスポンダー",
+          "category": "評価アウトカム",
+          "plain_language": "痛みや膝の働きを質問票で測り、「これくらい良くなれば本人にも意味がある」と決めた境目です。レスポンダーは、その境目を超えた人です。",
+          "why_it_matters": "境目を超えたかは分かりやすい一方、少し下の人が全く良くないとは限らず、手術の成功率を直接表しません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.3, WOMAC MCID definition",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "相対リスク（RR）と95%信頼区間",
+          "category": "統計",
+          "plain_language": "二つのグループで「起こりやすさ」を割った数字です。95%信頼区間は、同じ研究を何度も繰り返したときに本当の値がありそうな範囲を表します。",
+          "why_it_matters": "範囲が広いほど個人に当てはめるのが不安定で、RRだけを見て成功確率とは言えません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.7, Table III",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "R²（決定係数）",
+          "category": "統計",
+          "plain_language": "予測に使った特徴が、結果のばらつきをどれくらい説明できたかを示す割合です。R²=0.14なら、ばらつきの約14%を説明したという意味です。",
+          "why_it_matters": "14%の人が治るという意味ではなく、残りの多くは別の要因で決まる可能性があります。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.7, Table III",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "床反力と逆動力学",
+          "category": "解析",
+          "plain_language": "床反力は、足が床を押したときに床から返ってくる力です。体の重さ・動き・床反力から、膝などにかかった力を計算するのが逆動力学です。",
+          "why_it_matters": "体の中の力を直接測らず推定するので、計測器の精度とモデルの仮定に左右されます。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-3, Gait Biomechanics",
+            "status": "reported"
+          }
+        }
+      ]
     },
     {
       "schema_version": "0.1.0",
@@ -510,7 +708,8 @@
             "source": "paper PDF",
             "location": "pp.1-4, Abstract/Methods",
             "status": "reported"
-          }
+          },
+          "axis": "design"
         },
         {
           "claim": "実験1はn=8、実験2は脳卒中1例で、同一被験者の反復・図示が中心。統計的因果推論は不可",
@@ -518,7 +717,8 @@
             "source": "paper PDF",
             "location": "p.4, Experimental Paradigm; pp.8, 13-14",
             "status": "reported"
-          }
+          },
+          "axis": "internal_validity"
         },
         {
           "claim": "内積0.923-0.974等の類似度は高いが、事前の精度閾値・CI・独立テストセットは示されない",
@@ -526,7 +726,8 @@
             "source": "paper PDF",
             "location": "pp.9-10, Table 3; p.14, Table 5",
             "status": "reported"
-          }
+          },
+          "axis": "statistical_credibility"
         },
         {
           "claim": "モデルは筋をバネ、モーメントアーム一定、上腕・前腕長同等などの仮定を置き、動的影響を簡略化",
@@ -534,7 +735,8 @@
             "source": "paper PDF",
             "location": "pp.5-7, Eqs. (5)-(11)",
             "status": "reported"
-          }
+          },
+          "axis": "effect_practical"
         },
         {
           "claim": "若年健常者と脳卒中単例・同世代健常者で、対象・課題・世代の代表性は低い",
@@ -542,7 +744,8 @@
             "source": "paper PDF",
             "location": "p.4, Participants; pp.13-14",
             "status": "reported"
-          }
+          },
+          "axis": "external_validity"
         },
         {
           "claim": "6筋EMG、1000 Hz、10-450 Hz bandpass、整流・平滑化・MVC正規化、モーションキャプチャ100 Hzを明記するが専用装置が必要",
@@ -550,7 +753,8 @@
             "source": "paper PDF",
             "location": "pp.2-4, Apparatus and EMG processing",
             "status": "reported"
-          }
+          },
+          "axis": "feasibility"
         },
         {
           "claim": "数式と装置条件は詳しいが、コード・生データ・外部テスト・SENIAM準拠の完全な再現資料は本文にない",
@@ -558,7 +762,8 @@
             "source": "paper PDF",
             "location": "pp.4-7, Methods; p.15, Future Directions",
             "status": "reported"
-          }
+          },
+          "axis": "transparency_reproducibility"
         },
         {
           "claim": "課題は座位・水平面の上肢運動で、被験者への急性危険は低いが臨床ロボット介入の安全性は未評価",
@@ -566,7 +771,8 @@
             "source": "paper PDF",
             "location": "pp.2-4, apparatus and experiments",
             "status": "reported"
-          }
+          },
+          "axis": "safety_burden"
         }
       ],
       "tier": {
@@ -737,7 +943,186 @@
         "audit_notes": [
           "原著内に健常者8例の学習実験と、健常高齢者1例・脳卒中1例の症例的回復実験が併存する。臨床効果試験ではない。"
         ]
-      }
+      },
+      "radar_gap_analysis": [
+        {
+          "axis": "design",
+          "score": 2,
+          "gaps": [
+            "物理モデルを人の課題に当てはめた実証で、独立した診断精度・比較試験の設計ではない。",
+            "健常者8人と脳卒中1例が中心で、同じ人の反復測定が多い。",
+            "臨床的に役立つ閾値や患者アウトカムを検証する計画ではない。"
+          ],
+          "what_would_raise_score": "独立した患者集団、事前に定めた基準値、比較法、臨床アウトカムを含む検証研究を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-4, Abstract/Methods",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "internal_validity",
+          "score": 2,
+          "gaps": [
+            "無作為化・盲検化・通常リハとの比較がなく、自然回復や練習効果を分けられない。",
+            "脳卒中例が1人なので、個人差や病期の違いを評価できない。",
+            "筋をばねとみなす、モーメントアームを一定とする等の仮定を実測で十分確かめていない。"
+          ],
+          "what_would_raise_score": "複数患者で対照を置き、仮定を直接測定し、測定者・装置を変えた再現性を確認する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.4, Experimental Paradigm; pp.8, 13-14",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "statistical_credibility",
+          "score": 2,
+          "gaps": [
+            "内積類似度が高いという基準や信頼区間が事前に決まっていない。",
+            "独立テストセット、外部検証、多重比較への対応がなく、図示中心の結果が多い。",
+            "nが小さく、推定値の不確実性とモデル誤差を十分に数値化していない。"
+          ],
+          "what_would_raise_score": "事前の精度閾値、信頼区間、独立テスト、再現性・誤差分析、必要症例数を設定する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-10, Table 3; p.14, Table 5",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "effect_practical",
+          "score": 3,
+          "gaps": [
+            "シナジーの似ている度合いはモデルの一致度で、痛み・ADL・歩行が良くなる大きさではない。",
+            "脳卒中1例のFIM・運動時間の変化は自然回復や通常リハの影響を分けられない。",
+            "剛性楕円・仮想軌道に患者にとってのMCIDや治療判断の閾値がない。"
+          ],
+          "what_would_raise_score": "臨床尺度との増分妥当性、患者に意味のある閾値、通常リハとの比較を検証する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-7, Eqs. (5)-(11)",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "external_validity",
+          "score": 1,
+          "gaps": [
+            "若年健常者と脳卒中単例で、上肢の水平面課題に限られる。",
+            "下肢・歩行・整形外科患者・重症度の異なる脳卒中への外挿根拠がない。",
+            "世代、病期、装置、課題が変わったときのモデル安定性が不明である。"
+          ],
+          "what_would_raise_score": "年齢・病期・疾患・上肢下肢・課題を広げた多施設外部検証を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.4, Participants; pp.13-14",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "feasibility",
+          "score": 1,
+          "gaps": [
+            "6筋EMG、モーションキャプチャ、肩固定、水平面の専用課題と解析が必要である。",
+            "電極位置、MVC正規化、モデル計算に熟練者が必要で、通常診療の時間・費用が不明である。",
+            "臨床で使える簡易版、標準ソフト、測定者間手順が確立していない。"
+          ],
+          "what_would_raise_score": "装置・人員・時間を減らした手順と、測定者間・施設間の再現性を検証する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, Apparatus and EMG processing",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "transparency_reproducibility",
+          "score": 3,
+          "gaps": [
+            "数式・装置条件は比較的詳しいが、コード・生データ・外部テストがない。",
+            "SENIAM等の電極配置規約への完全な準拠や偏差がまとめられていない。",
+            "モデル仮定の感度分析と再利用可能な基準データが不足している。"
+          ],
+          "what_would_raise_score": "コード・匿名化EMG・校正データ・完全な電極配置と感度分析を公開する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4-7, Methods; p.15, Future Directions",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "safety_burden",
+          "score": 3,
+          "gaps": [
+            "課題自体の急性リスクは低いが、脳卒中患者に使うロボット・摂動の安全性を調べていない。",
+            "疲労、痛み、転倒、皮膚刺激などの有害事象を体系的に報告していない。",
+            "臨床介入へ拡張した場合の禁忌、停止基準、監視方法がない。"
+          ],
+          "what_would_raise_score": "患者向けの安全監視、停止基準、疲労・疼痛・転倒・皮膚トラブルの前向き記録を追加する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, apparatus and experiments",
+            "status": "reported"
+          }
+        }
+      ],
+      "plain_language_explanations": [
+        {
+          "term": "筋シナジー",
+          "category": "解析・考え方",
+          "plain_language": "脳が筋肉を一本ずつ別々に動かすのではなく、何本かをチームのようにまとめて動かすという考え方です。",
+          "why_it_matters": "チームの組み方が似ていても、力が強くなったり生活が良くなったりしたとは限りません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-4, Introduction and model",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "AA ratio／AA sum",
+          "category": "解析",
+          "plain_language": "縮める筋肉と反対向きに働く筋肉の活動を組み合わせ、関節の目標位置と硬さを推定するための数字です。",
+          "why_it_matters": "EMGから物理量を計算するため、筋をばねとみなすなどの仮定が外れると結果も変わります。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3-5, AA model equations",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "内積類似度",
+          "category": "評価アウトカム",
+          "plain_language": "二つの筋活動パターンがどれくらい同じ向きを向いているかを、0から1に近い数字で表します。1に近いほど形が似ています。",
+          "why_it_matters": "「形が似ている」指標であり、痛みやADLが改善した大きさではありません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-7, similarity analysis",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "エンドポイント剛性の楕円",
+          "category": "評価アウトカム",
+          "plain_language": "手を少し押したとき、方向ごとにどれくらい動きにくいかを測り、強い方向・弱い方向を楕円で描いたものです。",
+          "why_it_matters": "腕をばねのように扱った推定図なので、歩行や実生活の硬さを直接測ったものではありません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.6-8, stiffness ellipse",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "FIM",
+          "category": "評価アウトカム",
+          "plain_language": "食事、着替え、移動などの日常生活を、どれくらい自分でできるか点数にする尺度です。",
+          "why_it_matters": "この研究では脳卒中1人の変化なので、モデルの効果だと切り分けられません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8-9, stroke case",
+            "status": "reported"
+          }
+        }
+      ]
     },
     {
       "schema_version": "0.1.0",
@@ -805,7 +1190,8 @@
             "source": "paper PDF",
             "location": "p.1, Abstract and section 1",
             "status": "reported"
-          }
+          },
+          "axis": "design"
         },
         {
           "claim": "引用研究の選択・検索・除外手順や事前プロトコルは記載されず、ナラティブ選択バイアスを評価できない",
@@ -813,7 +1199,8 @@
             "source": "paper PDF",
             "location": "pp.1-14, no systematic search methods section",
             "status": "not_reported"
-          }
+          },
+          "axis": "internal_validity"
         },
         {
           "claim": "ΔV=(VUCM−VORT)/VTOTなどの定義と三つの練習シナリオは明確だが、レビュー全体の定量統合やCIはない",
@@ -821,7 +1208,8 @@
             "source": "paper PDF",
             "location": "pp.3, 8-10, Fig.1 and Fig.5",
             "status": "reported"
-          }
+          },
+          "axis": "statistical_credibility"
         },
         {
           "claim": "複数の先行研究が強化・不変・弱化の全シナリオを示すと要約され、因果的な段階順序は仮説として扱われる",
@@ -829,7 +1217,8 @@
             "source": "paper PDF",
             "location": "pp.8-10, section 7-8",
             "status": "reported"
-          }
+          },
+          "axis": "effect_practical"
         },
         {
           "claim": "研究対象は指・上肢等の課題で、整形外科リハや神経疾患への直接一般化は制約",
@@ -837,7 +1226,8 @@
             "source": "paper PDF",
             "location": "pp.7-10, cited experimental examples",
             "status": "reported"
-          }
+          },
+          "axis": "external_validity"
         },
         {
           "claim": "UCM解析は実装可能な分散指標を提示するが、λメータ等の測定限界が明記される",
@@ -845,7 +1235,8 @@
             "source": "paper PDF",
             "location": "pp.4, 7, section 5",
             "status": "reported"
-          }
+          },
+          "axis": "feasibility"
         },
         {
           "claim": "図と数式は再現できるが、論文選択を再現する検索式・データセットはなし",
@@ -853,7 +1244,8 @@
             "source": "paper PDF",
             "location": "pp.1-19; References",
             "status": "reported"
-          }
+          },
+          "axis": "transparency_reproducibility"
         },
         {
           "claim": "理論上の介入示唆はあるが、安全性や臨床負担を評価する研究ではない",
@@ -861,7 +1253,8 @@
             "source": "paper PDF",
             "location": "pp.9-11, Final comments",
             "status": "not_reported"
-          }
+          },
+          "axis": "safety_burden"
         }
       ],
       "tier": {
@@ -875,7 +1268,7 @@
         ],
         "model_proposed_label": "D3",
         "caps_applied": [],
-        "quality_mean": 2.0
+        "quality_mean": 2
       },
       "outcomes": [
         {
@@ -1003,7 +1396,186 @@
         "audit_notes": [
           "PDFはナラティブレビュー／理論提案であり、統合効果量を持たない。CONの仮説生成として扱った。"
         ]
-      }
+      },
+      "radar_gap_analysis": [
+        {
+          "axis": "design",
+          "score": 3,
+          "gaps": [
+            "理論を統合するナラティブレビューで、効果を推定する系統的レビューの設計ではない。",
+            "対象課題・対象者・練習期間が先行研究ごとに異なり、共通の比較条件がない。",
+            "患者の訓練量や臨床アウトカムを直接測る研究ではない。"
+          ],
+          "what_would_raise_score": "検索・選択基準を事前登録し、研究ごとのデザインをそろえた系統的レビューまたは検証実験を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.1, Abstract and section 1",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "internal_validity",
+          "score": 2,
+          "gaps": [
+            "検索式、除外基準、研究選択の網羅性が確認できず、引用の選び方の偏りを評価できない。",
+            "先行研究のリスク・バイアスを共通基準で再評価していない。",
+            "段階の順番という理論解釈を、代替説明や反証例と同じように比較していない。"
+          ],
+          "what_would_raise_score": "再現可能な検索と二重選択、研究ごとのバイアス評価、反証・代替モデルの比較を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-14, no systematic search methods section",
+            "status": "not_reported"
+          }
+        },
+        {
+          "axis": "statistical_credibility",
+          "score": 1,
+          "gaps": [
+            "研究結果を統合した効果量・信頼区間・確実性がない。",
+            "ΔVの計算条件、元素変数、階層レベルが研究間で異なり、値を単純比較できない。",
+            "段階1→段階2という順序を統計的に検定する事前基準がない。"
+          ],
+          "what_would_raise_score": "共通プロトコル、定量統合、感度分析、段階判定の事前基準と信頼区間を設定する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3, 8-10, Fig.1 and Fig.5",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "effect_practical",
+          "score": 3,
+          "gaps": [
+            "ΔVやgood variabilityは運動の仕組みを見る指標で、患者の痛み・歩行・ADLの改善量ではない。",
+            "MCIDや「この値なら治療を変える」という臨床閾値がない。",
+            "練習回数・強度・休息などの処方量を決めるデータがない。"
+          ],
+          "what_would_raise_score": "患者報告・機能アウトカムと結びつけ、課題別の意味のある閾値と処方量を検証する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8-10, section 7-8",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "external_validity",
+          "score": 1,
+          "gaps": [
+            "指・上肢・多関節の研究が中心で、整形外科リハや神経疾患への直接根拠がない。",
+            "課題、筋力、疲労、正確さなどの制約が変わるとΔVの意味も変わる。",
+            "研究室の反復課題から、日常生活の複雑な動作へ移せるか不明である。"
+          ],
+          "what_would_raise_score": "病態・課題・生活環境を広げ、臨床集団と日常動作で外部検証する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.7-10, cited experimental examples",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "feasibility",
+          "score": 1,
+          "gaps": [
+            "反復運動、運動学、ヤコビアン、UCM計算を要し、一般の臨床機器だけでは実施しにくい。",
+            "共通の測定時間、試行数、練習量、ソフトウェアが指定されていない。",
+            "結果の解釈に専門知識が必要で、通常の臨床意思決定への手順がない。"
+          ],
+          "what_would_raise_score": "入力・試行数・計算・表示を標準化した簡易プロトコルと、臨床での時間・費用評価を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4, 7, section 5",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "transparency_reproducibility",
+          "score": 2,
+          "gaps": [
+            "数式と概念は説明されるが、検索戦略・選択記録・研究ごとのデータセットがない。",
+            "同じ文献を同じ順番で選べるか、レビューを更新できるかが不明である。",
+            "理論モデルのパラメータ感度や再解析用コードが公開されていない。"
+          ],
+          "what_would_raise_score": "検索式、除外研究一覧、抽出表、コード・データ、更新手順を公開する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-19; References",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "safety_burden",
+          "score": 2,
+          "gaps": [
+            "理論レビューなので、有害事象、患者負担、費用、禁忌を評価していない。",
+            "ΔVの方向だけを治療目標にすると、疲労や痛みを無視して練習量を増やす危険がある。",
+            "実際の訓練へ移す場合の停止基準・監視方法がない。"
+          ],
+          "what_would_raise_score": "臨床試験で負担・疲労・疼痛・転倒等を監視し、安全な訓練量と停止基準を定める。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-11, Final comments",
+            "status": "not_reported"
+          }
+        }
+      ],
+      "plain_language_explanations": [
+        {
+          "term": "EP仮説（平衡点仮説）",
+          "category": "理論",
+          "plain_language": "脳が筋肉一つ一つの命令を細かく出すより、「この姿勢・動きに落ち着いてほしい」という目標を設定し、筋肉がばねのように働くという考え方です。",
+          "why_it_matters": "便利な説明モデルですが、患者の訓練量や治療効果を自動的に決める法則ではありません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-3, EP framework",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "UCM（uncontrolled manifold）",
+          "category": "解析",
+          "plain_language": "関節の組み合わせのうち、少し変わっても大事な結果を変えない「安全なゆらぎの通り道」を探す方法です。",
+          "why_it_matters": "動きのばらつきが全部悪いわけではない、と見るための分析です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3-5, UCM analysis",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "VUCM・VORT・VTOTとΔV",
+          "category": "評価アウトカム",
+          "plain_language": "VUCMは結果を保つ方向のゆらぎ、VORTは結果を崩す方向のゆらぎ、VTOTは全部のゆらぎです。ΔV=(VUCM−VORT)/VTOTは、良いゆらぎが悪いゆらぎより多いかを比べます。",
+          "why_it_matters": "数が大きいから治療が成功するとは限らず、課題や測り方を変えると意味も変わります。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4-6, equations and scenarios",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "good variability",
+          "category": "考え方",
+          "plain_language": "結果を悪くしない範囲で、体の各部分が少し自由に変わることです。全く同じ動きをすることだけが上手さではない、という見方です。",
+          "why_it_matters": "柔軟な動きを評価できますが、患者に必要な変化量の基準はまだありません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-7, Discussion",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "ヤコビアン",
+          "category": "解析",
+          "plain_language": "関節を少し動かしたとき、手先や体の結果がどれくらい変わるかを並べた計算表です。",
+          "why_it_matters": "この表を使ってUCMの方向を決めるため、測定誤差や課題の定義に影響されます。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4-5, UCM computation",
+            "status": "reported"
+          }
+        }
+      ]
     },
     {
       "schema_version": "0.1.0",
@@ -1081,7 +1653,8 @@
             "source": "paper PDF",
             "location": "pp.8, 26-29, Abstract/Methods",
             "status": "reported"
-          }
+          },
+          "axis": "design"
         },
         {
           "claim": "40 RCT・4059人だが、全試験で少なくとも1ドメインが不明/高リスク。アウトカムごとに感度分析とGRADE降格",
@@ -1089,7 +1662,8 @@
             "source": "paper PDF",
             "location": "pp.8-10, 39-42, Main results/Risk of bias",
             "status": "reported"
-          }
+          },
+          "axis": "internal_validity"
         },
         {
           "claim": "SMD/MD/RRと95%CIを使用し、異なる尺度を臨床単位へ再表現してMIDと比較",
@@ -1097,7 +1671,8 @@
             "source": "paper PDF",
             "location": "pp.11-14, 18-23, Summary of Findings 1-4",
             "status": "reported"
-          }
+          },
+          "axis": "statistical_credibility"
         },
         {
           "claim": "入院と退院後、運動種別・主要アウトカムを分け、異質性I2・リスク・精度をアウトカム別に評価",
@@ -1105,7 +1680,8 @@
             "source": "paper PDF",
             "location": "pp.9, 14, 21-24, 41-43",
             "status": "reported"
-          }
+          },
+          "axis": "effect_practical"
         },
         {
           "claim": "17か国・平均80歳だが、認知障害70%、移動制限/医学的状態72%が除外され、フレイル・認知症への一般化に制約",
@@ -1113,7 +1689,8 @@
             "source": "paper PDF",
             "location": "pp.8-10, Main results/Plain language summary",
             "status": "reported"
-          }
+          },
+          "axis": "external_validity"
         },
         {
           "claim": "レビューは介入内容・期間・頻度・強度・監督・遵守・資源を抽出したが、プールされた処方は異質",
@@ -1121,7 +1698,8 @@
             "source": "paper PDF",
             "location": "pp.28-29, Data extraction; pp.73-145 study characteristics",
             "status": "reported"
-          }
+          },
+          "axis": "feasibility"
         },
         {
           "claim": "検索式・データベース・試験登録・除外研究・感度分析が本文・Appendixに追跡可能",
@@ -1129,7 +1707,8 @@
             "source": "paper PDF",
             "location": "pp.28, 59-68, 147-260, Appendix 3",
             "status": "reported"
-          }
+          },
+          "axis": "transparency_reproducibility"
         },
         {
           "claim": "死亡・再入院等の有害事象はイベントが少なく低確実性が多い。安全性はアウトカムとして抽出されるが実装ごとの詳細は不足",
@@ -1137,7 +1716,8 @@
             "source": "paper PDF",
             "location": "pp.13-14, 19-20, 42, Summary of Findings",
             "status": "reported"
-          }
+          },
+          "axis": "safety_burden"
         }
       ],
       "tier": {
@@ -1440,7 +2020,207 @@
         "audit_notes": [
           "Cochraneレビューの検索終了日は2021-03-10。含まれるアウトカムごとにGRADE確実性が異なるため、論文ティアA1と各アウトカムの推奨を分離した。"
         ]
-      }
+      },
+      "radar_gap_analysis": [
+        {
+          "axis": "design",
+          "score": 5,
+          "gaps": [
+            "この軸は5/5で、レビューの問いと系統的レビュー設計は直接適合している。",
+            "ただし検索終了日が2021年3月で、後発研究は反映されない。",
+            "介入の種類が多く、単一の運動処方を答える設計ではない。"
+          ],
+          "what_would_raise_score": "更新検索を行い、必要なら介入種類・対象・時期を分けて直接比較する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8, 26-29, Abstract/Methods",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "internal_validity",
+          "score": 4,
+          "gaps": [
+            "40試験すべてで少なくとも1つのバイアス領域が不明または高リスクである。",
+            "運動介入では参加者・治療者の盲検化が難しく、遵守・共介入の差が残る。",
+            "アウトカムごとにGRADEが降格され、安全性イベントも少ない。"
+          ],
+          "what_would_raise_score": "低バイアス試験を増やし、割付・欠測・遵守・共介入を厳密に管理し、重要アウトカムを事前登録する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8-10, 39-42, Main results/Risk of bias",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "statistical_credibility",
+          "score": 4,
+          "gaps": [
+            "入院中モビリティでI²=81%と研究間の結果の違いが大きい。",
+            "運動の種類・強度・頻度・標準ケアが異なり、同じSMDにまとめると処方差が隠れる。",
+            "安全性はイベント数が少なく、感度分析で推定が変わるアウトカムがある。"
+          ],
+          "what_would_raise_score": "異質性の原因を分けたサブグループ・メタ回帰、事前の解析計画、十分な安全性データを追加する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.11-14, 18-23, Summary of Findings 1-4",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "effect_practical",
+          "score": 4,
+          "gaps": [
+            "歩行速度などはMCID付近の小さな改善で、すべてのアウトカムが患者に大きな利益とは限らない。",
+            "SMDは尺度をそろえるための値で、患者個人のメートル・点数への変換には不確実性がある。",
+            "効果の確実性はアウトカムごとに低〜高で、レビュー全体を一つの効果量にできない。"
+          ],
+          "what_would_raise_score": "患者単位の絶対効果、MCID、費用・負担・害をアウトカム別に示し、個人差を含む実装研究を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9, 14, 21-24, 41-43",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "external_validity",
+          "score": 3,
+          "gaps": [
+            "認知障害、移動制限、医学的に不安定な人が多くの試験で除外されている。",
+            "17か国でも入院制度、退院時期、理学療法資源が異なる。",
+            "重度フレイル・認知症・複雑な荷重制限への適用は不確かである。"
+          ],
+          "what_would_raise_score": "除外されがちな高リスク群を含む実臨床コホートで、地域・制度別の効果を確認する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8-10, Main results/Plain language summary",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "feasibility",
+          "score": 3,
+          "gaps": [
+            "介入内容・監督・頻度・遵守・資源が異なり、統合効果をそのまま処方箋にできない。",
+            "費用、スタッフ数、訓練時間、家庭での継続方法が十分にそろっていない。",
+            "荷重制限や認知機能に合わせた具体的な進行基準が研究横断で共通化されていない。"
+          ],
+          "what_would_raise_score": "誰が・何を・何分・何回・どの条件で進めるかを実装研究で標準化し、費用と遵守を測る。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.28-29, Data extraction; pp.73-145 study characteristics",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "transparency_reproducibility",
+          "score": 5,
+          "gaps": [
+            "この軸は5/5で、検索式、データベース、除外研究、感度分析、GRADEを追跡できる。",
+            "ただし新しい試験やデータ更新を自動で取り込む仕組みはなく、個別試験のコード公開までは保証しない。"
+          ],
+          "what_would_raise_score": "定期更新とデータ・解析コードの公開、最新試験を含めた再解析を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.28, 59-68, 147-260, Appendix 3",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "safety_burden",
+          "score": 3,
+          "gaps": [
+            "死亡・再入院などのイベントが少なく、長期安全性の確実性が低いアウトカムがある。",
+            "介入ごとの転倒、疼痛、再骨折、過負荷などの詳細が十分にそろっていない。",
+            "認知症・重度フレイル・心肺リスクの高い人での安全性が不明である。"
+          ],
+          "what_would_raise_score": "介入ごとの有害事象を同じ定義で前向き収集し、リスク群別の監視・中止基準を報告する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.13-14, 19-20, 42, Summary of Findings",
+            "status": "reported"
+          }
+        }
+      ],
+      "plain_language_explanations": [
+        {
+          "term": "SMD（標準化平均差）",
+          "category": "統計",
+          "plain_language": "歩行速度や別の歩行尺度のように単位が違う結果を、ばらつきの大きさで割って同じ物差しにする数字です。",
+          "why_it_matters": "研究をまとめやすい一方、患者が何m歩けるようになったかは別に読み替える必要があります。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "Results; Summary of findings tables",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "MD（平均差）",
+          "category": "統計",
+          "plain_language": "同じ尺度を使った二つのグループの平均値を、そのまま引き算した差です。歩行速度ならm/sのまま読めます。",
+          "why_it_matters": "実際の単位で分かりやすいですが、尺度が違う研究同士は直接まとめにくいです。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "Results; outcome tables",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "I²（異質性）",
+          "category": "統計",
+          "plain_language": "研究同士の結果の食い違いが、偶然だけではなくどれくらいあるかを割合で表します。高いほど研究の答えがばらばらです。",
+          "why_it_matters": "入院中モビリティではI²=81%で、平均の効果を全員にそのまま当てはめにくい理由です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "Results; inpatient mobility analysis",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "GRADEの確実性",
+          "category": "評価",
+          "plain_language": "その結果をどれくらい信じてよいかを、研究の偏り、結果の食い違い、人数、直接性などから「高・中・低」などで表します。",
+          "why_it_matters": "効果が大きくても確実性が低いことがあり、ティアや効果量とは別の情報です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "Methods and Summary of findings tables",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "MCID／MID",
+          "category": "評価アウトカム",
+          "plain_language": "患者が「少し良くなった」と感じられる最小限の変化量です。研究で統計的に差があっても、これ未満なら実感が小さいことがあります。",
+          "why_it_matters": "歩行速度やBarthelの差を、実際の生活上の意味に読み替える基準になります。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "Results; outcome-specific re-expression",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "感度分析",
+          "category": "解析",
+          "plain_language": "結果を大きく動かしている研究を一つ外すなどして、結論が同じままか確かめる「やり直しテスト」です。",
+          "why_it_matters": "Monticone研究を外すと入院中の効果とI²が変わり、結論の安定性が分かります。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "Sensitivity analyses",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "SPPB・Barthel・6MWT",
+          "category": "評価アウトカム",
+          "plain_language": "SPPBは立つ・歩く・椅子から立つ力、Barthelは食事やトイレなどの自立度、6MWTは6分間で歩ける距離を測る尺度です。",
+          "why_it_matters": "同じ「動ける」でも、速さ・自立・持久力を別々に見ています。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "Outcome tables",
+            "status": "reported"
+          }
+        }
+      ]
     },
     {
       "schema_version": "0.1.0",
@@ -1508,7 +2288,8 @@
             "source": "paper PDF",
             "location": "pp.1-2, Objectives/Patients and Methods",
             "status": "reported"
-          }
+          },
+          "axis": "design"
         },
         {
           "claim": "予後因子を広く記録し多変量ロジスティック回帰を行うが、因子選択は単変量有意性に依存し、残余交絡・欠測処理は限定的",
@@ -1516,7 +2297,8 @@
             "source": "paper PDF",
             "location": "pp.2, Statistical Analyses; pp.5-7, Tables 5-8",
             "status": "reported"
-          }
+          },
+          "axis": "internal_validity"
         },
         {
           "claim": "RRと95%CIを報告する一方、household群のCIは非常に広く、連続変数の平均二分化による情報損失",
@@ -1524,7 +2306,8 @@
             "source": "paper PDF",
             "location": "pp.2, 5-7, Tables 5-8",
             "status": "reported"
-          }
+          },
+          "axis": "statistical_credibility"
         },
         {
           "claim": "T-cane獲得はcommunity群12か月RR3.25 (1.69-6.37)、household群RR4.17 (1.33-14.29)だが、予後マーカーであり介入効果ではない",
@@ -1532,7 +2315,8 @@
             "source": "paper PDF",
             "location": "pp.6-7, Tables 7-8",
             "status": "reported"
-          }
+          },
+          "axis": "effect_practical"
         },
         {
           "claim": "日本の14病院、長期入院、退院後PTが一般的でない医療制度に依存し、海外・現在の早期退院環境への移送は制約",
@@ -1540,7 +2324,8 @@
             "source": "paper PDF",
             "location": "pp.1-3, 8, Settings and Discussion limitations",
             "status": "reported"
-          }
+          },
+          "axis": "external_validity"
         },
         {
           "claim": "術後早期離床・荷重、週5日1日2回PT、退院時5段階移動評価など実装詳細は比較的再現可能",
@@ -1548,7 +2333,8 @@
             "source": "paper PDF",
             "location": "p.2, postoperative protocol and discharge assessment",
             "status": "reported"
-          }
+          },
+          "axis": "feasibility"
         },
         {
           "claim": "外部検証、校正、識別能（AUC等）、決定曲線はなく、予測モデルとしての成熟度は限定",
@@ -1556,7 +2342,8 @@
             "source": "paper PDF",
             "location": "pp.2, 5-8, Statistical Analyses/Discussion; no external validation",
             "status": "not_reported"
-          }
+          },
+          "axis": "transparency_reproducibility"
         },
         {
           "claim": "介入試験ではないため有害事象は予後研究の範囲で、T-caneを目標にする提案は著者も今後検証が必要と明記",
@@ -1564,7 +2351,8 @@
             "source": "paper PDF",
             "location": "pp.7-8, Discussion",
             "status": "reported"
-          }
+          },
+          "axis": "safety_burden"
         }
       ],
       "tier": {
@@ -1732,7 +2520,186 @@
           "主張は予後予測であり、標準PTは共通背景。INTを副ルートから外し、OBS単独に固定した。",
           "PDFのLevel of EvidenceはPrognostic Level Iだが、研究デザインのラベルと予測モデルの外部検証は別に評価した。"
         ]
-      }
+      },
+      "radar_gap_analysis": [
+        {
+          "axis": "design",
+          "score": 4,
+          "gaps": [
+            "14病院の前向き予後コホートで問いには合うが、T-cane訓練を無作為化した介入研究ではない。",
+            "長期入院・退院後PTが少ない時代の設定で、現在の早期退院モデルとは条件が異なる。",
+            "受傷前移動レベルや退院時指標を予測因子として使うため、治療効果の設計ではない。"
+          ],
+          "what_would_raise_score": "予後モデルとして事前に因子と時点を定め、別施設・現在の医療環境で外部検証する。介入効果にはRCTが必要。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-2, Objectives/Patients and Methods",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "internal_validity",
+          "score": 3,
+          "gaps": [
+            "因子選択が単変量の有意性に依存し、残余交絡や過適合の余地がある。",
+            "欠測データ処理が限定的で、退院時T-caneは回復過程の途中の変数でもある。",
+            "認知・片麻痺・住環境・術後ケアなど重要な要因の影響を完全に分離できない。"
+          ],
+          "what_would_raise_score": "臨床知識に基づく事前モデル、多重代入、時間順序を保った解析、十分な症例数で検証する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2, Statistical Analyses; pp.5-7, Tables 5-8",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "statistical_credibility",
+          "score": 3,
+          "gaps": [
+            "連続値を二分化して情報を失い、household群の信頼区間が非常に広い。",
+            "AUCなどの識別能、校正、決定曲線、外部検証がなく、個人の予測精度を判断できない。",
+            "複数の層・時点・因子を扱うが、多重比較や過適合への対応が不十分である。"
+          ],
+          "what_would_raise_score": "連続変数を保ち、AUC・校正曲線・決定曲線・外部検証・欠測処理を事前計画する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2, 5-7, Tables 5-8",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "effect_practical",
+          "score": 4,
+          "gaps": [
+            "RRが大きくても「その人が何％で歩けるか」という絶対確率を直接示していない。",
+            "T-cane獲得は良い予後の印であり、T-cane訓練を行えば改善する効果ではない。",
+            "歩行・ADLの分類に患者が感じる最小改善量や意思決定の閾値がない。"
+          ],
+          "what_would_raise_score": "絶対リスクと予測区間を提示し、T-cane訓練を変えることで利益が出るかを介入試験で検証する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.6-7, Tables 7-8",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "external_validity",
+          "score": 3,
+          "gaps": [
+            "日本の14病院、2004〜2006年、長期入院と退院後PTが少ない制度に依存する。",
+            "高齢の非病的骨折患者に限られ、重い認知・医学的不安定、別の骨折型・荷重条件への適用が不明である。",
+            "住環境や地域サービスが違う国・施設で、同じT-caneの意味になる保証がない。"
+          ],
+          "what_would_raise_score": "現在の地域・在宅・回復期環境と多様な患者を含め、前向き外部検証を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-3, 8, Settings and Discussion limitations",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "feasibility",
+          "score": 4,
+          "gaps": [
+            "ベッド、車椅子、平行棒、T字杖で実施でき、測定自体は比較的簡単である。",
+            "一方、週5日・1日2回のPTと長期入院が必要で、現在の人員・在宅環境では再現しにくい。",
+            "T-cane到達までの最適期間、未到達時の代替目標、遵守・費用が定まっていない。"
+          ],
+          "what_would_raise_score": "短期入院・在宅PTでも実行できる標準手順と、杖以外の安全な目標を検証する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.2, postoperative protocol and discharge assessment",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "transparency_reproducibility",
+          "score": 3,
+          "gaps": [
+            "予測因子と結果の記載はあるが、外部検証、校正、決定曲線、再利用できる計算式・コードがない。",
+            "単変量選択に依存するため、別データで同じ因子が選ばれるか不明である。",
+            "現在の制度・集団へ更新する手順がない。"
+          ],
+          "what_would_raise_score": "完全なモデル式、コード、匿名化データ、外部検証と更新手順を公開する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2, 5-8, Statistical Analyses/Discussion; no external validation",
+            "status": "not_reported"
+          }
+        },
+        {
+          "axis": "safety_burden",
+          "score": 3,
+          "gaps": [
+            "予後研究であり、T-cane目標を設定した場合の転倒・過負荷・失敗の害を比較していない。",
+            "有害事象の定義・監視が介入試験ほど体系的ではない。",
+            "個人に無理な歩行目標を押しつけると安全性を損なう可能性がある。"
+          ],
+          "what_would_raise_score": "転倒・疼痛・再骨折・目標未達を前向きに監視し、杖目標を使う判断ルールと中止基準を定める。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.7-8, Discussion",
+            "status": "reported"
+          }
+        }
+      ],
+      "plain_language_explanations": [
+        {
+          "term": "予後因子",
+          "category": "考え方",
+          "plain_language": "将来どうなりやすいかを考える手がかりです。良い予後の人に一緒に見られても、その因子を治療すれば良くなるとは限りません。",
+          "why_it_matters": "退院時T字杖歩行は予測の手がかりで、T字杖訓練の効果そのものではありません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-3, prognostic question",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "多変量ロジスティック回帰",
+          "category": "解析",
+          "plain_language": "年齢、認知、杖歩行など複数の条件を同時に入れて、「歩ける／歩けない」と関係する要因を調べる計算です。",
+          "why_it_matters": "他の条件をそろえる助けになりますが、観察研究なので見えない要因までは消せません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4-6, Statistical analysis",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "RRと95%信頼区間",
+          "category": "統計",
+          "plain_language": "ある特徴を持つ人が、持たない人より良い結果になりやすい割合です。信頼区間が広いと、推定が不安定です。",
+          "why_it_matters": "household群のT-cane RRは大きくても、区間が広く個人の予測には慎重さが必要です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.6-8, Tables",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "校正・AUC・決定曲線",
+          "category": "予測モデルの確認",
+          "plain_language": "校正は「予測70%の人が本当に約70%良くなるか」、AUCは良くなる人とならない人を並べ分ける力、決定曲線はその予測を使うと得か損かを見る方法です。",
+          "why_it_matters": "この研究には外部検証やこれらの確認がなく、個人向け予測ツールとしては未完成です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "Discussion/limitations; external validation not reported",
+            "status": "not_reported"
+          }
+        },
+        {
+          "term": "community／household ambulationとADL",
+          "category": "評価アウトカム",
+          "plain_language": "communityは屋外や地域を歩ける状態、householdは家の中を中心に歩ける状態です。ADLは食事・着替え・移動など毎日の基本動作です。",
+          "why_it_matters": "「歩ける」といっても生活範囲が違うため、杖だけでなく住環境と自立度を一緒に考えます。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-3, outcome definitions",
+            "status": "reported"
+          }
+        }
+      ]
     },
     {
       "schema_version": "0.1.0",
@@ -1810,7 +2777,8 @@
             "source": "paper PDF",
             "location": "pp.1-3, Abstract/Experimental design",
             "status": "reported"
-          }
+          },
+          "axis": "design"
         },
         {
           "claim": "方法評価n=2/3、学習n=6で、成功試行のみ選別。健康成人かつ単一課題で内部妥当性・外部性に制約",
@@ -1818,7 +2786,8 @@
             "source": "paper PDF",
             "location": "pp.2-4, Participants and Learning experiments",
             "status": "reported"
-          }
+          },
+          "axis": "internal_validity"
         },
         {
           "claim": "等尺性r=0.891/0.882、動的肩r=0.85・肘r=0.78、学習相関は肩5/6・肘4/6有意だがCI・事前閾値はない",
@@ -1826,7 +2795,8 @@
             "source": "paper PDF",
             "location": "pp.5-9, Figs.3-9 and Table 1",
             "status": "reported"
-          }
+          },
+          "axis": "statistical_credibility"
         },
         {
           "claim": "EMG-トルク線形、一定モーメントアーム、長さ速度特性簡略化を仮定し、動的剛性を相対変化として扱う",
@@ -1834,7 +2804,8 @@
             "source": "paper PDF",
             "location": "pp.2-4, IMCJ definition; p.9-10 Discussion",
             "status": "reported"
-          }
+          },
+          "axis": "effect_practical"
         },
         {
           "claim": "単一研究室・健常成人の水平面2関節運動で、患者・下肢・別操作者/装置への外部妥当性は未確認",
@@ -1842,7 +2813,8 @@
             "source": "paper PDF",
             "location": "pp.2-4, Experimental setup",
             "status": "reported"
-          }
+          },
+          "axis": "external_validity"
         },
         {
           "claim": "EMG 2,000 Hz、25-1,500 Hz bandpass、6筋、PFM摂動8方向3回、動的課題の軌道・トルク補正が詳細",
@@ -1850,7 +2822,8 @@
             "source": "paper PDF",
             "location": "pp.2-5, Methods and Appendix 2",
             "status": "reported"
-          }
+          },
+          "axis": "feasibility"
         },
         {
           "claim": "BMFモデル、AIC、最大尤度、Monte Carlo・残差検証を記載するが、独立サンプルによる検証ではない",
@@ -1858,7 +2831,8 @@
             "source": "paper PDF",
             "location": "pp.5, 8-12, Fig.2, Fig.9, Appendix 1",
             "status": "reported"
-          }
+          },
+          "axis": "transparency_reproducibility"
         },
         {
           "claim": "研究課題の有害事象は報告されず、力場・摂動課題の安全性は研究室監督下の健常者に限定",
@@ -1866,7 +2840,8 @@
             "source": "paper PDF",
             "location": "pp.2-4, experimental setup; no adverse-event section",
             "status": "not_reported"
-          }
+          },
+          "axis": "safety_burden"
         }
       ],
       "tier": {
@@ -2058,7 +3033,197 @@
         "audit_notes": [
           "EMG-IMCJとPFM摂動剛性の比較は小規模な同一研究内較正で、絶対剛性の普遍的測定法・臨床診断法の検証ではない。"
         ]
-      }
+      },
+      "radar_gap_analysis": [
+        {
+          "axis": "design",
+          "score": 4,
+          "gaps": [
+            "方法比較と学習実験の問いには合うが、独立した外部検証や臨床有用性の試験ではない。",
+            "方法評価は等尺性2人・動的3人、学習実験6人で、成功試行だけを選んでいる。",
+            "患者の神経制御や機能を改善する介入設計ではない。"
+          ],
+          "what_would_raise_score": "独立サンプル・患者・別装置で方法を検証し、技術指標が患者アウトカムを改善するかを比較試験で確認する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-3, Abstract/Experimental design",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "internal_validity",
+          "score": 3,
+          "gaps": [
+            "無作為化・盲検化がなく、同じ研究室・課題での反復測定に依存する。",
+            "EMGとトルクの線形関係、一定モーメントアーム、筋の長さ・速度特性の簡略化を仮定している。",
+            "成功試行のみの解析で、失敗時の共収縮や疲労を含む実際の学習過程を捨てている。"
+          ],
+          "what_would_raise_score": "仮定を変えた感度分析、失敗試行を含む事前解析、操作者・装置を変えた再試験を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, Participants and Learning experiments",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "statistical_credibility",
+          "score": 3,
+          "gaps": [
+            "相関とp値は報告されるが、事前の精度基準や全推定値の信頼区間が十分でない。",
+            "nが2〜6と小さく、被験者・筋・課題ごとの多数の検定で偶然の陽性が混ざりうる。",
+            "AIC、Monte Carlo、残差検証は同じデータ内で、外部テスト・交差検証ではない。"
+          ],
+          "what_would_raise_score": "必要症例数、主要解析、信頼区間、多重比較、リークのない交差検証と外部テストを事前に定める。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-9, Figs.3-9 and Table 1",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "effect_practical",
+          "score": 4,
+          "gaps": [
+            "rやR²が高くても、PFMで測った条件内の相対剛性が似ているという意味にとどまる。",
+            "絶対剛性、患者にとっての痛み・歩行・ADL、MCIDとの関係がない。",
+            "学習に伴う共収縮変化は機序の支持で、神経疾患の改善や訓練効果ではない。"
+          ],
+          "what_would_raise_score": "絶対値の基準法、患者アウトカム、MCID、臨床意思決定への上乗せ価値を検証する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, IMCJ definition; p.9-10 Discussion",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "external_validity",
+          "score": 2,
+          "gaps": [
+            "健康な成人の肩・肘水平面課題と単一研究室に限られる。",
+            "下肢・歩行・脳卒中・整形外科患者、異なる姿勢・速度・筋長への一般化が不明である。",
+            "操作者、電極、装置、施設が変わったときの安定性を測っていない。"
+          ],
+          "what_would_raise_score": "患者、下肢・歩行、複数施設・装置・操作者を含む外部検証を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, Experimental setup",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "feasibility",
+          "score": 3,
+          "gaps": [
+            "6筋EMG、力場ロボット、光学計測、等尺性較正、専門的BMF解析が必要である。",
+            "96〜120試行と成功試行選別を要し、臨床での時間・疲労・休息・費用が定義されていない。",
+            "簡易EMGだけで置き換えられるか、現場の進行ルールがない。"
+          ],
+          "what_would_raise_score": "必要機器・時間を減らした代替法、標準ソフト、臨床での休息・判定・費用を検証する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-5, Methods and Appendix 2",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "transparency_reproducibility",
+          "score": 4,
+          "gaps": [
+            "サンプリング、フィルタ、較正、BMF、AIC、Monte Carloは詳しいが、コード・生データ・独立テストがない。",
+            "試験再試験信頼性、電極位置のずれ、測定者・装置間の再現性が不足している。",
+            "モデルの前提とパラメータを別施設で再現できるか不明である。"
+          ],
+          "what_would_raise_score": "コード・匿名化EMG・較正データ・完全な前処理と、別施設の再現性試験を公開する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5, 8-12, Fig.2, Fig.9, Appendix 1",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "safety_burden",
+          "score": 4,
+          "gaps": [
+            "研究室で監督された健常者の摂動課題で、急性の危険は低い。",
+            "力場・摂動による疲労、痛み、驚き、転倒リスクを体系的に比較していない。",
+            "患者へ導入した場合の禁忌、停止基準、長期安全性がない。"
+          ],
+          "what_would_raise_score": "力・速度・疲労・痛みを監視し、患者群で有害事象と中止基準を前向きに評価する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, experimental setup; no adverse-event section",
+            "status": "not_reported"
+          }
+        }
+      ],
+      "plain_language_explanations": [
+        {
+          "term": "IMCJ／rIMCJ",
+          "category": "解析・評価指標",
+          "plain_language": "EMGから、縮める筋と反対向きの筋が作るトルクを推定し、その合計を関節の共収縮の目安にしたものです。rIMCJは条件間で比べやすくした相対値です。",
+          "why_it_matters": "筋を直接押して測るのではなく、EMGとモデルから推定した「相対的な硬さ」の指標です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, IMCJ definition",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "PFMによる摂動剛性",
+          "category": "測定",
+          "plain_language": "機械が手を少し押したり引いたりし、そのときどれくらい抵抗したかを測って、腕の硬さを調べる方法です。",
+          "why_it_matters": "IMCJが本当に硬さの変化を表すか比べる基準ですが、同じ姿勢・速度の範囲での比較です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3-5, PFM perturbation",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "相関係数 r／R²",
+          "category": "統計",
+          "plain_language": "二つの数字が一緒に増減する強さを表します。rは向きと強さ、R²は一方のばらつきをどの程度説明できるかです。",
+          "why_it_matters": "強く一緒に動いても、片方がもう片方を原因として変えたとは言えません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-7, validation results",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "BMF・AIC・Monte Carlo",
+          "category": "解析",
+          "plain_language": "BMFはEMGとトルクの関係を、ノイズを含めて推定するモデルです。AICは複雑すぎないモデルを選ぶ物差し、Monte Carloは乱数で何度も試して推定の揺れを見る方法です。",
+          "why_it_matters": "計算の確からしさを調べる手段ですが、同じ小さなデータだけで行うと外部施設で正しい保証にはなりません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-10, BMF/AIC/Monte Carlo analysis",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "相互相関・インパルス応答",
+          "category": "時系列解析",
+          "plain_language": "一方の変化の後、もう一方が何回後に変わりやすいかを調べます。インパルス応答は、ひとつの出来事のあとに反応がどう続くかを表します。",
+          "why_it_matters": "誤差の後に共収縮が変わる時間関係は見えますが、訓練で意図的に変えられるとは限りません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "Fig.8-9; cross-correlation/BMF impulse response",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "共収縮・関節インピーダンス",
+          "category": "生体力学",
+          "plain_language": "関節を反対向きに働く筋が同時に力を出すのが共収縮です。インピーダンスは、押されたときにどれくらい動きにくく、元に戻ろうとするかの性質です。",
+          "why_it_matters": "硬さが高いことは安定に役立つ場合も、動きにくさや疲労になる場合もあります。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-3, Introduction and Discussion",
+            "status": "reported"
+          }
+        }
+      ]
     },
     {
       "schema_version": "0.1.0",
@@ -2130,7 +3295,8 @@
             "source": "paper PDF",
             "location": "pp.2-4, Study design",
             "status": "reported"
-          }
+          },
+          "axis": "design"
         },
         {
           "claim": "ベースラインは均衡だが、6週評価完了は介入30/40・対照29/40、16週は20/40・24/40で脱落が大きい",
@@ -2138,7 +3304,8 @@
             "source": "paper PDF",
             "location": "pp.8-10, Fig.1 and Results",
             "status": "reported"
-          }
+          },
+          "axis": "internal_validity"
         },
         {
           "claim": "主要筋パワーとEMSはp値・CIを一部報告するが、多くのアウトカムで分散推定・調整・ITTは不明",
@@ -2146,7 +3313,8 @@
             "source": "paper PDF",
             "location": "pp.1-2, 5-6, Table 2",
             "status": "reported"
-          }
+          },
+          "axis": "statistical_credibility"
         },
         {
           "claim": "骨折脚LEPは6週群間差が大きく、EMS差2.5 (95%CI 1.1-3.8)、16週差1.9 (0.4-3.4)だがTUG・歩行速度は差なし",
@@ -2154,7 +3322,8 @@
             "source": "paper PDF",
             "location": "pp.1-2, 9-14, Table 2",
             "status": "reported"
-          }
+          },
+          "axis": "effect_practical"
         },
         {
           "claim": "72%の病棟患者を組み入れたが、単一老年整形外科病棟、歩行可能・認知/医学的安定例に限定",
@@ -2162,7 +3331,8 @@
             "source": "paper PDF",
             "location": "pp.4, 8, 14-16, Methods/Discussion",
             "status": "reported"
-          }
+          },
+          "axis": "external_validity"
         },
         {
           "claim": "1RM再評価・週2回・50/70/80%進行・3×12・休息2分を明記し、安価な足首重錘で再現可能",
@@ -2170,7 +3340,8 @@
             "source": "paper PDF",
             "location": "pp.1, 4-6, 10, intervention recipe",
             "status": "reported"
-          }
+          },
+          "axis": "feasibility"
         },
         {
           "claim": "割付・介入は詳細だが、完全なCONSORTフロー、ITT、登録/プロトコル、介入コードは未確認",
@@ -2178,7 +3349,8 @@
             "source": "paper PDF",
             "location": "pp.4, 8-10, Fig.1; no registry statement",
             "status": "not_reported"
-          }
+          },
+          "axis": "transparency_reproducibility"
         },
         {
           "claim": "忍容性・疼痛増加なしを示唆するが、有害事象の体系的収集や転倒・再骨折の比較は不足",
@@ -2186,7 +3358,8 @@
             "source": "paper PDF",
             "location": "pp.9-10, 14-16, Clinical messages/Discussion",
             "status": "reported"
-          }
+          },
+          "axis": "safety_burden"
         }
       ],
       "tier": {
@@ -2382,7 +3555,197 @@
         "audit_notes": [
           "割付隠蔽はコンピュータ乱数＋第三者保管封筒だが、非盲検で主要評価者も非盲検。16週の追跡は介入20/40、対照24/40。"
         ]
-      }
+      },
+      "radar_gap_analysis": [
+        {
+          "axis": "design",
+          "score": 4,
+          "gaps": [
+            "割付隠蔽を備えたRCTだが、単一老年整形外科病棟の小規模試験である。",
+            "非盲検で、完全なCONSORTフロー・登録・プロトコルが確認できない。",
+            "患者に重要な歩行・ADLを検出する統計的パワーが十分でない可能性がある。"
+          ],
+          "what_would_raise_score": "多施設・十分な症例数、事前登録・CONSORT、患者重要アウトカムを主要評価にした試験を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, Study design",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "internal_validity",
+          "score": 3,
+          "gaps": [
+            "6週・16週の脱落が大きく、完全なITT解析や欠測の扱いが不明である。",
+            "評価者の盲検化が不十分で、非盲検の期待・共介入・遵守差が入りうる。",
+            "認知・医学的安定性、荷重制限、標準PTの差を完全には分離できない。"
+          ],
+          "what_would_raise_score": "全例をITTで追跡し、欠測を適切に扱い、評価者盲検・共介入記録・遵守監査を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8-10, Fig.1 and Results",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "statistical_credibility",
+          "score": 3,
+          "gaps": [
+            "多くのアウトカムで分散推定、調整、ITT、信頼区間が十分に報告されていない。",
+            "複数の筋力・機能・QOLをp値中心に調べ、多重比較で偶然の差が出る余地がある。",
+            "16週の欠測が大きく、効果の持続性を精確に推定できない。"
+          ],
+          "what_would_raise_score": "主要アウトカム・解析を事前登録し、差と95%CI、欠測・多重比較・長期追跡を計画する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-2, 5-6, Table 2",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "effect_practical",
+          "score": 4,
+          "gaps": [
+            "脚伸展パワーとEMSは改善したが、TUGと歩行速度は改善しなかった。",
+            "EMS、Barthel、NHPのMCIDや絶対的な患者利益が示されていない。",
+            "筋力の増加を歩行自立・転倒減少・生活の質の改善と同一視できない。"
+          ],
+          "what_would_raise_score": "患者が重要と感じる歩行・移乗・転倒・QOLをMCID付きで主要評価にし、長期の絶対効果を示す。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-2, 9-14, Table 2",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "external_validity",
+          "score": 3,
+          "gaps": [
+            "単一病棟の歩行可能・認知的／医学的に安定した高齢者が中心である。",
+            "以前から歩行不能、重いフレイル、固定・荷重制限、認知症などへの適用が不明である。",
+            "医療制度やスタッフ配置が異なる施設・在宅環境での実行可能性が未検証である。"
+          ],
+          "what_would_raise_score": "多施設・在宅を含む実臨床集団と、認知・フレイル・荷重条件別の効果を検証する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4, 8, 14-16, Methods/Discussion",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "feasibility",
+          "score": 4,
+          "gaps": [
+            "50→70→80% 1RM、3セット×12回、週2回×6週と処方は明確である。",
+            "一方、1RM再測定、専門監督、足首重錘、疼痛・固定への調整が必要で、全施設で同じ資源を用意できるか不明である。",
+            "脱落・未完遂への代替、家庭での継続、費用・スタッフ負担が十分に評価されていない。"
+          ],
+          "what_would_raise_score": "簡易負荷設定、家庭・回復期での進行基準、費用・時間・遵守を含む実装研究を行う。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1, 4-6, 10, intervention recipe",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "transparency_reproducibility",
+          "score": 4,
+          "gaps": [
+            "介入手順は比較的詳しいが、完全CONSORT、登録・プロトコル、ITT、解析コードが確認できない。",
+            "負荷再設定や共介入の記録、欠測理由が十分に追跡できない。",
+            "有害事象の定義と収集方法が再現可能な形で示されていない。"
+          ],
+          "what_would_raise_score": "登録・プロトコル・CONSORTフロー、匿名化データ・コード、介入忠実度と欠測理由を公開する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4, 8-10, Fig.1; no registry statement",
+            "status": "not_reported"
+          }
+        },
+        {
+          "axis": "safety_burden",
+          "score": 3,
+          "gaps": [
+            "「忍容性良好」とされるが、転倒、再骨折、疼痛、創部・固定への影響を体系的に比較していない。",
+            "フレイル高齢者での負荷増加と疲労の安全限界が不明である。",
+            "16週以降の安全性や、歩行に結びつかない筋力増加の意味が分からない。"
+          ],
+          "what_would_raise_score": "有害事象・転倒・再骨折・疼痛・疲労を定義して前向き収集し、負荷調整と中止基準を報告する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-10, 14-16, Clinical messages/Discussion",
+            "status": "reported"
+          }
+        }
+      ],
+      "plain_language_explanations": [
+        {
+          "term": "1RMと50→70→80%負荷",
+          "category": "介入量",
+          "plain_language": "1RMは一回だけ持ち上げられる最大の重さです。その最大値の半分、7割、8割と段階的に負荷を上げました。",
+          "why_it_matters": "同じ「筋トレ」でも重さと回数が違えば刺激が変わるため、再現に必要な情報です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-3, training protocol",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "Leg extensor power",
+          "category": "評価アウトカム",
+          "plain_language": "脚でどれだけ大きな力を、どれだけ速く出せるかを合わせた値です。力だけでなく、素早く立つ・踏み出す能力に近い指標です。",
+          "why_it_matters": "数値が上がっても、歩行速度やTUGが上がるとは限りません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3-5, outcome assessment",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "Elderly Mobility Scale（EMS）",
+          "category": "評価アウトカム",
+          "plain_language": "立ち上がり、歩行、移乗など、高齢者の動きやすさを0〜20点で見る尺度です。",
+          "why_it_matters": "筋力より生活動作に近いですが、どの点数差が本人に大切かは研究で別に確認する必要があります。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3-5, mobility outcomes",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "Barthel Index・NHP",
+          "category": "評価アウトカム",
+          "plain_language": "Barthel Indexは食事・トイレ・移動などの自立度、NHPは元気さや生活のつらさを本人が答える質問票です。",
+          "why_it_matters": "筋力や歩行速度とは違う「暮らし」の結果なので、別々に確認します。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3-5, ADL and quality-of-life outcomes",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "TUG・歩行速度",
+          "category": "評価アウトカム",
+          "plain_language": "TUGは椅子から立ち、歩いて戻り、座るまでの時間です。歩行速度は一定距離をどれくらい速く歩けるかです。",
+          "why_it_matters": "この研究では筋パワーが上がっても両方に群間差がなく、筋力改善を歩行改善と同じに扱えません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "Results; TUG and gait-speed outcomes",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "ITT・脱落",
+          "category": "研究の読み方",
+          "plain_language": "ITTは最初に割り付けられたグループのまま全員を比べる考え方です。脱落が多いと、最後まで残った元気な人だけの結果になる危険があります。",
+          "why_it_matters": "16週の追跡人数が少なく、効果が長く続くかは不確かです。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "Results; follow-up completion",
+            "status": "reported"
+          }
+        }
+      ]
     }
   ]
 }
@@ -2535,9 +3898,14 @@
          if (!outcomes.length) return baseRenderOutcomes(r);
          return `<div class="table-wrap"><table><thead><tr><th>アウトカム</th><th>方向・効果量</th><th>臨床的意味</th><th>判定</th><th>ロケータ</th></tr></thead><tbody>${outcomes.map(o=>`<tr><td>${esc(o.name || o.outcome || '—')}<br><span class="muted">${esc(o.timepoint || '')}</span></td><td><span class="effect-values">${esc(o.direction || '方向未報告')}</span><br><span class="effect-values">${esc(effectText(o.effect_size ?? o.estimate ?? o.effect))}</span></td><td>${esc(o.clinical_or_practical_meaning || o.practical_meaning || '—')}</td><td>${esc(o.verdict || '—')}<br><span class="muted">${esc(o.harms_or_burden || '')}</span></td><td>${esc(locator(o.locator))}</td></tr>`).join('')}</tbody></table></div>`;
        };
+       function renderPlainLanguage(r) {
+         const items = arr(r.plain_language_explanations);
+         if (!items.length) return `<section class="plain-explain"><h4>通常見ない解析・アウトカムをやさしく</h4><p>このレコードには用語解説が未登録です。</p></section>`;
+         return `<section class="plain-explain"><h4>通常見ない解析・アウトカムをやさしく</h4><p>専門用語を「何を測るか」「何が分かるか」「何は分からないか」に分けて、高校生にも読める言葉で説明しています。</p><div class="table-wrap"><table><thead><tr><th>用語</th><th>種類</th><th>平易な説明</th><th>この研究での注意点</th><th>ロケータ</th></tr></thead><tbody>${items.map(item=>`<tr><td>${esc(item.term || '—')}</td><td>${esc(item.category || '—')}</td><td>${esc(item.plain_language || '—')}</td><td>${esc(item.why_it_matters || '—')}</td><td>${esc(locator(item.locator))}</td></tr>`).join('')}</tbody></table></div></section>`;
+       }
        renderRecord = function(r) {
          const html = baseRenderRecord(r);
-         return html.replace('<div class="detail">', `<div class="detail"><div class="one-liner"><span class="one-liner-label">一言で</span><strong>${esc(researchOneLiner(r))}</strong></div>${renderConditions(r)}`);
+         return html.replace('<div class="detail">', `<div class="detail"><div class="one-liner"><span class="one-liner-label">一言で</span><strong>${esc(researchOneLiner(r))}</strong></div>${renderConditions(r)}${renderPlainLanguage(r)}`);
        };
        function radarReason(r, axis) {
         const notes = arr(r.radar_notes);
@@ -2550,7 +3918,10 @@
       }
       function renderRadar(r) {
         const radar = r.radar || {};
-        return `<div class="radar-wrap"><div>${radarSvg(radar)}</div><div class="table-wrap"><table><thead><tr><th>軸</th><th>スコア</th><th>根拠／不確実性</th></tr></thead><tbody>${axes.map(a=>{const item=radar[a]; const value=typeof item==='number'?item:item?.score; return `<tr><td>${esc(axisLabels[a])}</td><td>${displayScore(value)} / 5</td><td>${esc(radarReason(r,a))}</td></tr>`;}).join('')}</tbody></table></div></div>`;
+        const gapMap = new Map(arr(r.radar_gap_analysis).map(item => [item.axis, item]));
+        const summary = `<div class="radar-wrap"><div>${radarSvg(radar)}</div><div class="table-wrap"><table><thead><tr><th>軸</th><th>スコア</th><th>根拠／不確実性</th></tr></thead><tbody>${axes.map(a=>{const item=radar[a]; const value=typeof item==='number'?item:item?.score; return `<tr><td>${esc(axisLabels[a])}</td><td>${displayScore(value)} / 5</td><td>${esc(radarReason(r,a))}</td></tr>`;}).join('')}</tbody></table></div></div>`;
+        const gaps = `<div class="gap-panel"><h4>8軸の減点理由：足りない情報・条件を列挙</h4><p>点数が満点でない軸は、下の「不足点」があるためです。「点を上げるには」は、次の研究や追加資料で何を補えばよいかを示します。</p><div class="table-wrap"><table class="gap-table"><thead><tr><th>軸</th><th>点</th><th>不足点・減点理由</th><th>点を上げるには</th><th>ロケータ</th></tr></thead><tbody>${axes.map(a=>{const item=gapMap.get(a); const value=item?.score ?? (typeof radar[a]==='number'?radar[a]:radar[a]?.score); const gapItems=arr(item?.gaps); const gapHtml=gapItems.length ? `<ul class="gap-list">${gapItems.map(g=>`<li>${esc(g)}</li>`).join('')}</ul>` : '<span class="muted">大きな減点要因なし（この軸は満点）</span>'; return `<tr><td>${esc(axisLabels[a])}</td><td>${displayScore(value)} / 5</td><td>${gapHtml}</td><td class="raise-score">${esc(item?.what_would_raise_score || '軸別の改善条件は未登録')}</td><td>${esc(locator(item?.locator))}</td></tr>`;}).join('')}</tbody></table></div></div>`;
+        return summary + gaps;
       }
       function renderOutcomes(r) {
         const outcomes = arr(r.outcomes);
