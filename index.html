@@ -1,0 +1,2579 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PICOと研究の質・実装可能性・効果量を一枚で確認するエビデンス・ティア・ライブラリ">
+  <title>Evidence Tier Library</title>
+  <style>
+    :root {
+      --canvas:#081416; --surface:#102d31; --surface-soft:#12383d;
+      --accent:#65d8d4; --text:#edf3f1; --muted:#b5c8c5; --line:#29474b;
+      --positive:#72d6a0; --caution:#d9bb8c; --danger:#ff8a8a;
+      --shadow:0 18px 50px rgba(0,0,0,.22); --radius:12px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--canvas); color:var(--text); font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif; line-height:1.6; }
+    a { color:var(--accent); }
+    button,input,select { font:inherit; }
+    button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+    .topbar { position:sticky; top:0; z-index:5; border-bottom:1px solid var(--line); background:rgba(8,20,22,.93); backdrop-filter:blur(14px); }
+    .topbar-inner,.shell { width:min(1180px,calc(100% - 32px)); margin-inline:auto; }
+    .topbar-inner { min-height:64px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .brand { display:flex; align-items:center; gap:12px; min-width:0; }
+    .mark { width:34px; height:34px; display:grid; place-items:center; border:1px solid var(--accent); color:var(--accent); border-radius:50%; font-weight:700; letter-spacing:-.08em; }
+    .brand strong { font-family:Georgia,"Times New Roman",serif; font-size:1.08rem; letter-spacing:.02em; }
+    .brand small { display:block; color:var(--muted); font-size:.72rem; white-space:nowrap; }
+    .top-meta { color:var(--muted); font-size:.78rem; text-align:right; }
+    main { padding:44px 0 80px; }
+    .hero { display:grid; grid-template-columns:1.4fr .9fr; gap:24px; align-items:end; margin-bottom:26px; }
+    h1,h2,h3 { font-family:Georgia,"Times New Roman",serif; font-weight:500; line-height:1.18; margin:0; }
+    h1 { font-size:clamp(2.2rem,5vw,4.4rem); letter-spacing:-.04em; max-width:780px; }
+    h1 em { color:var(--accent); font-style:normal; }
+    .lede { color:var(--muted); max-width:710px; margin:16px 0 0; font-size:1rem; }
+    .hero-note { border-left:2px solid var(--accent); padding-left:18px; color:var(--muted); font-size:.88rem; }
+    .hero-note strong { display:block; color:var(--text); font-size:1.2rem; margin-bottom:3px; }
+    .panel { background:linear-gradient(145deg,rgba(18,56,61,.86),rgba(16,45,49,.96)); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
+    .controls { padding:18px; margin-bottom:22px; }
+    .controls-grid { display:grid; grid-template-columns:minmax(240px,1.7fr) repeat(3,minmax(150px,1fr)); gap:10px; }
+    label { display:block; color:var(--muted); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; margin-bottom:5px; }
+    input,select { width:100%; border:1px solid var(--line); border-radius:7px; background:#0b2326; color:var(--text); padding:10px 11px; }
+    .control-foot { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:12px; color:var(--muted); font-size:.8rem; }
+    .button-link { border:1px solid var(--line); background:transparent; color:var(--accent); padding:7px 10px; border-radius:6px; cursor:pointer; }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px; }
+    .stat { padding:16px; border-top:2px solid var(--accent); }
+    .stat span { display:block; color:var(--muted); font-size:.77rem; }
+    .stat strong { display:block; margin-top:4px; font-size:1.75rem; font-weight:500; }
+    .legend { padding:17px 18px; margin-bottom:30px; display:flex; flex-wrap:wrap; align-items:center; gap:9px; }
+    .legend-title { color:var(--muted); font-size:.78rem; margin-right:4px; }
+    .tier { display:inline-flex; align-items:center; justify-content:center; min-width:47px; padding:3px 9px; border:1px solid var(--line); border-radius:999px; font-weight:700; font-size:.8rem; letter-spacing:.04em; }
+    .tier-a { border-color:var(--positive); color:var(--positive); } .tier-b { border-color:var(--accent); color:var(--accent); }
+    .tier-c { border-color:var(--caution); color:var(--caution); } .tier-d,.tier-x { border-color:var(--danger); color:var(--danger); }
+    .status { display:inline-flex; border-radius:999px; padding:3px 9px; font-size:.73rem; border:1px solid var(--line); color:var(--muted); }
+    .status-assessed { color:var(--positive); border-color:var(--positive); } .status-pending { color:var(--caution); border-color:var(--caution); }
+    .status-u { color:var(--caution); border-color:var(--caution); } .status-x { color:var(--danger); border-color:var(--danger); }
+    .theme { margin:32px 0 44px; }
+    .theme-head { display:flex; justify-content:space-between; align-items:baseline; gap:16px; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:13px; }
+    .theme-head h2 { font-size:1.55rem; } .theme-head small { color:var(--muted); }
+    .question-group { margin:18px 0; } .question-group h3 { font-size:1.02rem; color:var(--accent); margin-bottom:8px; }
+    .record { overflow:hidden; margin:10px 0; }
+    .record summary { list-style:none; cursor:pointer; padding:15px 17px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .record summary::-webkit-details-marker { display:none; }
+    .record summary:hover { background:rgba(101,216,212,.06); }
+    .record-title { min-width:0; } .record-title strong { display:block; font-size:.98rem; overflow-wrap:anywhere; }
+    .record-title small { display:block; color:var(--muted); margin-top:3px; }
+    .record-tags { display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-end; align-items:center; }
+    .detail { border-top:1px solid var(--line); padding:20px 17px 23px; }
+    .detail-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:18px; }
+    .detail section { min-width:0; } .detail h3 { color:var(--accent); font-size:1.12rem; margin:0 0 9px; }
+    .detail p { margin:7px 0; } .muted { color:var(--muted); }
+    .kv { display:grid; grid-template-columns:118px 1fr; gap:5px 11px; margin:0; font-size:.86rem; }
+    .kv dt { color:var(--muted); } .kv dd { margin:0; overflow-wrap:anywhere; }
+    .callout { border-left:2px solid var(--accent); background:rgba(8,20,22,.35); padding:11px 13px; margin:10px 0; }
+    .callout.warn { border-color:var(--caution); } .callout.danger { border-color:var(--danger); }
+    table { width:100%; border-collapse:collapse; font-size:.8rem; } th,td { text-align:left; vertical-align:top; border-bottom:1px solid var(--line); padding:8px 7px; }
+    .effect-json { margin:4px 0 0; white-space:normal; overflow-wrap:anywhere; font:inherit; color:var(--text); line-height:1.5; }
+    .effect-values { display:block; color:var(--text); }
+    .effect-item + .effect-item::before { content:" · "; color:var(--muted); }
+    th { color:var(--muted); font-weight:500; white-space:nowrap; } td { overflow-wrap:anywhere; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:7px; }
+    .radar-wrap { display:grid; grid-template-columns:minmax(310px,340px) 1fr; gap:22px; align-items:center; }
+    .radar-wrap > div:first-child { min-width:310px; }
+    .radar-svg { width:100%; max-width:320px; aspect-ratio:1; overflow:visible; }
+    .radar-svg polygon.grid { fill:none; stroke:var(--line); stroke-width:1; } .radar-svg polygon.data { fill:rgba(101,216,212,.18); stroke:var(--accent); stroke-width:2; }
+    .radar-svg line { stroke:var(--line); stroke-width:1; } .radar-svg text { fill:var(--muted); font-size:9px; }
+    .empty { border:1px dashed var(--line); padding:24px; color:var(--muted); text-align:center; }
+    footer { border-top:1px solid var(--line); color:var(--muted); font-size:.76rem; padding:20px 0 40px; }
+    .one-liner { border:1px solid rgba(101,216,212,.45); background:rgba(101,216,212,.08); padding:13px 15px; margin:12px 0 16px; }
+    .one-liner-label { display:block; color:var(--accent); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; margin-bottom:4px; }
+    .one-liner strong { display:block; font-weight:500; line-height:1.55; }
+    .conditions-callout { border-left-color:var(--caution); }
+    .conditions-callout strong { color:var(--caution); }
+    @media (max-width:850px) { .hero,.detail-grid { grid-template-columns:1fr; } .controls-grid { grid-template-columns:1fr 1fr; } .controls-grid > :first-child { grid-column:1/-1; } .radar-wrap { grid-template-columns:1fr; } .radar-wrap > div:first-child { min-width:0; } }
+    @media (max-width:560px) { .topbar-inner { min-height:58px; } .top-meta { display:none; } .shell,.topbar-inner { width:min(100% - 22px,1180px); } main { padding-top:28px; } .stats { grid-template-columns:1fr 1fr; } .controls-grid { grid-template-columns:1fr; } .controls-grid > :first-child { grid-column:auto; } .record summary { align-items:flex-start; flex-direction:column; } .record-tags { justify-content:flex-start; } .kv { grid-template-columns:1fr; gap:1px; } .kv dt { margin-top:6px; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><div class="mark" aria-hidden="true">ET</div><div><strong>Evidence Tier Library</strong><small>臨床家・大学院生のためのポケット辞書</small></div></div>
+      <div class="top-meta" id="top-meta">読み込み中…</div>
+    </div>
+  </header>
+  <main class="shell">
+    <section class="hero">
+      <div><h1>研究を、<em>使える確度</em>に翻訳する。</h1><p class="lede">PICO／PECOと8軸レーダーで、研究自体の信頼性・実生活への再現性・効果量を分けて読む。ティアは「信頼できるか」、実践判定は「役立つか」を別々に示します。</p></div>
+      <div class="hero-note"><strong id="hero-count">0本</strong>評価済みの論文と校正待ちの資料を、病態・問い・研究ファミリーで横断できます。</div>
+    </section>
+    <section class="panel controls" aria-label="ライブラリ検索とフィルター">
+      <div class="controls-grid">
+        <div><label for="search">検索</label><input id="search" type="search" placeholder="タイトル・著者・DOI・タグ・問い…"></div>
+        <div><label for="condition">病態／テーマ</label><select id="condition"><option value="">すべて</option></select></div>
+        <div><label for="family">研究ファミリー</label><select id="family"><option value="">すべて</option></select></div>
+        <div><label for="status">状態</label><select id="status"><option value="">すべて</option><option value="assessed">assessed</option><option value="pending_calibration">校正待ち</option><option value="U">U：判定不能</option><option value="X">X：使用不可</option></select></div>
+      </div>
+      <div class="control-foot"><span id="result-count">0件</span><button class="button-link" id="clear" type="button">フィルターをリセット</button></div>
+    </section>
+    <section class="stats" aria-label="概要">
+      <div class="panel stat"><span>総レコード</span><strong id="stat-total">0</strong></div>
+      <div class="panel stat"><span>評価済み</span><strong id="stat-assessed">0</strong></div>
+      <div class="panel stat"><span>校正待ち</span><strong id="stat-pending">0</strong></div>
+      <div class="panel stat"><span>病態／テーマ</span><strong id="stat-themes">0</strong></div>
+    </section>
+    <section class="panel legend" aria-label="ティア凡例"><span class="legend-title">ティア凡例</span><span class="tier tier-a">A1–A3</span><span class="muted">比較的高い信頼性</span><span class="tier tier-b">B1–B3</span><span class="muted">条件付きで有用</span><span class="tier tier-c">C1–C3</span><span class="muted">探索的／制約あり</span><span class="tier tier-d">D1–D3</span><span class="muted">根拠不十分</span><span class="status status-pending">校正待ち</span></section>
+    <div id="library-list" aria-live="polite"></div>
+  </main>
+  <footer><div class="shell">Rubric <span id="rubric-version">—</span> · library <span id="library-version">—</span> · すべての数値は評価記録のスナップショットです。実装前に原文・補足資料・最新の訂正／撤回情報を確認してください。</div></footer>
+
+  <!-- EVIDENCE_LIBRARY_DATA_START -->
+<script id="evidence-library-data" type="application/json">
+{
+  "schema_version": "0.1.0",
+  "library_version": "0.1.0",
+  "rubric_version": "0.1.0",
+  "generated_at": "2026-08-15T00:41:47.360484+00:00",
+  "records": [
+    {
+      "schema_version": "0.1.0",
+      "paper_id": "young_shand_2020_tka_gait_pca",
+      "assessment_status": "assessed",
+      "metadata": {
+        "title": "Individual Gait Features Are Associated with Clinical Improvement After Total Knee Arthroplasty",
+        "authors": [
+          "Kathryn L. Young-Shand",
+          "Michael J. Dunbar",
+          "Janie L. Astephen Wilson"
+        ],
+        "year": 2020,
+        "journal": "JBJS Open Access",
+        "doi": "10.2106/JBJS.OA.19.00038",
+        "source_path": "C:\\Users\\furuk\\Desktop\\EMG文献\\TKAのPCAは全介入区間混ぜる.pdf",
+        "source_urls": [
+          "https://doi.org/10.2106/JBJS.OA.19.00038"
+        ]
+      },
+      "classification": {
+        "primary_family": "OBS",
+        "secondary_families": [
+          "MECH",
+          "ENG"
+        ],
+        "question_type": "prognosis",
+        "condition_tags": [
+          "TKA",
+          "knee osteoarthritis"
+        ],
+        "topic_tags": [
+          "gait",
+          "patient-reported outcome",
+          "responder phenotype",
+          "PCA"
+        ],
+        "method_tags": [
+          "3D motion capture",
+          "ground reaction force",
+          "inverse dynamics",
+          "principal component analysis",
+          "WOMAC MCID"
+        ]
+      },
+      "question": {
+        "framework": "PECO",
+        "summary": "TKAを受ける末期膝OA患者で、術前および術前から術後1年までの歩行運動学的特徴は、WOMAC疼痛・身体機能のMCID達成と関連するか。",
+        "population": "末期膝OAで一次TKAを受け、6 mを介助なしで歩ける患者。解析対象46人（術前135人、術後109人の測定母集団から完全なWOMACが得られた症例）。",
+        "intervention_or_index": "術前の3D歩行特徴（PCAスコア）およびTKA前後の変化量",
+        "comparator_or_reference": "WOMAC MCID未達成の非応答群（疼痛12人、機能10人）との観察比較",
+        "outcome": "1年後WOMAC疼痛23点以上、身体機能19点以上の改善（MCID）、歩行運動学的変化",
+        "time": "術前1週とTKA後1年（WOMAC）；歩行波形も同時点"
+      },
+      "radar": {
+        "design": 3,
+        "internal_validity": 2,
+        "statistical_credibility": 2,
+        "effect_practical": 3,
+        "external_validity": 2,
+        "feasibility": 2,
+        "transparency_reproducibility": 3,
+        "safety_burden": 3
+      },
+      "radar_notes": [
+        {
+          "claim": "前向きの術前・術後コホートで問いには適合するが、対照介入や因果推論を目的とした設計ではない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-2, Materials and Methods; Level of Evidence: Prognostic IV",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "完全WOMAC症例46人のみを解析し、非応答群が疼痛12人・機能10人と小さい。交絡調整は限定的",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, Fig.1 and Statistical Analysis",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "探索的解析で多重比較補正なし、p<0.05を採用。大きなCIとtype-I errorを著者自身が認める",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4, 9, Discussion/limitations",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "疼痛・機能のMCIDをアウトカム定義に使用したが、相対リスクとr2は小さく、絶対効果の予測モデルではない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3, 7, Table III",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "全例が同一の標準TKAを受けた単施設系で、歩行可能な患者に限定されるため他施設・重症例への移送は制約",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2, 9, Patients and Surgery; limitations",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "3Dマーカー、2,000 Hz床反力、100 Hz光学計測、4歩行試行以上、PCA投影は再現可能だが臨床現場には設備が必要",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-3, Gait Biomechanics",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "PCAモデルは既報の標準化母集団から作成し補遺を参照できるが、解析コード・外部検証データは本文にない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3, 10, PCA description and Appendix",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "歩行課題そのものの有害事象は報告されず、安全性は決定的介入ではなく未評価に近い",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-3, gait protocol; no adverse-event section",
+            "status": "not_reported"
+          }
+        }
+      ],
+      "tier": {
+        "label": "C3",
+        "letter": "C",
+        "number": 3,
+        "rationale": [
+          "観察的予後研究で、設計は問いに適合するが因果効果を示さない",
+          "探索的・多重比較未補正、完全例46人、非応答群小、外部検証なし",
+          "ルーブリックのOBS上限B以前に、4信用軸平均2.5の暫定C3相当"
+        ],
+        "model_proposed_label": "C3",
+        "caps_applied": [],
+        "quality_mean": 2.5
+      },
+      "outcomes": [
+        {
+          "name": "WOMAC疼痛応答",
+          "timepoint": "術後1年",
+          "direction": "改善",
+          "effect": {
+            "responders": 34,
+            "non_responders": 12,
+            "threshold": "WOMAC疼痛+23点以上",
+            "association": "術前stance期varus（内反）角度PC1が低いほど応答；RR 0.915, 95%CI 0.838-0.998, p=0.045",
+            "model_r2": 0.14
+          },
+          "clinical_or_practical_meaning": "予測候補だが効果量のCIが広く、個人のTKA適応やアライメント変更を決める根拠にはしない。",
+          "verdict": "条件付き・仮説生成",
+          "harms_or_burden": "歩行計測の負担のみ。手術方針を変える有害性は未検証。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1, 5, 7, Table III (pain domain)",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "WOMAC身体機能応答",
+          "timepoint": "術後1年",
+          "direction": "改善",
+          "effect": {
+            "responders": 36,
+            "non_responders": 10,
+            "threshold": "WOMAC機能+19点以上",
+            "association": "術前stance期屈曲伸展角度範囲PC4が小さいほど応答；RR 0.898, 95%CI 0.827-0.976, p=0.011",
+            "model_r2": 0.15
+          },
+          "clinical_or_practical_meaning": "術前歩行特徴と改善の関連は示唆されるが、治療効果を増やす介入としては未検証。",
+          "verdict": "条件付き・仮説生成",
+          "harms_or_burden": "臨床に導入するには3D歩行計測の資源と解釈訓練が必要。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1, 5, 7, Table III (function domain)",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "歩行運動学の術前後変化",
+          "timepoint": "術前から術後1年",
+          "direction": "応答群で典型的改善、非応答群で矢状面・荷重パターンの補正が遅い",
+          "effect": {
+            "examples": [
+              "疼痛応答群の術前後stance varus低下量とWOMAC疼痛変化 r=0.47, p=0.001",
+              "機能応答群のvarus低下量 r=0.38, p=0.009",
+              "機能応答群の内側荷重範囲増加 r=0.32, p=0.03"
+            ]
+          },
+          "clinical_or_practical_meaning": "関連の方向は興味深いが、相関は小〜中程度で臨床的MCIDを直接増加させる因果効果ではない。",
+          "verdict": "臨床効果は未確認",
+          "harms_or_burden": "歩行解析を術前・1年に2回実施。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.6-9, Fig.3, Tables II and IV",
+            "status": "reported"
+          }
+        }
+      ],
+      "implementation": {
+        "who": "末期膝OAで一次TKAを予定し、6 mを介助なしで歩ける成人。神経疾患・歩行安全性を損なう病態は除外。",
+        "what": "術前および術後1年の3D歩行評価を、WOMAC疼痛・身体機能のMCID応答と照合する。",
+        "how": "骨盤・大腿・下腿・足に4つのマーカー三脚、12解剖学的ランドマーク、床反力計、光学モーションキャプチャを同期し、自己選択速度で5 m歩行。各人最低4試行を平均し、既成PCAへ投影。",
+        "duration": "術前約1週と術後1年。",
+        "dose": "各時点最低4歩行試行；研究は介入としての歩行訓練を規定していない。",
+        "setting": "高容量の大学整形外科施設。術後は標準入院理学療法、退院後理学療法は任意・非標準化。",
+        "equipment": "2,000 Hz床反力計、100 Hz光学モーションキャプチャ、標準マーカー、PCA解析環境。",
+        "supervision": "研究スタッフによる計測。臨床での意思決定アルゴリズムは未検証。",
+        "adherence_and_fidelity": "歩行試行数は規定されるが、術後外来理学療法の遵守・内容は標準化されていない。",
+        "adaptation_boundary": "歩行不能、神経疾患、重度認知・安全上の問題、別施設の計測系では外挿不可。個別アライメント手術やリハビリ変更は本研究から直接推奨しない。"
+      },
+      "safety": {
+        "adverse_events": "歩行計測に伴う有害事象は報告なし。TKA自体の合併症比較は目的外。",
+        "contraindications": "研究除外基準（神経疾患、6 m歩行不能、安全に参加できない状態）を臨床導入にも適用。",
+        "monitoring": "歩行中の安全確保と疲労・疼痛の確認。",
+        "burden_cost_time": "3D計測設備、専門解析、術前・1年の2時点が必要。",
+        "unknowns": [
+          "外部コホートでの予測性能・校正",
+          "MCID応答を用いた個別アライメント変更の利益と害",
+          "歩行計測を用いた場合の費用対効果"
+        ]
+      },
+      "provenance": [
+        {
+          "claim": "本文の対象・主要結果・MCID定義",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-3, Abstract/Materials and Methods",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "主解析のRR・95%CI・r2",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.7, Table III",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "研究同定用DOI",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.1, citation line",
+            "status": "reported"
+          }
+        }
+      ],
+      "q_and_a": [
+        {
+          "question": "この研究はTKAの効果を証明したRCTか？",
+          "answer_30s": "いいえ。TKAを受けた46例の前向き予後コホートで、術前・術後の歩行PCA特徴とWOMAC MCID応答の関連を探索したLevel IV研究です。多重比較未補正で、個別の術式変更や効果予測を確定するものではありません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1, 4, 9",
+            "status": "reported"
+          }
+        },
+        {
+          "question": "臨床で何を再現できるか？",
+          "answer_30s": "術前と術後1年に、最低4試行の5 m自己選択歩行を3Dマーカー・床反力で測る手順は再現できます。ただし、高価な設備とPCAモデル、外部検証済みのカットオフが必要です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-3",
+            "status": "reported"
+          }
+        }
+      ],
+      "audit": {
+        "hard_flags": [],
+        "uncertainties": [
+          "完全WOMAC症例のみの選択によるバイアス",
+          "PCAモデルの外部データ・コード未確認",
+          "MCID二値化と多重比較未補正",
+          "外部検証・校正なし",
+          "46例の完全WOMAC症例（疼痛非応答12、機能非応答10）と多重比較未補正の探索解析により、個人予測の校正は不明。"
+        ],
+        "verification": {
+          "identity": "PDF内のタイトル・著者・DOIで確認",
+          "doi_external_resolution": "not_performed_in_audit_pass",
+          "supplement": "本文はJBJS補遺へのリンクを記載するが、補遺データは本評価で未取得",
+          "source_pdf_recheck": "completed_from_user_supplied_pdf_text"
+        },
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "max",
+        "rubric_version": "0.1.0",
+        "generated_at": "2026-08-15",
+        "audit_notes": [
+          "前向き単施設の予後コホート（PDF明記）で、PCAは予測候補の探索。手術・アライメントを変更する因果効果ではない。"
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "paper_id": "hirai_2015_aa_muscle_synergy",
+      "assessment_status": "assessed",
+      "metadata": {
+        "title": "On the Origin of Muscle Synergies: Invariant Balance in the Co-activation of Agonist and Antagonist Muscle Pairs",
+        "authors": [
+          "Hiroaki Hirai",
+          "Fumio Miyazaki",
+          "Hiroaki Naritomi",
+          "Keitaro Koba",
+          "Takanori Oku",
+          "Kanna Uno",
+          "Mitsunori Uemura",
+          "Tomoki Nishi",
+          "Masayuki Kageyama",
+          "Hermano Igo Krebs"
+        ],
+        "year": 2015,
+        "journal": "Frontiers in Bioengineering and Biotechnology",
+        "doi": "10.3389/fbioe.2015.00192",
+        "source_path": "C:\\Users\\furuk\\Desktop\\F_lab\\Thesis\\Observational_Study\\Reference_thesis\\EP_theory_or_learning_一部内部モデル_重要論文\\Hirai.pdf",
+        "source_urls": [
+          "https://doi.org/10.3389/fbioe.2015.00192"
+        ]
+      },
+      "classification": {
+        "primary_family": "ENG",
+        "secondary_families": [
+          "MECH",
+          "MEAS"
+        ],
+        "question_type": "technical validation",
+        "condition_tags": [
+          "healthy",
+          "stroke"
+        ],
+        "topic_tags": [
+          "muscle synergy",
+          "agonist-antagonist coactivation",
+          "equilibrium-point hypothesis",
+          "endpoint stiffness",
+          "virtual trajectory",
+          "neural control"
+        ],
+        "method_tags": [
+          "surface EMG",
+          "optical motion capture",
+          "physics-based model",
+          "biofeedback",
+          "polar-coordinate projection"
+        ]
+      },
+      "question": {
+        "framework": "TECH",
+        "summary": "6筋の表面EMGと運動学から、AA ratio/sumに基づく物理モデルで筋シナジー・エンドポイント剛性・仮想軌道を推定でき、学習・脳卒中回復で不変性を示すか。",
+        "population": "実験1は若年健常男性8人、実験2は健常高齢男性1人と急性期脳卒中男性1人。",
+        "intervention_or_index": "AA ratio（平衡関節角）・AA sum（関節剛性）から導出したuR、uφ、uR×φシナジー推定器とリアルタイム表示",
+        "comparator_or_reference": "実験1の訓練前後・被験者間、実験2の脳卒中前後と同世代健常者、課題間比較",
+        "outcome": "内積類似度、剛性楕円、仮想軌道、運動時間・FIMの変化",
+        "time": "実験1：50試行/日×8日；実験2：リハ前と2.5か月後"
+      },
+      "radar": {
+        "design": 2,
+        "internal_validity": 2,
+        "statistical_credibility": 2,
+        "effect_practical": 3,
+        "external_validity": 1,
+        "feasibility": 1,
+        "transparency_reproducibility": 3,
+        "safety_burden": 3
+      },
+      "radar_notes": [
+        {
+          "claim": "新しい物理モデルを人の課題に適用する実証だが、無作為化比較・独立した診断精度設計ではない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-4, Abstract/Methods",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "実験1はn=8、実験2は脳卒中1例で、同一被験者の反復・図示が中心。統計的因果推論は不可",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.4, Experimental Paradigm; pp.8, 13-14",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "内積0.923-0.974等の類似度は高いが、事前の精度閾値・CI・独立テストセットは示されない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-10, Table 3; p.14, Table 5",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "モデルは筋をバネ、モーメントアーム一定、上腕・前腕長同等などの仮定を置き、動的影響を簡略化",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-7, Eqs. (5)-(11)",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "若年健常者と脳卒中単例・同世代健常者で、対象・課題・世代の代表性は低い",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.4, Participants; pp.13-14",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "6筋EMG、1000 Hz、10-450 Hz bandpass、整流・平滑化・MVC正規化、モーションキャプチャ100 Hzを明記するが専用装置が必要",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, Apparatus and EMG processing",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "数式と装置条件は詳しいが、コード・生データ・外部テスト・SENIAM準拠の完全な再現資料は本文にない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4-7, Methods; p.15, Future Directions",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "課題は座位・水平面の上肢運動で、被験者への急性危険は低いが臨床ロボット介入の安全性は未評価",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, apparatus and experiments",
+            "status": "reported"
+          }
+        }
+      ],
+      "tier": {
+        "label": "D3",
+        "letter": "D",
+        "number": 3,
+        "rationale": [
+          "技術的仮説と物理モデルの初期実証で、ENG+MECHの技術成熟度を評価",
+          "小標本・単例、独立外部テストと臨床妥当性がない",
+          "信用4軸平均2.25の暫定D3。技術的に興味深いが臨床推奨には未到達"
+        ],
+        "model_proposed_label": "D3",
+        "caps_applied": [],
+        "quality_mean": 2.25
+      },
+      "outcomes": [
+        {
+          "name": "筋シナジー内積類似度（健常者・訓練前後）",
+          "timepoint": "8日訓練の初日対最終日",
+          "direction": "高い類似性・不変",
+          "effect": {
+            "uR": "0.968±0.015",
+            "uPhi": "0.963±0.017",
+            "uNull": "0.933±0.018",
+            "n": 8
+          },
+          "clinical_or_practical_meaning": "同じ装置・課題内の再現性を示すが、他施設・他筋・下肢・患者での妥当性ではない。",
+          "verdict": "技術的に有望だが臨床有用性未検証",
+          "harms_or_burden": "6筋電極・水平面課題・専用解析装置。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-10, Fig.4 and Table 3",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "脳卒中単例のシナジー回復",
+          "timepoint": "リハ前対2.5か月後",
+          "direction": "健常パターンに近づく",
+          "effect": {
+            "before_after_similarity": {
+              "uR": 0.966,
+              "uPhi": 0.885,
+              "uNull": 0.861
+            },
+            "after_vs_healthy": {
+              "uR": 0.93,
+              "uPhi": 0.994,
+              "uNull": 0.924
+            },
+            "FIM": "44→67",
+            "movement_time": "約6→4 s"
+          },
+          "clinical_or_practical_meaning": "単一症例の回復過程と整合するが、自然回復・通常リハとの分離やレスポンダー基準は不明。",
+          "verdict": "仮説生成・臨床効果は未確認",
+          "harms_or_burden": "リハビリ内容自体は規定されず、測定負担のみ。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8, 13-14, Fig.8-9 and Tables 4-5",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "エンドポイント剛性と仮想軌道",
+          "timepoint": "訓練・回復前後",
+          "direction": "剛性楕円の大きさ・向きと仮想軌道が変化",
+          "effect": {
+            "quantification": "図示中心；推定誤差・CIは報告なし"
+          },
+          "clinical_or_practical_meaning": "機械的解釈を与えるが、臨床尺度に対する増分妥当性は未検証。",
+          "verdict": "技術的に有望だが臨床有用性未検証",
+          "harms_or_burden": "リアルタイム表示はバイオフィードバックに使えるが、誤推定時の影響未評価。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.7-9, Fig.5-7; pp.13-14, Fig.9",
+            "status": "reported"
+          }
+        }
+      ],
+      "implementation": {
+        "who": "研究対象は若年健常者または軽〜中等度片麻痺の急性期脳卒中単例。臨床適用集団は未確定。",
+        "what": "6筋表面EMGと上肢運動からAA ratio/sum、uR/uφ/uNull、剛性楕円、仮想軌道を推定し表示。",
+        "how": "肩固定ハーネス、水平面で手関節を台車に固定し、螺旋または円追跡。EMG 1,000 Hz、10-450 Hz bandpass、全波整流、平滑化、MVC正規化、OptiTrack 100 Hz。",
+        "duration": "健常実験は練習20試行後、50試行/日×8日。脳卒中例はリハ前と2.5か月後に測定。",
+        "dose": "実験1は1日50回の螺旋追跡；実験2のリハ用量・頻度・内容は本文で規定されない。",
+        "setting": "大学工学・病院の研究室、専用synergy analyzerと大型表示。",
+        "equipment": "EMGテレメータ、8台光学カメラ、水平面アーム支持台、ハーネス、65インチ表示、専用計算装置。",
+        "supervision": "研究者・療法士の監督。表示をバイオフィードバックに利用可能だが効果は未検証。",
+        "adherence_and_fidelity": "健常者の試行回数は規定；脳卒中例の通常リハの遵守・内容は報告なし。",
+        "adaptation_boundary": "上肢水平面モデル、6筋、一定モーメントアーム仮定の範囲を超えて下肢・歩行・多施設へ外挿しない。臨床意思決定に使う前に外部再現、信頼性、基準値、臨床アウトカムとの増分妥当性が必要。"
+      },
+      "safety": {
+        "adverse_events": "課題・測定に伴う有害事象の報告なし。",
+        "contraindications": "肩固定・水平面運動が困難、急性期の医学的不安定、電極皮膚障害などは個別判断。",
+        "monitoring": "疲労、疼痛、片麻痺側の過負荷、電極皮膚状態を監視。",
+        "burden_cost_time": "多数電極、MVC、同期運動計測、専用装置と解析。",
+        "unknowns": [
+          "臨床閾値・最小検出変化",
+          "外部サイト・操作者・デバイス間頑健性",
+          "ロボット治療へ接続した際の安全性と利益"
+        ]
+      },
+      "provenance": [
+        {
+          "claim": "AA ratio/sumと物理モデルの定義・仮定",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4-7, Table 1, Fig.2, Eqs. (1)-(15)",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "健常訓練と脳卒中単例の結果",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8-14, Figs.3-9 and Tables 2-5",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "DOI・掲載誌",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.1, citation line",
+            "status": "reported"
+          }
+        }
+      ],
+      "q_and_a": [
+        {
+          "question": "このEMG法は臨床でそのまま使えるか？",
+          "answer_30s": "まだ研究用です。6筋EMGとモーションキャプチャから物理的に解釈しやすい指標を作れる点は有望ですが、健常8人と脳卒中1例、専用装置、外部検証なしなので、診断・治療選択の閾値はありません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4, 13-15",
+            "status": "reported"
+          }
+        },
+        {
+          "question": "何が再現性の根拠か？",
+          "answer_30s": "健常者の訓練前後・被験者間でシナジー内積が約0.93-0.97、脳卒中例でもリハ後のパターンが健常者に近づいたことです。ただし同じ装置・課題内の再現性で、外部妥当性とは別です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-10, 13-14, Tables 3 and 5",
+            "status": "reported"
+          }
+        }
+      ],
+      "audit": {
+        "hard_flags": [],
+        "uncertainties": [
+          "数式抽出で一部記号がPDFフォント依存",
+          "脳卒中例n=1",
+          "外部テスト・コード・生データなし",
+          "モデル仮定の実測妥当性が限定的",
+          "AA ratio/sum・剛性楕円は物理モデル依存で、独立外部テスト、操作者/装置間再現性、臨床閾値が未検証。"
+        ],
+        "verification": {
+          "identity": "PDF内のタイトル・著者・DOIで確認",
+          "doi_external_resolution": "not_performed_in_audit_pass",
+          "clinical_utility": "本文も今後のデータ収集・ロボット検証が必要と記載",
+          "source_pdf_recheck": "completed_from_user_supplied_pdf_text"
+        },
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "max",
+        "rubric_version": "0.1.0",
+        "generated_at": "2026-08-15",
+        "audit_notes": [
+          "原著内に健常者8例の学習実験と、健常高齢者1例・脳卒中1例の症例的回復実験が併存する。臨床効果試験ではない。"
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "paper_id": "latash_2010_stages_learning_synergies",
+      "assessment_status": "assessed",
+      "metadata": {
+        "title": "Stages in Learning Motor Synergies: A View Based on the Equilibrium-Point Hypothesis",
+        "authors": [
+          "Mark L. Latash"
+        ],
+        "year": 2010,
+        "journal": "Human Movement Science",
+        "doi": "10.1016/j.humov.2009.11.002",
+        "source_path": "C:\\Users\\furuk\\Desktop\\F_lab\\Thesis\\Observational_Study\\Reference_thesis\\EP_theory_or_learning_一部内部モデル_重要論文\\Stages in learining.pdf",
+        "source_urls": [
+          "https://doi.org/10.1016/j.humov.2009.11.002"
+        ]
+      },
+      "classification": {
+        "primary_family": "CON",
+        "secondary_families": [
+          "MECH"
+        ],
+        "question_type": "concept",
+        "condition_tags": [
+          "病態なし"
+        ],
+        "topic_tags": [
+          "motor learning",
+          "synergy",
+          "uncontrolled manifold",
+          "equilibrium-point hypothesis",
+          "good variability"
+        ],
+        "method_tags": [
+          "narrative review",
+          "UCM variance",
+          "referent configuration",
+          "theoretical model"
+        ]
+      },
+      "question": {
+        "framework": "CONCEPT",
+        "summary": "運動学習を、(1)主要パフォーマンス変数を安定化するシナジーの発見・強化、(2)疲労・美的制約等を最適化する過程での弱化、という2段階で説明できるか。",
+        "population": "特定病態ではなく、指・上肢・多関節の運動学習研究を横断して議論。",
+        "intervention_or_index": "EP仮説・referent configurationとUCMの「good variability」枠組み",
+        "comparator_or_reference": "BernsteinのDOF freezing/releasing三段階、UCMのVUCM対VORTシナリオ、既報の練習研究",
+        "outcome": "シナジー指数（ΔV等）、VUCM・VORT、パフォーマンス変動と学習段階の理論的一貫性",
+        "time": "学習練習の初期から熟練・追加制約導入後まで（研究ごとに異なる）"
+      },
+      "radar": {
+        "design": 3,
+        "internal_validity": 2,
+        "statistical_credibility": 1,
+        "effect_practical": 3,
+        "external_validity": 1,
+        "feasibility": 1,
+        "transparency_reproducibility": 2,
+        "safety_burden": 2
+      },
+      "radar_notes": [
+        {
+          "claim": "理論統合・既報研究の解釈を目的とするレビューで、理論問いには適合するが効果推定の設計ではない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.1, Abstract and section 1",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "引用研究の選択・検索・除外手順や事前プロトコルは記載されず、ナラティブ選択バイアスを評価できない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-14, no systematic search methods section",
+            "status": "not_reported"
+          }
+        },
+        {
+          "claim": "ΔV=(VUCM−VORT)/VTOTなどの定義と三つの練習シナリオは明確だが、レビュー全体の定量統合やCIはない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3, 8-10, Fig.1 and Fig.5",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "複数の先行研究が強化・不変・弱化の全シナリオを示すと要約され、因果的な段階順序は仮説として扱われる",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8-10, section 7-8",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "研究対象は指・上肢等の課題で、整形外科リハや神経疾患への直接一般化は制約",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.7-10, cited experimental examples",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "UCM解析は実装可能な分散指標を提示するが、λメータ等の測定限界が明記される",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4, 7, section 5",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "図と数式は再現できるが、論文選択を再現する検索式・データセットはなし",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-19; References",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "理論上の介入示唆はあるが、安全性や臨床負担を評価する研究ではない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-11, Final comments",
+            "status": "not_reported"
+          }
+        }
+      ],
+      "tier": {
+        "label": "D3",
+        "letter": "D",
+        "number": 3,
+        "rationale": [
+          "CON（理論・ナラティブレビュー）として、理論的整合性と反証可能な予測を分離",
+          "体系的検索・定量統合・直接臨床アウトカムがなく、仮説生成に留まる",
+          "信用4軸平均2.0の暫定D3。CONの上限Cを満たす臨床効果エビデンスではない"
+        ],
+        "model_proposed_label": "D3",
+        "caps_applied": [],
+        "quality_mean": 2.0
+      },
+      "outcomes": [
+        {
+          "name": "学習段階モデル（2段階）",
+          "timepoint": "練習初期〜熟練",
+          "direction": "第1段階で主要変数安定化、第2段階で他制約により主シナジー弱化",
+          "effect": {
+            "quantification": "理論命題；統合効果量なし",
+            "support": "複数先行研究の方向性を引用"
+          },
+          "clinical_or_practical_meaning": "学習過程を観察する仮説として有用だが、個々の患者の訓練段階を判定する診断基準ではない。",
+          "verdict": "仮説生成",
+          "harms_or_burden": "理論を介入ルールとして直接適用すると誤った訓練量・評価につながる可能性。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1, 8-11, Abstract and sections 7-9",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "UCMのgood variability",
+          "timepoint": "反復練習中",
+          "direction": "VUCMとVORTの相対変化でシナジー強化・維持・弱化を区別",
+          "effect": {
+            "formula": "ΔV=(VUCM−VORT)/VTOT",
+            "scenarios": 3
+          },
+          "clinical_or_practical_meaning": "運動の正確さだけでなく柔軟性・摂動耐性を見る分析軸。標準化したMCIDや患者利益は未確立。",
+          "verdict": "技術的に有用な分析枠組み・臨床効果未確認",
+          "harms_or_burden": "複数試行・高次元運動計測と線形近似が必要。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3, 8-10, Fig.1 and Fig.5",
+            "status": "reported"
+          }
+        }
+      ],
+      "implementation": {
+        "who": "病態を限定しない運動学習研究参加者。臨床で使う場合は病態・課題別の検証が必要。",
+        "what": "目標パフォーマンス変数、元素変数、UCM/ORTを定義し、反復試行のVUCM・VORT・ΔVを追跡する。",
+        "how": "課題のスナップショットまたは時間系列で元素変数を記録し、ヤコビアンでUCM/直交空間を近似。練習段階と二次制約（疲労、時間、正確さ等）を記録。",
+        "duration": "課題に応じて初期学習から熟練まで。論文は共通の期間・頻度を規定しない。",
+        "dose": "試行数・休息・フィードバックは各実験研究で設定；本レビューから一律の処方は抽出できない。",
+        "setting": "運動制御・バイオメカニクス研究室。",
+        "equipment": "課題に応じた力センサ、モーションキャプチャ、EMG等とUCM解析ソフト。",
+        "supervision": "研究者による課題教示・安全監督。",
+        "adherence_and_fidelity": "レビューでは個別研究間で異なり、統合的な遵守率は未報告。",
+        "adaptation_boundary": "ΔVの方向を治療目標と解釈しない。課題・元素変数・階層レベルを変えるとシナジー強度の意味が変わる。"
+      },
+      "safety": {
+        "adverse_events": "レビュー自体は有害事象を集計しない。",
+        "contraindications": "個別課題の身体負荷に応じて設定。",
+        "monitoring": "疲労・疼痛・摂動課題での転倒等を個別に監視。",
+        "burden_cost_time": "複数試行と高次元データ解析。",
+        "unknowns": [
+          "臨床患者での安全域",
+          "訓練処方にした場合の過負荷・効果",
+          "UCM指数の最小有益変化"
+        ]
+      },
+      "provenance": [
+        {
+          "claim": "2段階モデルの要旨",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.1, Abstract",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "UCM定義とΔVシナリオ",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-3, 8-10, Figs.1 and 5",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "DOI・掲載誌",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.1, publication line",
+            "status": "reported"
+          }
+        }
+      ],
+      "q_and_a": [
+        {
+          "question": "この論文は臨床リハの訓練回数を決めるか？",
+          "answer_30s": "決めません。EP仮説とUCMを統合した2段階の理論モデルで、練習初期は主要変数を安定化し、後期は疲労や時間などの制約でシナジーが弱まる可能性を示します。患者別の処方量や効果量はありません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1, 8-11",
+            "status": "reported"
+          }
+        },
+        {
+          "question": "現場での使い道は？",
+          "answer_30s": "正確さだけでなくUCM内の柔軟な変動と直交方向の誤差変動を分けて、学習の質を仮説化する分析枠です。測定・基準値・臨床アウトカムとの対応を別研究で確認してください。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-3, 7-10",
+            "status": "reported"
+          }
+        }
+      ],
+      "audit": {
+        "hard_flags": [],
+        "uncertainties": [
+          "ナラティブレビューで検索網羅性不明",
+          "理論命題と引用研究の因果推論を分離する必要",
+          "臨床実装の閾値・安全性なし",
+          "検索戦略・選択基準・研究ごとのリスクオブバイアスが提示されず、理論命題を臨床推奨へ外挿できない。"
+        ],
+        "verification": {
+          "identity": "PDF内のタイトル・著者・掲載誌・DOIで確認",
+          "doi_external_resolution": "not_performed_in_audit_pass",
+          "search_protocol": "not_reported",
+          "source_pdf_recheck": "completed_from_user_supplied_pdf_text"
+        },
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "max",
+        "rubric_version": "0.1.0",
+        "generated_at": "2026-08-15",
+        "audit_notes": [
+          "PDFはナラティブレビュー／理論提案であり、統合効果量を持たない。CONの仮説生成として扱った。"
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "paper_id": "fairhall_2022_hip_fracture_mobility_cochrane",
+      "assessment_status": "assessed",
+      "metadata": {
+        "title": "Interventions for improving mobility after hip fracture surgery in adults",
+        "authors": [
+          "Nicola J Fairhall",
+          "Suzanne M Dyer",
+          "Jenson C.S. Mak",
+          "Joanna Diong",
+          "Wing S. Kwok",
+          "Catherine Sherrington"
+        ],
+        "year": 2022,
+        "journal": "Cochrane Database of Systematic Reviews",
+        "doi": "10.1002/14651858.CD001704.pub5",
+        "source_path": "C:\\Users\\furuk\\Desktop\\F_lab\\Thesis\\Observational_Study\\Reference_thesis\\background\\4_rehabilitation review.pdf",
+        "source_urls": [
+          "https://doi.org/10.1002/14651858.CD001704.pub5",
+          "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD001704.pub5/full"
+        ]
+      },
+      "classification": {
+        "primary_family": "SYN",
+        "secondary_families": [
+          "INT"
+        ],
+        "question_type": "intervention",
+        "condition_tags": [
+          "hip fracture",
+          "proximal femoral fracture"
+        ],
+        "topic_tags": [
+          "mobility",
+          "gait training",
+          "balance",
+          "functional training",
+          "resistance training",
+          "post-hospital rehabilitation"
+        ],
+        "method_tags": [
+          "Cochrane systematic review",
+          "meta-analysis",
+          "GRADE",
+          "RCT",
+          "SMD",
+          "risk of bias"
+        ]
+      },
+      "question": {
+        "framework": "PICO",
+        "summary": "成人の股関節骨折手術後に、入院中または退院後の歩行・バランス・機能・筋力等のモビリティ戦略は通常ケア等と比べて移動能力・歩行速度・機能・QOL・死亡・有害事象を改善するか。",
+        "population": "股関節骨折手術後の成人40 RCT、4059人、平均80歳、女性80%、17か国。",
+        "intervention_or_index": "ケアプログラム、歩行・バランス・機能訓練、抵抗/筋力、持久、柔軟、3D運動、一般身体活動、電気刺激（試験ごとに異なる）。",
+        "comparator_or_reference": "通常入院ケア、通常ケア・無介入・sham exercise・social visit。",
+        "outcome": "mobility、歩行速度、機能、HRQoL、短長期死亡、再入院等の有害事象、骨折前居住地への帰還。",
+        "time": "入院研究は約4か月に最も近い時点、退院後研究は介入終了時に最も近い時点。検索は2021年3月まで。"
+      },
+      "radar": {
+        "design": 5,
+        "internal_validity": 4,
+        "statistical_credibility": 4,
+        "effect_practical": 4,
+        "external_validity": 3,
+        "feasibility": 3,
+        "transparency_reproducibility": 5,
+        "safety_burden": 3
+      },
+      "radar_notes": [
+        {
+          "claim": "RCT・準RCTを対象とするCochrane更新レビューで、PRISMA相当の検索・選択・抽出・GRADEの枠組みが明記",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8, 26-29, Abstract/Methods",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "40 RCT・4059人だが、全試験で少なくとも1ドメインが不明/高リスク。アウトカムごとに感度分析とGRADE降格",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8-10, 39-42, Main results/Risk of bias",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "SMD/MD/RRと95%CIを使用し、異なる尺度を臨床単位へ再表現してMIDと比較",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.11-14, 18-23, Summary of Findings 1-4",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "入院と退院後、運動種別・主要アウトカムを分け、異質性I2・リスク・精度をアウトカム別に評価",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9, 14, 21-24, 41-43",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "17か国・平均80歳だが、認知障害70%、移動制限/医学的状態72%が除外され、フレイル・認知症への一般化に制約",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8-10, Main results/Plain language summary",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "レビューは介入内容・期間・頻度・強度・監督・遵守・資源を抽出したが、プールされた処方は異質",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.28-29, Data extraction; pp.73-145 study characteristics",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "検索式・データベース・試験登録・除外研究・感度分析が本文・Appendixに追跡可能",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.28, 59-68, 147-260, Appendix 3",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "死亡・再入院等の有害事象はイベントが少なく低確実性が多い。安全性はアウトカムとして抽出されるが実装ごとの詳細は不足",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.13-14, 19-20, 42, Summary of Findings",
+            "status": "reported"
+          }
+        }
+      ],
+      "tier": {
+        "label": "A1",
+        "letter": "A",
+        "number": 1,
+        "rationale": [
+          "Cochrane SYNで検索・二重選択/抽出・RoB・GRADE・感度分析が明示され、信用4軸平均4.5",
+          "メタ分析だから自動的に高いのではなく、アウトカムごとの確実性は低〜高で異なる",
+          "暫定A1。ただし個別アウトカムのGRADEと効果の実装可能性を別表示"
+        ],
+        "model_proposed_label": "A1",
+        "caps_applied": [],
+        "quality_mean": 4.5
+      },
+      "outcomes": [
+        {
+          "name": "入院中モビリティ（全戦略）",
+          "timepoint": "5日〜4か月",
+          "direction": "改善",
+          "effect": {
+            "measure": "SMD",
+            "value": 0.53,
+            "ci95": [
+              0.1,
+              0.96
+            ],
+            "studies": 7,
+            "participants": 507,
+            "certainty": "low",
+            "reexpressed": "PPME MD 1.46 (95%CI 0.28-2.64)",
+            "mcid": "PPME 1.13-2.15",
+            "heterogeneity_I2": 81,
+            "sensitivity_without_Monticone": {
+              "measure": "SMD",
+              "value": 0.29,
+              "ci95": [
+                0.03,
+                0.55
+              ],
+              "I2": 44
+            }
+          },
+          "clinical_or_practical_meaning": "中等度・臨床的に意味のある可能性。ただし異質性I2=84%、RoBと精度で低確実性。",
+          "verdict": "条件付き推奨",
+          "harms_or_burden": "短長期死亡・再入院・帰宅は差不明。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9, 11-14, Summary of Findings 1",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "退院後モビリティ",
+          "timepoint": "2〜12か月",
+          "direction": "改善",
+          "effect": {
+            "measure": "SMD",
+            "value": 0.32,
+            "ci95": [
+              0.11,
+              0.54
+            ],
+            "studies": 7,
+            "participants": 761,
+            "certainty": "high",
+            "reexpressed": "SPPB MD 0.89 (95%CI 0.30-1.50)",
+            "mcid": "SPPB small 0.27-0.55; substantial 0.99-1.34",
+            "heterogeneity_I2": 48
+          },
+          "clinical_or_practical_meaning": "小さいが臨床的に意味のある改善。多くは歩行・バランス・機能訓練。",
+          "verdict": "推奨",
+          "harms_or_burden": "死亡・再入院への効果は不明/ほぼ差なし。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-10, 17-18, Summary of Findings 3",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "歩行速度（退院後）",
+          "timepoint": "1〜12か月",
+          "direction": "改善",
+          "effect": {
+            "measure": "SMD",
+            "value": 0.16,
+            "ci95": [
+              0.04,
+              0.29
+            ],
+            "studies": 14,
+            "participants": 1067,
+            "certainty": "high",
+            "reexpressed": "MD 0.05 m/s (95%CI 0.01-0.09)",
+            "mcid": "0.04-0.06 m/s",
+            "heterogeneity_I2": 1
+          },
+          "clinical_or_practical_meaning": "小さいが小変化の閾値に近い。個々のプログラムの頻度・強度は試験間で異なる。",
+          "verdict": "推奨",
+          "harms_or_burden": "介入内容と資源は施設依存。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9, 18, Summary of Findings 3",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "退院後機能",
+          "timepoint": "3〜12か月",
+          "direction": "わずかに改善",
+          "effect": {
+            "measure": "SMD",
+            "value": 0.23,
+            "ci95": [
+              0.1,
+              0.36
+            ],
+            "studies": 9,
+            "participants": 936,
+            "certainty": "high",
+            "reexpressed": "Barthel MD 1.4 (95%CI 0.6-2.1)",
+            "mcid": "Barthel 9.8",
+            "heterogeneity_I2": 0
+          },
+          "clinical_or_practical_meaning": "統計的には改善するが、Barthel単位ではMID未満で臨床的には小さい。",
+          "verdict": "統計的に有意だが臨床的に小さい",
+          "harms_or_burden": "機能改善の規模は患者の基線・環境で変わる。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9, 18-19, Summary of Findings 3",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "歩行・バランス・機能訓練（退院後モビリティ）",
+          "timepoint": "2〜12か月",
+          "direction": "改善",
+          "effect": {
+            "measure": "SMD",
+            "value": 0.2,
+            "ci95": [
+              0.05,
+              0.36
+            ],
+            "studies": 5,
+            "participants": 621,
+            "certainty": "high",
+            "reexpressed": "SPPB MD 0.55 (95%CI 0.14-1.0)",
+            "mcid": "SPPB 0.27-0.55",
+            "heterogeneity_I2": 0
+          },
+          "clinical_or_practical_meaning": "追加理学療法の中では最も一貫したタイプ。",
+          "verdict": "推奨",
+          "harms_or_burden": "患者の荷重制限・認知・転倒リスクに応じて段階化。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.21-22, Summary of Findings 4",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "抵抗/筋力訓練（退院後6MWT）",
+          "timepoint": "10週〜3か月",
+          "direction": "改善",
+          "effect": {
+            "measure": "MD",
+            "value": 55.65,
+            "ci95": [
+              28.58,
+              82.72
+            ],
+            "studies": 3,
+            "participants": 198,
+            "certainty": "low",
+            "mcid": "6MWT 14.0-30.5 m",
+            "heterogeneity_I2": 0
+          },
+          "clinical_or_practical_meaning": "効果量はMIDを上回るが、少数試験・RoB・精度で低確実性。",
+          "verdict": "条件付き推奨",
+          "harms_or_burden": "骨折固定、創部、荷重制限、心肺状態に応じた監視が必要。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.22, Summary of Findings 4",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "安全性（再入院・死亡）",
+          "timepoint": "短期/長期",
+          "direction": "明確な差なし",
+          "effect": {
+            "short_term_mortality_rr": "1.01 (95%CI 0.49-2.06), 8 studies/737, moderate",
+            "long_term_mortality_rr": "0.73 (0.39-1.37), 4/588, low",
+            "readmission_rr": "0.86 (0.52-1.42), 2/206, low",
+            "setting": "post-hospital",
+            "short_term_mortality_certainty": "moderate",
+            "long_term_mortality_certainty": "low",
+            "readmission_certainty": "low"
+          },
+          "clinical_or_practical_meaning": "有害事象を増やす明確な証拠はないが、イベント数が少なく安全性の確実性は限定的。",
+          "verdict": "安全性は許容可能だが不確実",
+          "harms_or_burden": "個別介入の負荷・転倒・疼痛は監視。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.13-14, 19-20, Summary of Findings 1 and 3",
+            "status": "reported"
+          }
+        }
+      ],
+      "implementation": {
+        "who": "股関節骨折手術後の成人（平均80歳）。認知障害・重度移動制限を除外した試験が多く、臨床では適応を個別化。",
+        "what": "標準ケアに歩行・バランス・機能課題を中心とした追加訓練、必要に応じ抵抗/筋力・複合運動を加える。",
+        "how": "立位・歩行再訓練、バランス、 sit-to-stand、階段/機能課題、筋力・持久運動を、荷重許可・創部・認知・疲労に合わせて進行。レビューは単一プロトコルを規定しない。",
+        "duration": "入院中は術後1週以内開始〜約4か月評価。退院後は在宅・外来・施設で介入終了時（多くは2〜12か月）。",
+        "dose": "試験間で頻度・強度・セッション数が異なるため、各RCTの処方を参照。共通して標準理学療法への追加が多い。",
+        "setting": "整形外科病棟、退院後の自宅・外来・老人施設・地域。",
+        "equipment": "歩行器・杖、平行棒、階段/障害物、筋力機器・エルゴメータ等（試験ごとに異なる）。",
+        "supervision": "理学療法士等の監督、研究では監督者:参加者比や遵守を抽出。",
+        "adherence_and_fidelity": "入院6/18研究が遵守を報告、介入内容・標準ケア・社会的接触の差が異質性要因。",
+        "adaptation_boundary": "荷重制限、骨折型/固定、認知症、フレイル、転倒・心肺リスクを確認。単一のSMDを患者個人の効果量として解釈しない。"
+      },
+      "safety": {
+        "adverse_events": "再入院・死亡等は概ね差なしだが、低確実性・少イベント。",
+        "contraindications": "骨折固定不安定、荷重禁止、疼痛・心肺不安定、転倒高リスク、認知・協力困難は個別判断。",
+        "monitoring": "疼痛、創部、荷重許可、血圧/心拍、疲労、転倒、再入院を監視。",
+        "burden_cost_time": "追加セッション、人員、在宅・通所資源。費用アウトカムは不足。",
+        "unknowns": [
+          "最適な運動種別・頻度・強度",
+          "認知症・重度フレイルへの効果",
+          "長期QOL・費用対効果",
+          "電気刺激の効果"
+        ]
+      },
+      "provenance": [
+        {
+          "claim": "検索・選択基準と40 RCT/4059人",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8, 26-29",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "アウトカム別効果量・GRADE",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-24, Summary of Findings 1-4",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "DOI・Cochrane更新情報",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.8, citation/publication status",
+            "status": "reported"
+          }
+        }
+      ],
+      "q_and_a": [
+        {
+          "question": "メタ分析だからどんな運動でも強く推奨できるか？",
+          "answer_30s": "いいえ。退院後のモビリティ・歩行速度は高確実性で小さな改善、入院中は低〜中確実性、機能や死亡・再入院は臨床的重要性が小さい/不確実です。歩行・バランス・機能課題を標準ケアに追加するのが最も一貫します。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-10, 17-24",
+            "status": "reported"
+          }
+        },
+        {
+          "question": "現場でどう処方するか？",
+          "answer_30s": "対象は術後の成人で、荷重許可と安全性を確認し、歩行・立位・バランス・sit-to-standを中心に標準PTへ追加、能力に応じ筋力・複合運動を進行します。ただし頻度・強度はこのレビューから一律に決まりません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.26-29, 73-145",
+            "status": "reported"
+          }
+        }
+      ],
+      "audit": {
+        "hard_flags": [],
+        "uncertainties": [
+          "含まれたRCTの多くで少なくとも1ドメイン高/不明リスク",
+          "介入の異質性と認知障害除外",
+          "安全性・費用・長期アウトカムのデータ不足",
+          "入院中モビリティはI²=81%（Monticone 2018除外でSMD 0.29、I²=44%）で、介入量・強度の異質性が大きい。",
+          "費用、認知障害・重度フレイル、長期安全性のデータが乏しく、単一の運動処方へ還元できない。"
+        ],
+        "verification": {
+          "identity": "PDF内のCochrane citation・DOIで確認",
+          "doi_external_resolution": "not_performed_in_audit_pass",
+          "search_end_date": "2021-03-10",
+          "review_update": "2022 Issue 9",
+          "source_pdf_recheck": "completed_from_user_supplied_pdf_text"
+        },
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "max",
+        "rubric_version": "0.1.0",
+        "generated_at": "2026-08-15",
+        "audit_notes": [
+          "Cochraneレビューの検索終了日は2021-03-10。含まれるアウトカムごとにGRADE確実性が異なるため、論文ティアA1と各アウトカムの推奨を分離した。"
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "paper_id": "fukui_2012_hip_fracture_cane_prognosis",
+      "assessment_status": "assessed",
+      "metadata": {
+        "title": "Predictors for Ambulatory Ability and the Change in ADL After Hip Fracture in Patients With Different Levels of Mobility Before Injury: A 1-Year Prospective Cohort Study",
+        "authors": [
+          "Naoshi Fukui",
+          "Yoshinobu Watanabe",
+          "Tetsuo Nakano",
+          "Takeshi Sawaguchi",
+          "Takashi Matsushita"
+        ],
+        "year": 2012,
+        "journal": "Journal of Orthopaedic Trauma",
+        "doi": null,
+        "source_path": "C:\\Users\\furuk\\Desktop\\F_lab\\Thesis\\Observational_Study\\Reference_thesis\\background\\3_cane_prediction.pdf",
+        "source_urls": []
+      },
+      "classification": {
+        "primary_family": "OBS",
+        "secondary_families": [],
+        "question_type": "prognosis",
+        "condition_tags": [
+          "hip fracture"
+        ],
+        "topic_tags": [
+          "ambulatory ability",
+          "ADL",
+          "T-cane",
+          "prognostic factors",
+          "early rehabilitation"
+        ],
+        "method_tags": [
+          "prospective cohort",
+          "multicentre",
+          "logistic regression",
+          "relative risk"
+        ]
+      },
+      "question": {
+        "framework": "PECO",
+        "summary": "股関節骨折手術後の高齢者で、受傷前移動レベル、ADL、併存症、入院中のT字杖歩行獲得などは6・12か月の歩行能力とADLを予測するか。",
+        "population": "65歳以上の非病的大腿骨頸部/転子部骨折手術患者650人、14病院、平均82.5歳、女性81.8%。",
+        "intervention_or_index": "受傷前のcommunity/household ambulator、ADL、入院時指標、退院時T-cane gait等の予後因子",
+        "comparator_or_reference": "各予後因子の非該当群、受傷前移動レベル別比較",
+        "outcome": "6・12か月のcommunity/household ambulation、ADL独立、死亡・追跡完了",
+        "time": "術後6か月および12か月。登録は2004年12月〜2006年1月。"
+      },
+      "radar": {
+        "design": 4,
+        "internal_validity": 3,
+        "statistical_credibility": 3,
+        "effect_practical": 4,
+        "external_validity": 3,
+        "feasibility": 4,
+        "transparency_reproducibility": 3,
+        "safety_burden": 3
+      },
+      "radar_notes": [
+        {
+          "claim": "14病院の連続前向きコホートで予後問いに適合し、6/12か月追跡を設定",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-2, Objectives/Patients and Methods",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "予後因子を広く記録し多変量ロジスティック回帰を行うが、因子選択は単変量有意性に依存し、残余交絡・欠測処理は限定的",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2, Statistical Analyses; pp.5-7, Tables 5-8",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "RRと95%CIを報告する一方、household群のCIは非常に広く、連続変数の平均二分化による情報損失",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2, 5-7, Tables 5-8",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "T-cane獲得はcommunity群12か月RR3.25 (1.69-6.37)、household群RR4.17 (1.33-14.29)だが、予後マーカーであり介入効果ではない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.6-7, Tables 7-8",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "日本の14病院、長期入院、退院後PTが一般的でない医療制度に依存し、海外・現在の早期退院環境への移送は制約",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-3, 8, Settings and Discussion limitations",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "術後早期離床・荷重、週5日1日2回PT、退院時5段階移動評価など実装詳細は比較的再現可能",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.2, postoperative protocol and discharge assessment",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "外部検証、校正、識別能（AUC等）、決定曲線はなく、予測モデルとしての成熟度は限定",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2, 5-8, Statistical Analyses/Discussion; no external validation",
+            "status": "not_reported"
+          }
+        },
+        {
+          "claim": "介入試験ではないため有害事象は予後研究の範囲で、T-caneを目標にする提案は著者も今後検証が必要と明記",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.7-8, Discussion",
+            "status": "reported"
+          }
+        }
+      ],
+      "tier": {
+        "label": "C3",
+        "letter": "C",
+        "number": 3,
+        "rationale": [
+          "多施設前向き予後コホートで設計は良好だが、観察研究のため因果効果やT-cane訓練の推奨にはならない",
+          "モデルは内部解析のみで外部検証・校正なし、変数二分化と単変量選択、広いCI",
+          "信用4軸平均3.25の暫定C3（OBS上限Bの範囲内）"
+        ],
+        "model_proposed_label": "C3",
+        "caps_applied": [],
+        "quality_mean": 3.25
+      },
+      "outcomes": [
+        {
+          "name": "受傷前community ambulatorの12か月歩行能力",
+          "timepoint": "術後12か月",
+          "direction": "T-cane獲得・自宅居住・若年等で良好",
+          "effect": {
+            "T_cane": "RR 3.25 (95%CI 1.69-6.37)",
+            "bathing_independent": "RR 4.93 (2.12-12.60)",
+            "no_cognitive_disorder": "RR 6.10 (1.52-41.32)",
+            "sample": "community ambulator n=386"
+          },
+          "clinical_or_practical_meaning": "退院時T-cane歩行はリスク層別化に有用だが、T-cane訓練を行えば改善するという因果効果ではない。",
+          "verdict": "予後情報として条件付き有用",
+          "harms_or_burden": "杖歩行目標を無理に設定すると転倒・過負荷の可能性。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5, 7, Table 7",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "受傷前household ambulatorの12か月歩行能力",
+          "timepoint": "術後12か月",
+          "direction": "T-cane、女性、頸部骨折、高アルブミン等で良好",
+          "effect": {
+            "T_cane": "RR 4.17 (95%CI 1.33-14.29)",
+            "female": "RR 14.23 (1.93-311.0)",
+            "albumin_ge_3.6": "RR 5.19 (1.61-19.90)",
+            "sample": "household ambulator n=118"
+          },
+          "clinical_or_practical_meaning": "推定は不精確で、CIの広さから個人予測には慎重さが必要。",
+          "verdict": "予後情報として不確実",
+          "harms_or_burden": "予測誤差により退院支援を過小/過大評価しうる。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.6-7, Table 8",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "歩行・ADLの経時変化",
+          "timepoint": "術前/6/12か月",
+          "direction": "6か月までに大半が決まり、その後変化少ない",
+          "effect": {
+            "community_ambulation": "59.3% before→33.8% at 6 months→35.5% at 12 months",
+            "household_ambulation": "18.2%→25.8%→23.6%",
+            "nonfunctional": "22.5%→40.4%→40.9%",
+            "community_outdoor_independence": "49.1% at 6 months",
+            "household_indoor_independence": "40.2% at 6 months"
+          },
+          "clinical_or_practical_meaning": "早期リハの重要性を示唆する記述疫学で、介入開始時期の効果を検定していない。",
+          "verdict": "臨床計画の参考",
+          "harms_or_burden": "予後説明時に回復の個人差を明記。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3-4, Tables 2-4",
+            "status": "reported"
+          }
+        }
+      ],
+      "implementation": {
+        "who": "65歳以上で手術を受けた非病的股関節骨折患者。受傷前community/household ambulator別に層別化。",
+        "what": "術後早期から離床・荷重、座位、車椅子移乗、平行棒、T-cane、独歩を段階評価し、6か月時点の予後を説明。",
+        "how": "術翌日座位、1-3日で車椅子移乗、可能時立位、通常2-5日で平行棒歩行、週5日・1日2回PT。退院時に座位/立位/平行棒/T-cane/独歩を0-5点評価。",
+        "duration": "入院中から退院まで、予後評価は術後6・12か月。",
+        "dose": "PT週5日・1日2回（研究施設の標準）。T-cane到達までの最適期間・未到達時の対応は未確定。",
+        "setting": "日本の大学・地域教育病院14施設、長期入院と退院後PTが少ない環境。",
+        "equipment": "ベッド、車椅子、平行棒、T字杖、歩行補助具。",
+        "supervision": "理学療法士が入院中に監督。退院後は自宅・施設・回復期病院で統一プロトコルなし。",
+        "adherence_and_fidelity": "入院プロトコルは同様だが、退院後の介入・遵守はほぼなし/未標準化。",
+        "adaptation_boundary": "T-cane歩行獲得を目標にしても、骨折型・認知・片麻痺・住環境・荷重許可を個別に確認。T-cane獲得を中止基準や治療効果とみなさない。"
+      },
+      "safety": {
+        "adverse_events": "予後研究で介入有害事象は体系的に報告されない。研究期間の死亡は6か月6.2%、12か月9.2%。",
+        "contraindications": "荷重制限、手術固定不安定、認知・医学的不安定、転倒高リスク。",
+        "monitoring": "離床・歩行時の疼痛、血圧、疲労、転倒、創部、荷重許可。",
+        "burden_cost_time": "週5日2回の入院PTと長期入院。",
+        "unknowns": [
+          "T-cane訓練の因果効果",
+          "現在の早期退院・在宅PT環境への一般化",
+          "外部予測性能と校正"
+        ]
+      },
+      "provenance": [
+        {
+          "claim": "対象・標準PT・追跡",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-3, Abstract/Patients and Methods",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "歩行・ADL分布",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3-4, Tables 2-4",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "予後因子RR・CI",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-7, Tables 5-8",
+            "status": "reported"
+          }
+        }
+      ],
+      "q_and_a": [
+        {
+          "question": "T-caneで歩けるようにすれば予後が良くなるか？",
+          "answer_30s": "この研究で言えるのは、退院時にT-cane歩行ができた人の6・12か月歩行能力が良かったという予後関連です。T-cane訓練そのものの効果は検証されておらず、著者も訓練期間や未達時対応は今後の課題としています。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.6-8, Discussion",
+            "status": "reported"
+          }
+        },
+        {
+          "question": "いつまでに回復を評価する？",
+          "answer_30s": "この日本のコホートでは歩行・ADLの分布は術後6か月までに大きく変化し、6〜12か月は少ない傾向でした。ただし個人差が大きく、環境や退院後リハの違いを考慮します。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3-4, 7-8, Tables 2-4",
+            "status": "reported"
+          }
+        }
+      ],
+      "audit": {
+        "hard_flags": [],
+        "uncertainties": [
+          "外部検証・校正なし",
+          "単変量選択と二分化",
+          "日本の長期入院・退院後PTなしの制度差",
+          "household群の広いCI",
+          "6・12か月の予測モデルに外部検証・校正・決定曲線がなく、T-cane獲得を介入効果と解釈できない。"
+        ],
+        "verification": {
+          "identity": "PDF内のタイトル・著者・誌名・Level of Evidenceで確認",
+          "doi_external_resolution": "not_performed_in_audit_pass",
+          "registry_or_protocol": "not_reported",
+          "source_pdf_recheck": "completed_from_user_supplied_pdf_text"
+        },
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "max",
+        "rubric_version": "0.1.0",
+        "generated_at": "2026-08-15",
+        "audit_notes": [
+          "主張は予後予測であり、標準PTは共通背景。INTを副ルートから外し、OBS単独に固定した。",
+          "PDFのLevel of EvidenceはPrognostic Level Iだが、研究デザインのラベルと予測モデルの外部検証は別に評価した。"
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "paper_id": "osu_2002_imcj_surface_emg_motor_learning",
+      "assessment_status": "assessed",
+      "metadata": {
+        "title": "Short- and Long-Term Changes in Joint Co-Contraction Associated With Motor Learning as Revealed From Surface EMG",
+        "authors": [
+          "Rieko Osu",
+          "David W. Franklin",
+          "Hiroko Kato",
+          "Hiroaki Gomi",
+          "Kazuhisa Domen",
+          "Toshinori Yoshioka",
+          "Mitsuo Kawato"
+        ],
+        "year": 2002,
+        "journal": "Journal of Neurophysiology",
+        "doi": "10.1152/jn.00943.2001",
+        "source_path": "C:\\Users\\furuk\\Desktop\\F_lab\\Thesis\\Observational_Study\\Reference_thesis\\impedance control\\Short- and Long-Term Changes in Joint Co-Contraction AssociatedWith Motor Learning as Revealed From Surface EMG.pdf",
+        "source_urls": [
+          "https://doi.org/10.1152/jn.00943.2001"
+        ]
+      },
+      "classification": {
+        "primary_family": "ENG",
+        "secondary_families": [
+          "MECH",
+          "MEAS"
+        ],
+        "question_type": "technical validation",
+        "condition_tags": [
+          "病態なし",
+          "healthy"
+        ],
+        "topic_tags": [
+          "joint co-contraction",
+          "viscoelasticity",
+          "motor learning",
+          "internal model",
+          "impedance control"
+        ],
+        "method_tags": [
+          "surface EMG",
+          "mechanical perturbation",
+          "inverse dynamics",
+          "IMCJ",
+          "Bayesian multivariate feedback model",
+          "Monte Carlo"
+        ]
+      },
+      "question": {
+        "framework": "TECH",
+        "summary": "表面EMGから算出したIMCJが機械的摂動で測った関節剛性の相対指標として妥当か、また厳密な軌道学習で共収縮が短期・長期に変化するか。",
+        "population": "健常成人。方法評価は等尺性2人・動的3人、学習実験6人（20-36歳、男女）。",
+        "intervention_or_index": "6筋EMGとEMG-関節トルク回帰から算出するIMCJ/rIMCJ（拮抗筋トルク絶対値の和）",
+        "comparator_or_reference": "PFMの機械的摂動で測った剛性、学習初期/終期の成功試行、性能誤差との時系列相互作用",
+        "outcome": "IMCJ-剛性相関、学習に伴うrIMCJ変化、性能誤差→後続共収縮の相互作用",
+        "time": "方法評価は等尺性/動的課題、学習は96-120試行の新奇軌道、成功試行は軌道誤差4 cm以内"
+      },
+      "radar": {
+        "design": 4,
+        "internal_validity": 3,
+        "statistical_credibility": 3,
+        "effect_practical": 4,
+        "external_validity": 2,
+        "feasibility": 3,
+        "transparency_reproducibility": 4,
+        "safety_burden": 4
+      },
+      "radar_notes": [
+        {
+          "claim": "機械摂動との同時測定による方法評価と学習実験を分け、技術妥当性の問いに適合",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-3, Abstract/Experimental design",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "方法評価n=2/3、学習n=6で、成功試行のみ選別。健康成人かつ単一課題で内部妥当性・外部性に制約",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, Participants and Learning experiments",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "等尺性r=0.891/0.882、動的肩r=0.85・肘r=0.78、学習相関は肩5/6・肘4/6有意だがCI・事前閾値はない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-9, Figs.3-9 and Table 1",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "EMG-トルク線形、一定モーメントアーム、長さ速度特性簡略化を仮定し、動的剛性を相対変化として扱う",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, IMCJ definition; p.9-10 Discussion",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "単一研究室・健常成人の水平面2関節運動で、患者・下肢・別操作者/装置への外部妥当性は未確認",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, Experimental setup",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "EMG 2,000 Hz、25-1,500 Hz bandpass、6筋、PFM摂動8方向3回、動的課題の軌道・トルク補正が詳細",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-5, Methods and Appendix 2",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "BMFモデル、AIC、最大尤度、Monte Carlo・残差検証を記載するが、独立サンプルによる検証ではない",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5, 8-12, Fig.2, Fig.9, Appendix 1",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "研究課題の有害事象は報告されず、力場・摂動課題の安全性は研究室監督下の健常者に限定",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, experimental setup; no adverse-event section",
+            "status": "not_reported"
+          }
+        }
+      ],
+      "tier": {
+        "label": "B2",
+        "letter": "B",
+        "number": 2,
+        "rationale": [
+          "ENG+MECHの技術検証として、参照法との相関と時系列再現性を複数課題で評価",
+          "小標本、仮定依存、外部テストなし。臨床診断・治療効果ではない",
+          "信用4軸平均3.5の暫定B2。技術性能と臨床有用性を分離"
+        ],
+        "model_proposed_label": "B2",
+        "caps_applied": [],
+        "quality_mean": 3.5
+      },
+      "outcomes": [
+        {
+          "name": "IMCJとPFM測定剛性（等尺性）",
+          "timepoint": "方法評価",
+          "direction": "強い正相関",
+          "effect": {
+            "shoulder_torque_reconstruction_r2": 0.976,
+            "elbow_torque_reconstruction_r2": 0.971,
+            "IMCJ_stiffness_r": [
+              0.891,
+              0.882
+            ],
+            "calibration": "rIMCJ = 6.27×IMCJ + 14.61"
+          },
+          "clinical_or_practical_meaning": "同一実験系で相対剛性の指標として有望。ただし絶対剛性の標準測定を置き換える証拠ではない。",
+          "verdict": "技術的に有望",
+          "harms_or_burden": "6筋EMGとPFM較正が必要。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-6, Fig.3",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "IMCJと動的剛性",
+          "timepoint": "3被験者×3力場",
+          "direction": "正相関",
+          "effect": {
+            "shoulder_r": 0.85,
+            "elbow_r": 0.78,
+            "reference": "PFM perturbation"
+          },
+          "clinical_or_practical_meaning": "同様の軌道内の相対変化に限れば再現可能性を示すが、姿勢・速度・筋長が変わると仮定誤差が増える。",
+          "verdict": "技術的に有望だが外部検証未確認",
+          "harms_or_burden": "力場・摂動測定は臨床資源を要する。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.3, 6, Fig.4 and Appendix 2",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "学習に伴う長期rIMCJ",
+          "timepoint": "96-120試行の学習",
+          "direction": "成功試行で低下",
+          "effect": {
+            "successful_trial_success_rates": {
+              "YO": 0.7,
+              "KD": 0.81,
+              "NH": 0.54,
+              "HS": 0.79,
+              "YK": 0.48,
+              "YM": 0.35
+            },
+            "significant_negative_correlations": "肩5/6、肘4/6",
+            "performance": "同一軌道成功試行のみ比較"
+          },
+          "clinical_or_practical_meaning": "新奇課題で共収縮を減らし内部モデル寄与が増える仮説を支持するが、患者の神経制御改善を示さない。",
+          "verdict": "機序研究として支持",
+          "harms_or_burden": "96-120試行と厳密軌道課題の疲労。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4, 7-8, Figs.5-7 and Table 1",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "短期の性能誤差→rIMCJ",
+          "timepoint": "数試行後",
+          "direction": "誤差後に共収縮上昇、良好試行後に低下",
+          "effect": {
+            "method": "cross-correlation/BMF impulse response",
+            "confidence": "95%CI in Fig.8; 5/6 subjects reproducible in Fig.9",
+            "lag": "肩1-2試行、肘2試行"
+          },
+          "clinical_or_practical_meaning": "適応的インピーダンス制御の機序仮説。リアルタイム訓練ルールとしては未検証。",
+          "verdict": "機序研究として支持",
+          "harms_or_burden": "誤差に応じて共収縮を増やす処方の安全性は未検証。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8-12, Figs.8-10 and Appendix 1",
+            "status": "reported"
+          }
+        }
+      ],
+      "implementation": {
+        "who": "研究対象は健常成人。臨床患者への適用は外部妥当性検証後に限定。",
+        "what": "EMG-トルク較正後、6筋から肩・肘IMCJ/rIMCJを算出し、同一軌道の学習試行で共収縮変化を追跡。",
+        "how": "肩・肘水平面、手関節固定。EMG 2,000 Hz、25-1,500 Hz filter、整流平均、等尺性課題でci回帰、逆動力学でトルク補正、PFM摂動で剛性に換算。成功軌道は各時点4 cm以内。",
+        "duration": "較正前後＋96-120学習試行。試行ごとに性能誤差とrIMCJを記録。",
+        "dose": "新奇軌道を約0.5秒で遂行、成功試行のみ解析。一般臨床の反復回数・休息は未定義。",
+        "setting": "運動制御研究室、PFMと光学計測、6筋EMG。",
+        "equipment": "PFM、力センサ、EMG、Optotrak、2関節逆動力学・BMF解析。",
+        "supervision": "研究者が課題・摂動を監督。",
+        "adherence_and_fidelity": "成功試行率35-81%と個人差。電極状態を前後較正し、同一軌道を選別。",
+        "adaptation_boundary": "臨床で単純なEMG総和に置換しない。個体内・同一軌道の相対変化に限定し、姿勢/速度/筋長が変わる場合は再較正。"
+      },
+      "safety": {
+        "adverse_events": "有害事象の系統的報告なし。健常者の研究室課題。",
+        "contraindications": "疼痛、疲労、神経・筋疾患、力場・摂動に耐えられない状態。",
+        "monitoring": "疲労・疼痛・運動誤差・摂動応答、電極皮膚状態。",
+        "burden_cost_time": "6筋EMG・力センサ・PFM較正・多数試行。",
+        "unknowns": [
+          "患者・下肢・歩行での妥当性",
+          "外部装置・操作者間再現性",
+          "共収縮を操作する訓練の利益/害"
+        ]
+      },
+      "provenance": [
+        {
+          "claim": "IMCJ定義・EMG/トルク仮定",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, Eqs.1-2",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "相関・学習結果・BMF検証",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-12, Figs.3-10, Table 1-2, Appendices",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "DOI・掲載誌",
+          "locator": {
+            "source": "paper PDF",
+            "location": "p.1, citation line",
+            "status": "reported"
+          }
+        }
+      ],
+      "q_and_a": [
+        {
+          "question": "IMCJは臨床で剛性を直接測れるか？",
+          "answer_30s": "同一条件内の相対変化を推定する技術として有望です。等尺性r=0.88-0.89、動的肩0.85・肘0.78でPFM剛性と相関しましたが、6筋EMG較正と力センサが必要で、患者・歩行・外部装置での妥当性は未確認です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.5-6, 9-10",
+            "status": "reported"
+          }
+        },
+        {
+          "question": "学習で共収縮を下げればよいか？",
+          "answer_30s": "この研究は、誤差が大きい初期には共収縮を増やし、学習後は同じ軌道を低い共収縮で行えるという機序を示します。安定性のための共収縮を一律に抑える訓練を推奨する研究ではありません。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.7-11, Discussion and Fig.10",
+            "status": "reported"
+          }
+        }
+      ],
+      "audit": {
+        "hard_flags": [],
+        "uncertainties": [
+          "方法評価の小標本",
+          "同一研究室・健常者",
+          "絶対剛性ではなく相対変化",
+          "独立外部検証・コードなし",
+          "方法評価は等尺性2例・動的3例、学習実験は健常6例。成功試行のみ解析し、独立外部検証・試験再試験信頼性・コード公開はない。"
+        ],
+        "verification": {
+          "identity": "PDF内のタイトル・著者・誌名・DOIで確認",
+          "doi_external_resolution": "not_performed_in_audit_pass",
+          "reference_standard": "PFM perturbation described in paper",
+          "source_pdf_recheck": "completed_from_user_supplied_pdf_text"
+        },
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "max",
+        "rubric_version": "0.1.0",
+        "generated_at": "2026-08-15",
+        "audit_notes": [
+          "EMG-IMCJとPFM摂動剛性の比較は小規模な同一研究内較正で、絶対剛性の普遍的測定法・臨床診断法の検証ではない。"
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "paper_id": "mitchell_2001_quadriceps_training_hip_fracture",
+      "assessment_status": "assessed",
+      "metadata": {
+        "title": "Randomized controlled trial of quadriceps training after proximal femoral fracture",
+        "authors": [
+          "Sarah L. Mitchell",
+          "David J. Stott",
+          "Brendan J. Martin",
+          "Stanley J. Grant"
+        ],
+        "year": 2001,
+        "journal": "Clinical Rehabilitation",
+        "doi": null,
+        "source_path": "C:\\Users\\furuk\\Desktop\\F_lab\\Thesis\\Observational_Study\\Reference_thesis\\intervention\\al-quad.pdf",
+        "source_urls": []
+      },
+      "classification": {
+        "primary_family": "INT",
+        "secondary_families": [
+          "MEAS"
+        ],
+        "question_type": "intervention",
+        "condition_tags": [
+          "proximal femoral fracture",
+          "hip fracture",
+          "older adults"
+        ],
+        "topic_tags": [
+          "quadriceps training",
+          "leg extensor power",
+          "mobility",
+          "ADL",
+          "inpatient rehabilitation"
+        ],
+        "method_tags": [
+          "randomized controlled trial",
+          "progressive resistance",
+          "Nottingham Power Rig",
+          "Elderly Mobility Scale",
+          "Barthel Index"
+        ]
+      },
+      "question": {
+        "framework": "PICO",
+        "summary": "手術後にリハビリ中の高齢近位大腿骨骨折患者で、標準理学療法に6週間の漸進的高強度大腿四頭筋訓練を追加すると、筋パワー・移動能力・障害・QOLが改善するか。",
+        "population": "65歳以上、外科治療後、以前は歩行可能、精神・医学的に安定した患者80人（各群40）。",
+        "intervention_or_index": "両脚膝伸展、週2回、6週間、1RMの50→70→80%、各脚3セット×12回（計12セッション）。",
+        "comparator_or_reference": "標準理学療法（週5日、約20分/日）単独。",
+        "outcome": "下肢伸展パワー、Elderly Mobility Scale、Barthel、TUG、歩行速度、機能的リーチ、Nottingham Health Profile、16週維持効果。",
+        "time": "ベースライン、介入終了6週、追跡16週。"
+      },
+      "radar": {
+        "design": 4,
+        "internal_validity": 3,
+        "statistical_credibility": 3,
+        "effect_practical": 4,
+        "external_validity": 3,
+        "feasibility": 4,
+        "transparency_reproducibility": 4,
+        "safety_burden": 3
+      },
+      "radar_notes": [
+        {
+          "claim": "コンピュータ乱数・第三者保管の封筒で割付を隠した80人並行RCT。非盲検",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.2-4, Study design",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "ベースラインは均衡だが、6週評価完了は介入30/40・対照29/40、16週は20/40・24/40で脱落が大きい",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.8-10, Fig.1 and Results",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "主要筋パワーとEMSはp値・CIを一部報告するが、多くのアウトカムで分散推定・調整・ITTは不明",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-2, 5-6, Table 2",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "骨折脚LEPは6週群間差が大きく、EMS差2.5 (95%CI 1.1-3.8)、16週差1.9 (0.4-3.4)だがTUG・歩行速度は差なし",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-2, 9-14, Table 2",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "72%の病棟患者を組み入れたが、単一老年整形外科病棟、歩行可能・認知/医学的安定例に限定",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4, 8, 14-16, Methods/Discussion",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "1RM再評価・週2回・50/70/80%進行・3×12・休息2分を明記し、安価な足首重錘で再現可能",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1, 4-6, 10, intervention recipe",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "割付・介入は詳細だが、完全なCONSORTフロー、ITT、登録/プロトコル、介入コードは未確認",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.4, 8-10, Fig.1; no registry statement",
+            "status": "not_reported"
+          }
+        },
+        {
+          "claim": "忍容性・疼痛増加なしを示唆するが、有害事象の体系的収集や転倒・再骨折の比較は不足",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-10, 14-16, Clinical messages/Discussion",
+            "status": "reported"
+          }
+        }
+      ],
+      "tier": {
+        "label": "B2",
+        "letter": "B",
+        "number": 2,
+        "rationale": [
+          "割付隠蔽を備えた小規模RCTで介入処方が明確",
+          "非盲検、脱落40-50%、非盲検評価者の小サンプル差、ITT/登録不明",
+          "信用4軸平均3.5の暫定B2。筋パワー・EMSは有望だが歩行速度/TUGは陰性"
+        ],
+        "model_proposed_label": "B2",
+        "caps_applied": [],
+        "quality_mean": 3.5
+      },
+      "outcomes": [
+        {
+          "name": "Leg extensor power",
+          "timepoint": "6 and 16 weeks",
+          "direction": "large improvement maintained",
+          "effect": {
+            "fractured_leg": "+157% (SE16) vs +63% (SE11) at week 6; between-group p<0.001 at week 6 and 16",
+            "nonfractured_leg": "+80% (SE12) vs +26% (SE8), p=0.01 at week 6"
+          },
+          "clinical_or_practical_meaning": "Large strength gain; late follow-up attrition limits certainty about durability.",
+          "verdict": "conditional recommendation",
+          "harms_or_burden": "Monitor pain, fixation, cardiopulmonary load and fatigue.",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-2, 9-10, Table 2",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "Elderly Mobility Scale",
+          "timepoint": "6 and 16 weeks",
+          "direction": "improvement",
+          "effect": {
+            "week6_between_group_difference": "2.5 (95% CI 1.1-3.8)",
+            "week16_between_group_difference": "1.9 (95% CI 0.4-3.4)",
+            "scale": "0-20"
+          },
+          "clinical_or_practical_meaning": "Potentially useful functional improvement; TUG and gait speed were not significantly different.",
+          "verdict": "conditional recommendation",
+          "harms_or_burden": "Six-week completion was 30/40 in training and 29/40 in control.",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-2, 13-14, Abstract/Discussion",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "Barthel Index and quality of life",
+          "timepoint": "6 and 16 weeks",
+          "direction": "short-term ADL and week-16 energy benefit",
+          "effect": {
+            "Barthel": "between-group p=0.05 at week 6; not significant at week 16",
+            "NHP_energy": "p=0.0185 at week 16",
+            "missingness": "NHP complete at week 16: 20/40 training, 24/40 control"
+          },
+          "clinical_or_practical_meaning": "ADL and quality-of-life effects are uncertain and no MCID was reported.",
+          "verdict": "uncertain",
+          "harms_or_burden": "Substantial questionnaire attrition.",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-14, Table 2 and Discussion",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "Timed Up and Go and gait speed",
+          "timepoint": "6 and 16 weeks",
+          "direction": "no clear between-group difference",
+          "effect": {
+            "TUG": "no significant between-group difference",
+            "gait_speed": "no significant between-group difference"
+          },
+          "clinical_or_practical_meaning": "Strength gain did not automatically translate into faster walking.",
+          "verdict": "no meaningful benefit demonstrated",
+          "harms_or_burden": "Walking practice remained part of standard physiotherapy.",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-10, 13-14, Results/Discussion",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "Tolerability and safety",
+          "timepoint": "6-week intervention",
+          "direction": "generally tolerated",
+          "effect": {
+            "report": "Authors describe the programme as well tolerated in frail older adults without increased pain",
+            "adverse_events": "No systematic adverse-event table"
+          },
+          "clinical_or_practical_meaning": "Feasible under supervision, but safety certainty is limited.",
+          "verdict": "acceptable with monitoring",
+          "harms_or_burden": "1RM testing and high-intensity knee extension twice weekly for 6 weeks.",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-10, 14-16, Clinical messages/Discussion",
+            "status": "reported"
+          }
+        }
+      ],
+      "implementation": {
+        "who": "65歳以上で近位大腿骨骨折を手術治療し、以前は歩行可能、認知・医学的に安定し入院リハ中の高齢者。",
+        "what": "標準PTに両脚大腿四頭筋の漸進的高強度膝伸展を追加。",
+        "how": "各脚3セット×12回、1回6-9秒、セット間2分。週1-2:1RM50%、週3-4:再測定後70%、週5-6:再測定後80%。膝90°→0°と10°→0°の伸展範囲。",
+        "duration": "6週間（計12セッション）、介入終了10週後の16週まで追跡。",
+        "dose": "週2回、12回の膝伸展×6セット（両脚合計）；標準PTは週5日・約20分/日。",
+        "setting": "老年整形外科リハ病棟と地域フォロー。",
+        "equipment": "足首上の重錘/サンドバッグ等の安価な負荷、1RM測定用膝伸展装置、Nottingham Power Rig評価。",
+        "supervision": "理学療法士/研究者が負荷を再設定し監督。疼痛・固定・疲労に応じる。",
+        "adherence_and_fidelity": "6週完了者は介入30/40・対照29/40、介入群のセッション中央値11/12。16週追跡は介入20/40・対照24/40。",
+        "adaptation_boundary": "認知・医学的不安定、術後固定や荷重制限、以前歩行不能者には外挿しない。TUG/速度が改善しない可能性を説明。"
+      },
+      "safety": {
+        "adverse_events": "著者は忍容性良好・疼痛増加なしとするが、転倒、再骨折、心肺イベントの体系的比較は未報告。",
+        "contraindications": "医学的不安定、疼痛/固定不安定、術後荷重制限、1RM測定が危険な状態。",
+        "monitoring": "疼痛、創部・固定、血圧/心拍、疲労、フォーム、転倒を各セッションで確認。",
+        "burden_cost_time": "週2回6週、1RM再測定、負荷・装置・監督者。",
+        "unknowns": [
+          "高齢フレイルでのイベント率",
+          "最適負荷・範囲",
+          "退院後の長期機能・転倒・費用対効果"
+        ]
+      },
+      "provenance": [
+        {
+          "claim": "RCT割付・介入量",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1, 4-6, Study design and intervention",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "アウトカムと効果量",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1-2, 9-14, Tables 2-3",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "脱落・盲検評価者差・限界",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-16, Results/Discussion",
+            "status": "reported"
+          }
+        }
+      ],
+      "q_and_a": [
+        {
+          "question": "この筋トレは誰にどう行う？",
+          "answer_30s": "術後に入院リハ中で、以前は歩けた65歳以上の近位大腿骨骨折患者に、標準PTへ週2回6週間の膝伸展を追加します。各脚3×12回、50%1RMから70%、80%へ進め、セット間2分です。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.1, 4-6",
+            "status": "reported"
+          }
+        },
+        {
+          "question": "歩行速度も速くなるか？",
+          "answer_30s": "筋パワーとEMSは改善しましたが、TUGと歩行速度には有意な群間差がありませんでした。したがって筋力増加を歩行能力の改善と同一視せず、歩行・移乗・転倒を別に評価します。",
+          "locator": {
+            "source": "paper PDF",
+            "location": "pp.9-10, 13-14, Table 2",
+            "status": "reported"
+          }
+        }
+      ],
+      "audit": {
+        "hard_flags": [],
+        "uncertainties": [
+          "16週脱落40-50%",
+          "非盲検評価者と小サンプル盲検再測定で差",
+          "ITT・登録・完全CONSORT情報未確認",
+          "有害事象の体系的報告不足",
+          "有害事象は体系的表でなく、歩行速度・TUGは群間差なし。筋パワーとEMSの改善を歩行自立の改善と同一視しない。"
+        ],
+        "verification": {
+          "identity": "PDF内のClinical Rehabilitation citation・著者・受理日で確認",
+          "doi_external_resolution": "not_performed_in_audit_pass",
+          "protocol_or_registry": "not_reported",
+          "source_pdf_recheck": "completed_from_user_supplied_pdf_text"
+        },
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "max",
+        "rubric_version": "0.1.0",
+        "generated_at": "2026-08-15",
+        "audit_notes": [
+          "割付隠蔽はコンピュータ乱数＋第三者保管封筒だが、非盲検で主要評価者も非盲検。16週の追跡は介入20/40、対照24/40。"
+        ]
+      }
+    }
+  ]
+}
+</script>
+<!-- EVIDENCE_LIBRARY_DATA_END -->
+  <script>
+    (() => {
+      const dataScript = document.getElementById('evidence-library-data');
+      let LIBRARY = {};
+      try { LIBRARY = JSON.parse(dataScript.textContent || '{}'); } catch (error) { LIBRARY = {records:[], error:'library JSON is invalid'}; }
+      window.EVIDENCE_LIBRARY = LIBRARY;
+      const records = Array.isArray(LIBRARY.records) ? LIBRARY.records : [];
+      const axes = ['design','internal_validity','statistical_credibility','effect_practical','external_validity','feasibility','transparency_reproducibility','safety_burden'];
+      const axisLabels = {design:'設計妥当性',internal_validity:'内的妥当性',statistical_credibility:'統計的信頼性',effect_practical:'効果・実用的意味',external_validity:'外的妥当性',feasibility:'実生活再現性',transparency_reproducibility:'透明性・再現性',safety_burden:'安全性・負担'};
+      const familyLabels = {SYN:'系統的レビュー／メタ分析',INT:'介入',OBS:'観察・予後',MEAS:'測定・診断',ENG:'工学・EMG・アルゴリズム',MECH:'機序・バイオメカニクス',PRE:'前臨床',CON:'概念・理論'};
+      const questionLabels = {intervention:'介入',prognosis:'予後／予測',measurement:'測定・診断',engineering:'工学・技術',mechanism:'機序・バイオメカニクス',preclinical:'前臨床',concept:'概念・理論',unknown:'問い未分類'};
+      const $ = (id) => document.getElementById(id);
+      const esc = (value) => String(value ?? '—').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+      const arr = (value) => Array.isArray(value) ? value : (value ? [value] : []);
+      const text = (value) => Array.isArray(value) ? value.join('、') : (value ?? '—');
+      const statusClass = (status) => status === 'assessed' ? 'status-assessed' : status === 'X' ? 'status-x' : status === 'U' ? 'status-u' : 'status-pending';
+      const tierClass = (tier) => tier && tier.startsWith('A') ? 'tier-a' : tier && tier.startsWith('B') ? 'tier-b' : tier && tier.startsWith('C') ? 'tier-c' : 'tier-d';
+      const tierOrder = (record) => {
+        const label = record?.tier?.label;
+        if (typeof label === 'string' && /^[ABCD][123]$/.test(label)) return 'ABCD'.indexOf(label[0]) * 3 + Number(label[1]) - 1;
+        if (label === 'U') return 98;
+        if (label === 'X') return 99;
+        if (record?.assessment_status === 'pending_calibration') return 97;
+        return 96;
+      };
+      const statusLabel = (status) => ({assessed:'評価済み',pending_calibration:'校正待ち',U:'U：判定不能',X:'X：使用不可'}[status] || status || '—');
+      const locator = (item) => item ? [item.locator_status, item.location, item.note].filter(Boolean).join(' · ') : '—';
+      const displayScore = (value) => typeof value === 'number' ? value.toFixed(1) : 'N/A';
+      function fillFilters() {
+        const conditions = [...new Set(records.flatMap(r => arr(r.classification?.condition_tags)))].filter(Boolean).sort();
+        conditions.forEach(v => $('condition').insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}</option>`));
+        const families = [...new Set(records.map(r => r.classification?.primary_family || r.classification?.study_family).filter(Boolean))].sort();
+        families.forEach(v => $('family').insertAdjacentHTML('beforeend', `<option value="${esc(v)}">${esc(v)}${familyLabels[v] ? ` · ${esc(familyLabels[v])}` : ''}</option>`));
+      }
+      function radarSvg(radar) {
+        const size = 260, center = 130, radius = 91;
+        const vals = axes.map(a => { const value = typeof radar?.[a] === 'number' ? radar[a] : radar?.[a]?.score; return typeof value === 'number' ? Math.max(0,Math.min(5,value)) : null; });
+        const point = (value,i,r=radius) => { const angle = -Math.PI/2 + i*(Math.PI*2/axes.length); const scale = value == null ? 0 : value/5; return [center + Math.cos(angle)*r*scale, center + Math.sin(angle)*r*scale]; };
+        const ring = (level) => axes.map((_,i) => point(level,i,radius)).map(p=>p.join(',')).join(' ');
+        const data = axes.map((_,i) => point(vals[i],i)).map(p=>p.join(',')).join(' ');
+        const lines = axes.map((_,i)=>{const p=point(5,i); return `<line x1="${center}" y1="${center}" x2="${p[0]}" y2="${p[1]}"/>`;}).join('');
+        const labels = axes.map((a,i)=>{const p=point(5,i,radius+17); const anchor=p[0]<center-5?'end':p[0]>center+5?'start':'middle'; return `<text x="${p[0]}" y="${p[1]}" text-anchor="${anchor}" dominant-baseline="middle">${esc(axisLabels[a])}</text>`;}).join('');
+        const rings = [1,2,3,4,5].map(v=>`<polygon class="grid" points="${ring(v)}"/>`).join('');
+        return `<svg class="radar-svg" viewBox="0 0 ${size} ${size}" role="img" aria-label="8軸レーダーチャート">${rings}${lines}<polygon class="data" points="${data}"/>${labels}</svg>`;
+      }
+      function renderRadar(r) {
+        const radar = r.radar || {};
+        return `<div class="radar-wrap"><div>${radarSvg(radar)}</div><div class="table-wrap"><table><thead><tr><th>軸</th><th>スコア</th><th>根拠／不確実性</th></tr></thead><tbody>${axes.map(a=>{const item=radar[a]; const value=typeof item==='number'?item:item?.score; return `<tr><td>${esc(axisLabels[a])}</td><td>${displayScore(value)} / 5</td><td>${esc(item?.rationale || item?.reason || '記録なし')}</td></tr>`;}).join('')}</tbody></table></div></div>`;
+      }
+      function list(items, empty='記載なし') { return arr(items).length ? `<ul>${arr(items).map(v=>`<li>${esc(typeof v === 'object' ? text(v.text || v.value || v.note) : v)}</li>`).join('')}</ul>` : `<p class="muted">${empty}</p>`; }
+      function renderOutcomes(r) {
+        const outcomes = arr(r.outcomes);
+        if (!outcomes.length) return `<p class="muted">アウトカム別の結果は未登録です。校正後に主要・副次アウトカムを分けて記録します。</p>`;
+        return `<div class="table-wrap"><table><thead><tr><th>アウトカム</th><th>方向／効果量</th><th>臨床的意味</th><th>ロケータ</th></tr></thead><tbody>${outcomes.map(o=>`<tr><td>${esc(o.name || o.outcome || '—')}</td><td>${esc(o.direction || '—')}<br>${esc(o.effect_size || o.estimate || '—')}</td><td>${esc(o.practical_meaning || o.verdict || '—')}</td><td>${esc(locator(o.locator))}</td></tr>`).join('')}</tbody></table></div>`;
+      }
+      function renderRecord(r) {
+        const meta=r.metadata||{}, cls=r.classification||{}, q=r.question||{}, tier=r.tier||{};
+        const status=r.assessment_status||'pending_calibration';
+        const family=cls.primary_family || cls.study_family || '—';
+        const questionType=cls.question_type || q.type || 'unknown';
+        const tags=[...arr(cls.condition_tags),...arr(cls.topic_tags)].slice(0,5);
+        const recipe=r.implementation||{};
+        const provItems=Array.isArray(r.provenance) ? r.provenance : [];
+        const prov={
+          verification_status: r.audit?.verification?.source_pdf_recheck || r.audit?.verification?.identity || '—',
+          accessed_at: r.audit?.generated_at || '—',
+          primary_locator: provItems[0]?.locator || null
+        };
+        const audit=r.audit||{};
+        const practical=tier.practical_verdict || r.practical_verdict || '未判定';
+        const title=meta.title || r.paper_id;
+        const subtitle=[meta.first_author,meta.year,meta.journal].filter(Boolean).join(' · ');
+        return `<details class="panel record" data-search="${esc(JSON.stringify(r).toLowerCase())}"><summary><div class="record-title"><strong>${esc(title)}</strong><small>${esc(subtitle || meta.source_path || r.paper_id)}</small></div><div class="record-tags"><span class="tier ${tierClass(tier.label)}">${esc(tier.label || '—')}</span><span class="status ${statusClass(status)}">${esc(statusLabel(status))}</span>${tags.map(t=>`<span class="status">${esc(t)}</span>`).join('')}</div></summary><div class="detail">
+          <div class="callout ${status==='X'?'danger':status!=='assessed'?'warn':''}"><strong>${esc(statusLabel(status))}</strong> · ${esc(practical)}${r.assessment_status_note ? `<br><span class="muted">${esc(r.assessment_status_note)}</span>` : ''}</div>
+          <div class="detail-grid">
+            <section><h3>ポケットカード</h3><dl class="kv"><dt>研究ID</dt><dd>${esc(r.paper_id)}</dd><dt>研究ファミリー</dt><dd>${esc(family)} ${familyLabels[family] ? `· ${esc(familyLabels[family])}` : ''}</dd><dt>問い</dt><dd>${esc(questionLabels[questionType] || questionType)}</dd><dt>病態／テーマ</dt><dd>${esc(text(cls.condition_tags) || '病態なし／未分類')}</dd><dt>一言結論</dt><dd>${esc(r.pocket_card?.bottom_line || r.pocket_card?.summary || '校正待ち')}</dd></dl></section>
+            <section><h3>${esc(q.framework || 'PICO')}／適用フレーム</h3><dl class="kv"><dt>対象</dt><dd>${esc(q.population || q.participants || '—')}</dd><dt>介入／曝露</dt><dd>${esc(q.intervention_or_index || q.intervention || q.exposure || q.index_test || '—')}</dd><dt>比較／基準</dt><dd>${esc(q.comparator_or_reference || q.comparator || q.reference_standard || '—')}</dd><dt>アウトカム</dt><dd>${esc(q.outcome || q.outcomes || '—')}</dd><dt>期間</dt><dd>${esc(q.time || '—')}</dd></dl></section>
+          </div>
+          <section><h3>実装レシピ：誰に・何を・どのように・どの期間・どのぐらい</h3><dl class="kv"><dt>対象</dt><dd>${esc(recipe.who || q.population || '—')}</dd><dt>内容</dt><dd>${esc(recipe.what || q.intervention_or_index || '—')}</dd><dt>方法</dt><dd>${esc(recipe.how || '—')}</dd><dt>期間</dt><dd>${esc(recipe.duration || q.time || '—')}</dd><dt>頻度／強度</dt><dd>${esc(recipe.dose || '—')}</dd><dt>機器・環境</dt><dd>${esc([recipe.equipment,recipe.setting].filter(Boolean).join(' · ') || '—')}</dd><dt>監督・遵守</dt><dd>${esc([recipe.supervision,recipe.adherence_and_fidelity].filter(Boolean).join(' · ') || '—')}</dd><dt>適応境界</dt><dd>${esc(recipe.adaptation_boundary || '—')}</dd></dl></section>
+          <section><h3>8軸レーダー</h3>${renderRadar(r)}</section>
+          <section><h3>ティア根拠</h3><div class="table-wrap"><table><thead><tr><th>指標</th><th>値</th><th>説明</th></tr></thead><tbody><tr><td>ラベル</td><td><span class="tier ${tierClass(tier.label)}">${esc(tier.label || '—')}</span></td><td>${esc(text(tier.rationale) || '—')}</td></tr><tr><td>信頼性平均</td><td>${displayScore(tier.quality_mean)} / 5</td><td>設計・内的妥当性・統計・透明性の平均。研究デザイン名だけでは自動的に上がりません。</td></tr><tr><td>上限／フラグ</td><td>${esc(text(tier.caps_applied) || '—')}</td><td>${esc(text(tier.flags) || 'なし')}</td></tr></tbody></table></div></section>
+          <section><h3>アウトカム別の結果</h3>${renderOutcomes(r)}</section>
+          <div class="detail-grid"><section><h3>安全性・負担・実生活</h3><p>${esc(r.safety?.adverse_events || '—')}</p><p>${esc(r.safety?.monitoring || '—')}</p>${list(r.safety?.unknowns,'有害事象・負担の記載なし')}</section><section><h3>限界と適用範囲</h3>${list(r.limitations || r.audit?.limitations || r.audit?.uncertainties,'未登録')}</section></div>
+          <section><h3>出典・検証</h3><dl class="kv"><dt>出典</dt><dd>${esc(meta.source_path || meta.doi || meta.url || '—')}</dd><dt>識別子</dt><dd>${esc(meta.doi || meta.pmid || '—')}</dd><dt>検証</dt><dd>${esc(prov.verification_status || '—')} · ${esc(prov.accessed_at || '—')}</dd><dt>ロケータ</dt><dd>${esc(locator(prov.primary_locator))}</dd><dt>評価モデル</dt><dd>${esc(audit.model || '—')} · reasoning=${esc(audit.reasoning_effort || '—')} · rubric=${esc(audit.rubric_version || LIBRARY.rubric_version || '—')}</dd></dl></section>
+          <section><h3>想定質問と30秒回答</h3>${(r.q_and_a?.length || r.oral_defense?.questions?.length) ? `<div class="table-wrap"><table><thead><tr><th>質問</th><th>回答</th></tr></thead><tbody>${(r.q_and_a || r.oral_defense.questions).map(x=>`<tr><td>${esc(x.question)}</td><td>${esc(x.answer_30s || x.answer)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="muted">校正後に、研究デザイン・主要結果・適用限界を30秒回答に圧縮します。</p>'}</section>
+        </div></details>`;
+      }
+      /* The frozen records use a deliberately explicit schema: effect values
+         live under outcome.effect, provenance is an array of claim/locator
+         pairs, and audit.verification carries the run metadata.  Keep the
+         original compact renderers above for backwards compatibility, then
+         override them here so the audited calibration set is fully visible. */
+      function effectText(effect) {
+        if (effect == null) return '効果量は未登録';
+        if (typeof effect === 'string' || typeof effect === 'number') return String(effect);
+        try { return JSON.stringify(effect, null, 2); } catch (_) { return String(effect); }
+      }
+       const EFFECT_LABELS = {
+         ci95:'95% CI', mcid:'MCID', I2:'異質性 I²', heterogeneity_I2:'異質性 I²',
+         measure:'指標', value:'値', studies:'研究数', participants:'参加者数',
+         certainty:'確実性', sensitivity_without_Monticone:'Monticone除外感度分析',
+         model_r2:'モデルR²', sample:'標本数', association:'関連', calibration:'較正式',
+         reexpressed:'再表現した効果量', report:'報告', support:'支持', direction:'方向'
+       };
+       const effectKey = (key) => EFFECT_LABELS[key] || String(key).replaceAll('_',' ');
+       const numberText = (value) => typeof value === 'number' ? (Number.isInteger(value) ? String(value) : String(Number(value.toFixed(3)))) : String(value);
+       function formatEffectValue(value) {
+         if (value == null) return '未報告';
+         if (typeof value === 'number' || typeof value === 'string' || typeof value === 'boolean') return numberText(value);
+         if (Array.isArray(value)) {
+           if (value.length === 2 && value.every(v => typeof v === 'number')) return `${numberText(value[0])}–${numberText(value[1])}`;
+           return value.map(formatEffectValue).join(', ');
+         }
+         if (typeof value === 'object') return Object.entries(value).map(([key, item]) => `${effectKey(key)}: ${formatEffectValue(item)}`).join('; ');
+         return String(value);
+       }
+       function effectText(effect) {
+         if (effect == null) return '効果量未報告';
+         if (typeof effect !== 'object') return formatEffectValue(effect);
+         return Object.entries(effect).map(([key, value]) => `${effectKey(key)}: ${formatEffectValue(value)}`).join(' · ');
+       }
+       function researchOneLiner(r) {
+         const q = r.question || {}, impl = r.implementation || {}, cls = r.classification || {};
+         const who = impl.who || q.population || '研究対象者';
+         const outcomeNames = arr(r.outcomes).map(o => o && o.name).filter(Boolean).slice(0, 2);
+         const goal = q.outcome || outcomeNames.join('・') || '主要アウトカム';
+         const what = impl.what || q.intervention_or_index || '研究手法';
+         const family = cls.primary_family || '';
+         const purpose = family === 'INT' ? '改善するために' : family === 'ENG' || family === 'MEAS' ? '測定・予測できるか確かめるために' : family === 'CON' || family === 'MECH' ? '仕組みを明らかにするために' : '関連や効果を明らかにするために';
+         const verb = family === 'INT' ? '行う' : family === 'SYN' ? '比較・統合する' : family === 'ENG' || family === 'MEAS' ? '検証する' : '評価する';
+         return `${who}に、${goal}を${purpose}、${what}を${verb}研究。`;
+       }
+       function renderConditions(r) {
+         const impl = r.implementation || {}, outcomes = arr(r.outcomes);
+         const verdicts = outcomes.map(o => o && o.verdict).filter(Boolean).join(' ');
+         const conditional = /条件付き|有用|有望|conditional|promising/i.test(verdicts);
+         const boundary = r.conditions_for_use || impl.adaptation_boundary || '研究対象・設定・用量から外挿しない。';
+         const label = conditional ? '条件付きで有用となる条件' : '適用条件・境界';
+         return `<div class="callout conditions-callout"><strong>${label}</strong><p>${esc(boundary)}</p></div>`;
+       }
+       const baseRenderRecord = renderRecord;
+       const baseRenderOutcomes = renderOutcomes;
+       renderOutcomes = function(r) {
+         const outcomes = arr(r.outcomes);
+         if (!outcomes.length) return baseRenderOutcomes(r);
+         return `<div class="table-wrap"><table><thead><tr><th>アウトカム</th><th>方向・効果量</th><th>臨床的意味</th><th>判定</th><th>ロケータ</th></tr></thead><tbody>${outcomes.map(o=>`<tr><td>${esc(o.name || o.outcome || '—')}<br><span class="muted">${esc(o.timepoint || '')}</span></td><td><span class="effect-values">${esc(o.direction || '方向未報告')}</span><br><span class="effect-values">${esc(effectText(o.effect_size ?? o.estimate ?? o.effect))}</span></td><td>${esc(o.clinical_or_practical_meaning || o.practical_meaning || '—')}</td><td>${esc(o.verdict || '—')}<br><span class="muted">${esc(o.harms_or_burden || '')}</span></td><td>${esc(locator(o.locator))}</td></tr>`).join('')}</tbody></table></div>`;
+       };
+       renderRecord = function(r) {
+         const html = baseRenderRecord(r);
+         return html.replace('<div class="detail">', `<div class="detail"><div class="one-liner"><span class="one-liner-label">一言で</span><strong>${esc(researchOneLiner(r))}</strong></div>${renderConditions(r)}`);
+       };
+       function radarReason(r, axis) {
+        const notes = arr(r.radar_notes);
+        const note = notes.find(item => item && (item.axis === axis || item.dimension === axis));
+        if (note) return text(note.claim || note.rationale || note.reason || note.note);
+        const item = r.radar?.[axis];
+        if (item && typeof item === 'object') return text(item.rationale || item.reason || item.note);
+        const general = notes.map(item => text(item?.claim || item?.rationale || item?.reason || item?.note)).filter(Boolean);
+        return general.length ? general.slice(0, 2).join(' ／ ') : '軸別の根拠は未登録';
+      }
+      function renderRadar(r) {
+        const radar = r.radar || {};
+        return `<div class="radar-wrap"><div>${radarSvg(radar)}</div><div class="table-wrap"><table><thead><tr><th>軸</th><th>スコア</th><th>根拠／不確実性</th></tr></thead><tbody>${axes.map(a=>{const item=radar[a]; const value=typeof item==='number'?item:item?.score; return `<tr><td>${esc(axisLabels[a])}</td><td>${displayScore(value)} / 5</td><td>${esc(radarReason(r,a))}</td></tr>`;}).join('')}</tbody></table></div></div>`;
+      }
+      function renderOutcomes(r) {
+        const outcomes = arr(r.outcomes);
+        if (!outcomes.length) return `<p class="muted">アウトカム別の結果は未登録です。校正後に主要・副次アウトカムを分けて記録します。</p>`;
+        return `<div class="table-wrap"><table><thead><tr><th>アウトカム</th><th>方向・効果量</th><th>臨床的意味</th><th>実務上の判定</th><th>ロケータ</th></tr></thead><tbody>${outcomes.map(o=>`<tr><td>${esc(o.name || o.outcome || '—')}<br><span class="muted">${esc(o.timepoint || '')}</span></td><td>${esc(o.direction || '—')}<br><pre class="effect-json">${esc(effectText(o.effect_size ?? o.estimate ?? o.effect))}</pre></td><td>${esc(o.clinical_or_practical_meaning || o.practical_meaning || '—')}</td><td>${esc(o.verdict || '—')}<br><span class="muted">${esc(o.harms_or_burden || '')}</span></td><td>${esc(locator(o.locator))}</td></tr>`).join('')}</tbody></table></div>`;
+      }
+      function matches(r, query, condition, family, status) {
+        const blob=JSON.stringify(r).toLowerCase();
+        return (!query || blob.includes(query)) && (!condition || arr(r.classification?.condition_tags).includes(condition)) && (!family || (r.classification?.primary_family || r.classification?.study_family)===family) && (!status || r.assessment_status===status);
+      }
+      function render() {
+        const query=$('search').value.trim().toLowerCase(), condition=$('condition').value, family=$('family').value, status=$('status').value;
+        const filtered=records.filter(r=>matches(r,query,condition,family,status));
+        $('result-count').textContent=`${filtered.length}件表示`;
+        const groups=new Map();
+        filtered.forEach(r=>{const theme=text(r.classification?.condition_tags)||'病態なし／未分類'; const questionType=r.classification?.question_type || r.question?.type || 'unknown'; const question=questionLabels[questionType]||questionType||'問い未分類'; if(!groups.has(theme))groups.set(theme,new Map()); if(!groups.get(theme).has(question))groups.get(theme).set(question,[]); groups.get(theme).get(question).push(r);});
+        const html=[...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0],'ja')).map(([theme,questions])=>`<section class="theme"><div class="theme-head"><h2>${esc(theme)}</h2><small>${[...questions.values()].reduce((n,v)=>n+v.length,0)} records · ティア順</small></div>${[...questions.entries()].map(([q,items])=>`<div class="question-group"><h3>${esc(q)} <span class="muted">· ${items.length}</span></h3>${items.slice().sort((a,b)=>tierOrder(a)-tierOrder(b) || String(a.metadata?.title || a.paper_id).localeCompare(String(b.metadata?.title || b.paper_id),'ja')).map(renderRecord).join('')}</div>`).join('')}</section>`).join('');
+        $('library-list').innerHTML=html || '<div class="empty">条件に一致するレコードがありません。</div>';
+      }
+      const statuses=records.reduce((m,r)=>(m[r.assessment_status||'pending_calibration']=(m[r.assessment_status||'pending_calibration']||0)+1,m),{});
+      $('stat-total').textContent=records.length; $('stat-assessed').textContent=statuses.assessed||0; $('stat-pending').textContent=statuses.pending_calibration||0; $('stat-themes').textContent=new Set(records.flatMap(r=>arr(r.classification?.condition_tags)).filter(Boolean)).size; $('hero-count').textContent=`${statuses.assessed||0}本評価済み`; $('top-meta').textContent=`${LIBRARY.generated_at ? new Date(LIBRARY.generated_at).toLocaleDateString('ja-JP') : '—'} · ${records.length} records`; $('rubric-version').textContent=LIBRARY.rubric_version||'—'; $('library-version').textContent=LIBRARY.library_version||'—';
+      fillFilters(); ['search','condition','family','status'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render)); $('clear').addEventListener('click',()=>{['search','condition','family','status'].forEach(id=>$(id).value=''); render();}); render();
+    })();
+  </script>
+</body>
+</html>
