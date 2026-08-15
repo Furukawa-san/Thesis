@@ -67,6 +67,11 @@
     .detail { border-top:1px solid var(--line); padding:20px 17px 23px; }
     .detail-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:18px; }
     .detail section { min-width:0; } .detail h3 { color:var(--accent); font-size:1.12rem; margin:0 0 9px; }
+    .detail > section, .detail > .detail-grid { margin-top:28px; }
+    .detail > .callout { margin:0 0 18px; }
+    .detail > .one-liner { margin:0; }
+    .detail > .conditions-callout { margin:18px 0 0; }
+    .detail > .detail-grid:first-of-type { margin-top:24px; }
     .detail p { margin:7px 0; } .muted { color:var(--muted); }
     .kv { display:grid; grid-template-columns:118px 1fr; gap:5px 11px; margin:0; font-size:.86rem; }
     .kv dt { color:var(--muted); } .kv dd { margin:0; overflow-wrap:anywhere; }
@@ -88,7 +93,7 @@
     .plain-explain table td:first-child { min-width:150px; color:var(--accent); font-weight:600; }
     .plain-explain table td:nth-child(2) { min-width:165px; color:var(--muted); }
     th { color:var(--muted); font-weight:500; white-space:nowrap; } td { overflow-wrap:anywhere; }
-    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:7px; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:7px; -webkit-overflow-scrolling:touch; }
     .radar-wrap { display:grid; grid-template-columns:minmax(310px,340px) 1fr; gap:22px; align-items:center; }
     .radar-wrap > div:first-child { min-width:310px; }
     .radar-svg { width:100%; max-width:320px; aspect-ratio:1; overflow:visible; }
@@ -102,7 +107,7 @@
     .conditions-callout { border-left-color:var(--caution); }
     .conditions-callout strong { color:var(--caution); }
     @media (max-width:850px) { .hero,.detail-grid { grid-template-columns:1fr; } .controls-grid { grid-template-columns:1fr 1fr; } .controls-grid > :first-child { grid-column:1/-1; } .radar-wrap { grid-template-columns:1fr; } .radar-wrap > div:first-child { min-width:0; } }
-    @media (max-width:560px) { .topbar-inner { min-height:58px; } .top-meta { display:none; } .shell,.topbar-inner { width:min(100% - 22px,1180px); } main { padding-top:28px; } .stats { grid-template-columns:1fr 1fr; } .controls-grid { grid-template-columns:1fr; } .controls-grid > :first-child { grid-column:auto; } .record summary { align-items:flex-start; flex-direction:column; } .record-tags { justify-content:flex-start; } .kv { grid-template-columns:1fr; gap:1px; } .kv dt { margin-top:6px; } }
+    @media (max-width:560px) { .topbar-inner { min-height:58px; } .top-meta { display:none; } .shell,.topbar-inner { width:min(100% - 22px,1180px); } main { padding-top:28px; } .stats { grid-template-columns:1fr 1fr; } .controls-grid { grid-template-columns:1fr; } .controls-grid > :first-child { grid-column:auto; } .record summary { align-items:flex-start; flex-direction:column; } .record-tags { justify-content:flex-start; } .kv { grid-template-columns:1fr; gap:1px; } .kv dt { margin-top:6px; } .detail > section, .detail > .detail-grid { margin-top:24px; } .detail .table-wrap table { min-width:640px; } .detail .gap-table { min-width:980px; } .detail .plain-explain table { min-width:820px; } }
   </style>
 </head>
 <body>
@@ -143,7 +148,7 @@
   "schema_version": "0.1.0",
   "library_version": "0.1.0",
   "rubric_version": "0.1.0",
-  "generated_at": "2026-08-15T03:06:24.525574+00:00",
+  "generated_at": "2026-08-15T04:16:30.737910+00:00",
   "records": [
     {
       "schema_version": "0.1.0",
@@ -3835,7 +3840,7 @@
           <section><h3>アウトカム別の結果</h3>${renderOutcomes(r)}</section>
           <div class="detail-grid"><section><h3>安全性・負担・実生活</h3><p>${esc(r.safety?.adverse_events || '—')}</p><p>${esc(r.safety?.monitoring || '—')}</p>${list(r.safety?.unknowns,'有害事象・負担の記載なし')}</section><section><h3>限界と適用範囲</h3>${list(r.limitations || r.audit?.limitations || r.audit?.uncertainties,'未登録')}</section></div>
           <section><h3>出典・検証</h3><dl class="kv"><dt>出典</dt><dd>${esc(meta.source_path || meta.doi || meta.url || '—')}</dd><dt>識別子</dt><dd>${esc(meta.doi || meta.pmid || '—')}</dd><dt>検証</dt><dd>${esc(prov.verification_status || '—')} · ${esc(prov.accessed_at || '—')}</dd><dt>ロケータ</dt><dd>${esc(locator(prov.primary_locator))}</dd><dt>評価モデル</dt><dd>${esc(audit.model || '—')} · reasoning=${esc(audit.reasoning_effort || '—')} · rubric=${esc(audit.rubric_version || LIBRARY.rubric_version || '—')}</dd></dl></section>
-          <section><h3>想定質問と30秒回答</h3>${(r.q_and_a?.length || r.oral_defense?.questions?.length) ? `<div class="table-wrap"><table><thead><tr><th>質問</th><th>回答</th></tr></thead><tbody>${(r.q_and_a || r.oral_defense.questions).map(x=>`<tr><td>${esc(x.question)}</td><td>${esc(x.answer_30s || x.answer)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="muted">校正後に、研究デザイン・主要結果・適用限界を30秒回答に圧縮します。</p>'}</section>
+          ${renderPlainLanguage(r)}
         </div></details>`;
       }
       /* The frozen records use a deliberately explicit schema: effect values
@@ -3905,7 +3910,7 @@
        }
        renderRecord = function(r) {
          const html = baseRenderRecord(r);
-         return html.replace('<div class="detail">', `<div class="detail"><div class="one-liner"><span class="one-liner-label">一言で</span><strong>${esc(researchOneLiner(r))}</strong></div>${renderConditions(r)}${renderPlainLanguage(r)}`);
+         return html.replace('<div class="detail">', `<div class="detail"><div class="one-liner"><span class="one-liner-label">一言で</span><strong>${esc(researchOneLiner(r))}</strong></div>${renderConditions(r)}`);
        };
        function radarReason(r, axis) {
         const notes = arr(r.radar_notes);
