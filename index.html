@@ -102,8 +102,16 @@
     .empty { border:1px dashed var(--line); padding:24px; color:var(--muted); text-align:center; }
     footer { border-top:1px solid var(--line); color:var(--muted); font-size:.76rem; padding:20px 0 40px; }
     .one-liner { border:1px solid rgba(101,216,212,.45); background:rgba(101,216,212,.08); padding:13px 15px; margin:12px 0 16px; }
-    .one-liner-label { display:block; color:var(--accent); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; margin-bottom:4px; }
+    .one-liner-label { display:block; color:var(--accent); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px; }
     .one-liner strong { display:block; font-weight:500; line-height:1.55; }
+    .one-liner-question { margin:0 0 12px; }
+    .one-liner-question p { margin:3px 0 0; font-weight:500; line-height:1.55; }
+    .one-liner-subhead { display:block; color:var(--accent); font-size:.74rem; font-weight:600; letter-spacing:.08em; margin:0 0 5px; }
+    .practical-translation { display:grid; gap:0; }
+    .practical-line { display:grid; grid-template-columns:minmax(210px,.35fr) 1fr; gap:10px; padding:7px 0; border-top:1px solid rgba(101,216,212,.18); }
+    .practical-line:first-child { border-top:0; padding-top:0; }
+    .practical-line > span { color:var(--accent); font-size:.78rem; font-weight:600; line-height:1.55; }
+    .practical-line p { margin:0; line-height:1.55; }
     .conditions-callout { border-left-color:var(--caution); }
     .conditions-callout strong { color:var(--caution); }
     @media (max-width:850px) { .hero,.detail-grid { grid-template-columns:1fr; } .controls-grid { grid-template-columns:1fr 1fr; } .controls-grid > :first-child { grid-column:1/-1; } .radar-wrap { grid-template-columns:1fr; } .radar-wrap > div:first-child { min-width:0; } }
@@ -647,7 +655,13 @@
           "location": "pp.2-3, 5-9, gait protocol and outcome tables",
           "status": "reported"
         },
-        "research_question": "TKAを受ける末期膝OA患者で、術前および術前から術後1年までの歩行運動学的特徴は、WOMAC疼痛・身体機能のMCID達成と関連するか。"
+        "research_question": "TKAを受ける末期膝OA患者で、術前および術前から術後1年までの歩行運動学的特徴は、WOMAC疼痛・身体機能のMCID達成と関連するか。",
+        "life_plain": {
+          "who": "末期の膝OAで、人工膝関節置換術（TKA）を受ける人。自力で6m歩ける人が対象。",
+          "what": "手術前と手術後1年に、歩き方を3Dで測る。",
+          "compared_with": "手術後に痛み・体の動きが「意味のある改善」に達した人と、達しなかった人を比べる。",
+          "outcome": "WOMAC pain（膝の痛み）の改善目安MCIDは+23点で、達成者は34/46人。術前stance varus（立脚期の内反角）の特徴との関連はRR=0.915（95%CI 0.838–0.998）、予測力R²=0.14。WOMAC function（身体機能）のMCIDは+19点で36/46人、関連はRR=0.898（0.827–0.976）、R²=0.15。これは関連の数値であり、手術後の効果を個人ごとに予測する数値ではない。"
+        }
       }
     },
     {
@@ -1158,7 +1172,13 @@
           "location": "pp.3-9, experiments and stroke case",
           "status": "reported"
         },
-        "research_question": "6筋の表面EMGと運動学から、AA ratio/sumに基づく物理モデルで筋シナジー・エンドポイント剛性・仮想軌道を推定でき、学習・脳卒中回復で不変性を示すか。"
+        "research_question": "6筋の表面EMGと運動学から、AA ratio/sumに基づく物理モデルで筋シナジー・エンドポイント剛性・仮想軌道を推定でき、学習・脳卒中回復で不変性を示すか。",
+        "life_plain": {
+          "who": "健常者と、急性期の脳卒中で片麻痺がある人（脳卒中は1人）。",
+          "what": "腕を動かしながら、6つの筋肉の活動を測り、筋肉の組み合わせや腕の硬さを計算する。",
+          "compared_with": "健常者の練習前後、参加者同士、脳卒中の測定前後などを比べる。",
+          "outcome": "筋シナジー（複数の筋肉を協調させるパターン）の類似度はuR=0.968±0.015、uφ=0.963±0.017、uNull=0.933±0.018（n=8；1に近いほど似ている）。脳卒中1例では、FIM（自立度）44→67、動作時間約6→4秒、健常者との類似度はuR=0.930、uφ=0.994、uNull=0.924。エンドポイントStiffness（手先の硬さ）は図示中心で、推定誤差・CIの数値は未報告。"
+        }
       }
     },
     {
@@ -1626,7 +1646,13 @@
           "location": "pp.1-7, EP/UCM framework and scenarios",
           "status": "reported"
         },
-        "research_question": "運動学習を、(1)主要パフォーマンス変数を安定化するシナジーの発見・強化、(2)疲労・美的制約等を最適化する過程での弱化、という2段階で説明できるか。"
+        "research_question": "運動学習を、(1)主要パフォーマンス変数を安定化するシナジーの発見・強化、(2)疲労・美的制約等を最適化する過程での弱化、という2段階で説明できるか。",
+        "life_plain": {
+          "who": "運動を練習して上達していく人を対象にした研究。特定の病気の患者ではない。",
+          "what": "練習中の体の動きのばらつきを測り、動きが崩れない方向・崩れる方向を分けて見る。",
+          "compared_with": "練習の初め・上達後・別の制約を加えたときの動きを比べる。",
+          "outcome": "ΔV（結果を壊さないゆらぎの指標）=(VUCM−VORT)/VTOTで、VUCM（結果を保つばらつき）とVORT（結果を崩すばらつき）を分けて見る。練習初期・熟練後など3つの場面を理論的に整理したが、患者の点数、効果量、MCID（意味のある改善幅）は報告なし。"
+        }
       }
     },
     {
@@ -2291,7 +2317,13 @@
           "location": "Results; Summary of findings tables",
           "status": "reported"
         },
-        "research_question": "成人の股関節骨折手術後に、入院中または退院後の歩行・バランス・機能・筋力等のモビリティ戦略は通常ケア等と比べて移動能力・歩行速度・機能・QOL・死亡・有害事象を改善するか。"
+        "research_question": "成人の股関節骨折手術後に、入院中または退院後の歩行・バランス・機能・筋力等のモビリティ戦略は通常ケア等と比べて移動能力・歩行速度・機能・QOL・死亡・有害事象を改善するか。",
+        "life_plain": {
+          "who": "股関節骨折の手術を受けた成人。平均年齢は約80歳。",
+          "what": "通常のケアに、歩行・バランス・立ち上がりなどのリハビリを追加する。",
+          "compared_with": "通常の入院ケア、通常ケアだけ、運動をしない群などと比べる。",
+          "outcome": "入院中Mobility（移動能力）はSMD=0.53（95%CI 0.10–0.96、7研究507人）、PPME（身体能力・移動能力検査）は+1.46点（0.28–2.64；MCID 1.13–2.15）だが、研究間のばらつきI²=81%。退院後はSPPB（身体機能スコア）+0.89点（0.30–1.50）、歩行速度+0.05m/s（0.01–0.09；MCID 0.04–0.06）。Barthel（ADL）は+1.4点（0.6–2.1）でMCID 9.8未満、6MWT（6分間歩行）は+55.65m（28.58–82.72；MCID 14.0–30.5、3研究198人・低確実性）。"
+        }
       }
     },
     {
@@ -2786,7 +2818,13 @@
           "location": "pp.4-8, prognostic models and Tables",
           "status": "reported"
         },
-        "research_question": "股関節骨折手術後の高齢者で、受傷前移動レベル、ADL、併存症、入院中のT字杖歩行獲得などは6・12か月の歩行能力とADLを予測するか。"
+        "research_question": "股関節骨折手術後の高齢者で、受傷前移動レベル、ADL、併存症、入院中のT字杖歩行獲得などは6・12か月の歩行能力とADLを予測するか。",
+        "life_plain": {
+          "who": "股関節骨折の手術を受けた65歳以上の高齢者。",
+          "what": "受傷前の歩き方や、退院時にT字杖で歩けるかを確認する。",
+          "compared_with": "それらの特徴がある人と、ない人を比べる。",
+          "outcome": "12か月Community ambulation（屋外歩行）では、受傷前community ambulatorで退院時T-cane（T字杖）歩行ありのRR=3.25（95%CI 1.69–6.37、n=386）、household ambulatorではRR=4.17（1.33–14.29、n=118）。全体のcommunity ambulationは59.3%（受傷前）→33.8%（6か月）→35.5%（12か月）、nonfunctional（実用歩行なし）は22.5%→40.4%→40.9%。予後の関連であり、杖訓練の効果量ではない。"
+        }
       }
     },
     {
@@ -3327,7 +3365,13 @@
           "location": "pp.2-10, IMCJ validation and learning experiments",
           "status": "reported"
         },
-        "research_question": "表面EMGから算出したIMCJが機械的摂動で測った関節剛性の相対指標として妥当か、また厳密な軌道学習で共収縮が短期・長期に変化するか。"
+        "research_question": "表面EMGから算出したIMCJが機械的摂動で測った関節剛性の相対指標として妥当か、また厳密な軌道学習で共収縮が短期・長期に変化するか。",
+        "life_plain": {
+          "who": "健常な成人。患者に使えるかは未確認。",
+          "what": "6つの筋肉の活動を測り、腕の「力み」や動きにくさの変化を計算する。",
+          "compared_with": "機械で測った腕の硬さ、練習の最初と最後、うまくできた試行と失敗した試行を比べる。",
+          "outcome": "IMCJ（筋の共収縮から推定する関節Stiffness＝硬さ）は、PFM（機械的な剛性測定）との相関r=0.891（肩）、0.882（肘）。筋電図からトルクを再現するR²は肩0.976、肘0.971、較正式はrIMCJ=6.27×IMCJ+14.61。動的課題でも相関r=0.85（肩）、0.78（肘）。学習では成功試行ほどrIMCJが低い傾向（肩5/6、肘4/6）、誤差後のrIMCJ上昇は肩1–2試行後・肘2試行後に観察されたが、増加量は未報告。"
+        }
       }
     },
     {
@@ -3867,7 +3911,13 @@
           "location": "pp.2-6, training protocol and outcomes",
           "status": "reported"
         },
-        "research_question": "手術後にリハビリ中の高齢近位大腿骨骨折患者で、標準理学療法に6週間の漸進的高強度大腿四頭筋訓練を追加すると、筋パワー・移動能力・障害・QOLが改善するか。"
+        "research_question": "手術後にリハビリ中の高齢近位大腿骨骨折患者で、標準理学療法に6週間の漸進的高強度大腿四頭筋訓練を追加すると、筋パワー・移動能力・障害・QOLが改善するか。",
+        "life_plain": {
+          "who": "手術後に歩ける、医学的に安定した高齢の股関節骨折患者。",
+          "what": "通常の理学療法に、週2回・6週間の膝伸ばし筋トレを追加する。",
+          "compared_with": "通常の理学療法だけの人と比べる。",
+          "outcome": "Leg extensor power（脚の力をすばやく出す能力）は6週で骨折脚+157%（SE16）対 標準PTのみ+63%（SE11）、群間p<0.001。非骨折脚は+80%対+26%（p=0.01）。Elderly Mobility Scale（移動能力、0–20点）は群間差+2.5点（95%CI 1.1–3.8）/6週、+1.9点（0.4–3.4）/16週。TUG（立って歩いて座る時間）と歩行速度は群間有意差なしで、差の数値は未報告。"
+        }
       }
     },
     {
@@ -4352,6 +4402,12 @@
           "source": "paper PDF",
           "location": "pp.1-6, Tables 1-3",
           "status": "reported"
+        },
+        "life_plain": {
+          "who": "50歳以上で自力歩行できる、健常者・中等度OA・重度OAの人。",
+          "what": "トレッドミルを歩いているときの股関節の動きと、お尻の筋肉の活動を測る。",
+          "compared_with": "健常者と、中等度・重度のOAの人を比べる。",
+          "outcome": "Hip ROM（股関節の動く範囲；順に矢状・前額・水平面）は、健常48±5°/11±3°/18±4°、中等度OA40±7°/10±3°/16±4°、重度OA24±8°/6±2°/11±4°（矢状面p=0.002）。Gait speed（歩行速度）は1.51±0.16/1.32±0.22/1.11±0.27m/s、stride length（歩幅）は1.48±0.12/1.34±0.16/1.16±0.17m（群間p≤0.013）。GMd（中殿筋）PCAのPP1は410.6±63.2→436.6±69.5→521.2±98.6、PP2は62.0±49.6→30.7±59.9→−55.5±106.9、GMx（大殿筋）PP2は−42.3±63.1→−33.7±102.3→26.4±90.2（p=0.042）。"
         }
       },
       "q_and_a": [
@@ -4913,6 +4969,12 @@
           "source": "paper PDF",
           "location": "pp.1, 4-7, Tables 1-3",
           "status": "reported"
+        },
+        "life_plain": {
+          "who": "発症後6か月〜5年で、補助具を使って10m歩ける片麻痺者。主な前後解析は9人。",
+          "what": "体重を支えるトレッドミル、手の介助、屋外歩行を組み合わせた訓練を12週間・36回行う。",
+          "compared_with": "同じ人の訓練前と訓練後を比べる。未治療の脳卒中対照はない。",
+          "outcome": "NMF/EMG module timing error（筋モジュールの働くタイミング誤差）は0.08±0.07→0.05±0.05、健常群0.04±0.05（p=0.0132）。Gait speed（歩行速度）は約+0.29m/s（論文のpre−post表記−0.29±0.14）、訓練後0.78±0.26m/s対健常1.11±0.22m/s（p=0.0114）。Paretic pre-swing leg angle（麻痺側の振り出し前脚角度）は約+5.83±4.35°、訓練後19.85±6.07°対健常23.20±2.85°（p=0.044）。Propulsion asymmetry（推進力の左右差）はp=0.1121、step-ratio asymmetryはp=0.6904で前後差なし。"
         }
       },
       "q_and_a": [
@@ -5094,23 +5156,27 @@
        function outcomesSummary(r) {
          return arr(r.outcomes).slice(0, 2).map(o => [o?.name, o?.direction, o?.plain_language_meaning || o?.clinical_or_practical_meaning || o?.verdict].filter(Boolean).join('：')).filter(Boolean).join('；');
        }
-       function researchOneLiner(r) {
-         const practical = r.practical_summary || {};
-         if (practical.research_question && practical.who && practical.what && practical.dose && practical.result && practical.use) {
-           return `研究の問い：${practical.research_question}。実生活に置き換えると、誰に：${practical.who}／何を：${practical.what}／どれだけ：${practical.dose} → 結果：${practical.result}。実生活では${practical.use}。`;
-         }
-         const q = r.question || {}, impl = r.implementation || {}, cls = r.classification || {};
-         const who = impl.who || q.population || '研究対象者';
-         const outcomeNames = arr(r.outcomes).map(o => o && o.name).filter(Boolean).slice(0, 2);
-         const goal = q.outcome || outcomeNames.join('・') || '主要アウトカム';
-         const what = impl.what || q.intervention_or_index || '研究手法';
-         const dose = [impl.dose, impl.duration].filter(Boolean).join('・') || '研究記載の条件';
-         const result = outcomesSummary(r);
-         const use = impl.adaptation_boundary || '研究対象・設定の範囲で参考にする';
-         const family = cls.primary_family || '';
-         const purpose = family === 'INT' ? '改善するために' : family === 'ENG' || family === 'MEAS' ? '測定・予測できるか確かめるために' : family === 'CON' || family === 'MECH' ? '仕組みを明らかにするために' : '関連や効果を明らかにするために';
-         const verb = family === 'INT' ? '行う' : family === 'SYN' ? '比較・統合する' : family === 'ENG' || family === 'MEAS' ? '検証する' : '評価する';
-         return `研究の問い：${q.summary || `${goal}を${purpose}検証する`}。実生活に置き換えると、誰に：${who}／何を：${what}／どれだけ：${dose} → 結果：${result || `${goal}を${purpose}評価` }。実生活では${use}。`;
+       function practicalTranslation(r) {
+         const q = r.question || {}, practical = r.practical_summary || {}, impl = r.implementation || {};
+         const plain = practical.life_plain || {};
+         return {
+           question: practical.research_question || q.summary || '研究の問いは未登録',
+           who: plain.who || practical.who || impl.who || q.population || '研究対象者',
+           what: plain.what || practical.what || impl.what || q.intervention_or_index || '研究で調べた方法',
+           compared_with: plain.compared_with || q.comparator_or_reference || '比較対象は未記載',
+           outcome: plain.outcome || practical.result || outcomesSummary(r) || '主な結果は未登録'
+         };
+       }
+       function renderPracticalTranslation(r) {
+         const practical = practicalTranslation(r);
+         const rows = [
+           ['誰に', practical.who],
+           ['何をしたら', practical.what],
+           ['何と比べて', practical.compared_with],
+           ['どんな指標がどんなふうになるか', practical.outcome]
+         ];
+         const rowHtml = rows.map(([label, value]) => `<div class="practical-line"><span>${esc(label)}</span><p>${esc(value)}</p></div>`).join('');
+         return `<div class="one-liner-question"><span class="one-liner-subhead">研究の問い</span><p>${esc(practical.question)}</p></div><span class="one-liner-subhead">実生活に置き換えると</span><div class="practical-translation">${rowHtml}</div>`;
        }
        function renderConditions(r) {
          const impl = r.implementation || {}, outcomes = arr(r.outcomes);
@@ -5134,7 +5200,7 @@
        }
        renderRecord = function(r) {
          const html = baseRenderRecord(r);
-         return html.replace('<div class="detail">', `<div class="detail"><div class="one-liner"><span class="one-liner-label">研究の問い → 実生活に置き換えると</span><strong>${esc(researchOneLiner(r))}</strong></div>${renderConditions(r)}`);
+         return html.replace('<div class="detail">', `<div class="detail"><div class="one-liner"><span class="one-liner-label">研究の問いを実生活の言葉に置き換える</span>${renderPracticalTranslation(r)}</div>${renderConditions(r)}`);
        };
        function radarReason(r, axis) {
         const notes = arr(r.radar_notes);
