@@ -102,16 +102,8 @@
     .empty { border:1px dashed var(--line); padding:24px; color:var(--muted); text-align:center; }
     footer { border-top:1px solid var(--line); color:var(--muted); font-size:.76rem; padding:20px 0 40px; }
     .one-liner { border:1px solid rgba(101,216,212,.45); background:rgba(101,216,212,.08); padding:13px 15px; margin:12px 0 16px; }
-    .one-liner-label { display:block; color:var(--accent); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px; }
+    .one-liner-label { display:block; color:var(--accent); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; margin-bottom:4px; }
     .one-liner strong { display:block; font-weight:500; line-height:1.55; }
-    .one-liner-question { margin:0 0 12px; }
-    .one-liner-question p { margin:3px 0 0; font-weight:500; line-height:1.55; }
-    .one-liner-subhead { display:block; color:var(--accent); font-size:.74rem; font-weight:600; letter-spacing:.08em; margin:0 0 5px; }
-    .practical-translation { display:grid; gap:0; }
-    .practical-line { display:grid; grid-template-columns:minmax(210px,.35fr) 1fr; gap:10px; padding:7px 0; border-top:1px solid rgba(101,216,212,.18); }
-    .practical-line:first-child { border-top:0; padding-top:0; }
-    .practical-line > span { color:var(--accent); font-size:.78rem; font-weight:600; line-height:1.55; }
-    .practical-line p { margin:0; line-height:1.55; }
     .conditions-callout { border-left-color:var(--caution); }
     .conditions-callout strong { color:var(--caution); }
     @media (max-width:850px) { .hero,.detail-grid { grid-template-columns:1fr; } .controls-grid { grid-template-columns:1fr 1fr; } .controls-grid > :first-child { grid-column:1/-1; } .radar-wrap { grid-template-columns:1fr; } .radar-wrap > div:first-child { min-width:0; } }
@@ -156,7 +148,7 @@
   "schema_version": "0.1.0",
   "library_version": "0.1.0",
   "rubric_version": "0.1.0",
-  "generated_at": "2026-08-16T21:35:52.418165+00:00",
+  "generated_at": "2026-08-20T07:53:46.160127+00:00",
   "records": [
     {
       "schema_version": "0.1.0",
@@ -5027,6 +5019,530 @@
           "主要表値と方向はPDF Tables 1-3と整合し、未報告事項は実施されなかったことではなく本文で確認できないこととして扱った。"
         ]
       }
+    },
+    {
+      "schema_version": "0.1.0",
+      "paper_id": "shoja_2023_visual_block_human_walking_referent_control",
+      "assessment_status": "assessed",
+      "metadata": {
+        "title": "Reaction of human walking to transient block of vision: analysis in the context of indirect, referent control of motor actions",
+        "authors": [
+          "Otella Shoja",
+          "Farzad Towhidkhah",
+          "Hamidollah Hassanlouei",
+          "Mindy F. Levin",
+          "Alireza Bahramian",
+          "Sylvie Nadeau",
+          "Lei Zhang",
+          "Anatol G. Feldman"
+        ],
+        "year": 2023,
+        "journal": "Experimental Brain Research",
+        "doi": "10.1007/s00221-023-06593-x",
+        "source_path": "C:\\Users\\furuk\\Desktop\\F_lab\\Thesis\\Observational_Study\\Reference_thesis\\EP_theory_or_learning_一部内部モデル_重要論文\\CPG\\CPG.pdf",
+        "source_urls": [
+          "https://doi.org/10.1007/s00221-023-06593-x"
+        ]
+      },
+      "classification": {
+        "primary_family": "MECH",
+        "secondary_families": [],
+        "question_type": "mechanism",
+        "condition_tags": [
+          "健康成人",
+          "病態なし"
+        ],
+        "topic_tags": [
+          "歩行",
+          "視覚遮断",
+          "referent control",
+          "central pattern generator",
+          "phase resetting",
+          "多筋EMG"
+        ],
+        "method_tags": [
+          "surface EMG",
+          "3D motion analysis",
+          "ground reaction force",
+          "Hilbert transform",
+          "repeated-measures ANOVA",
+          "equivalence test"
+        ]
+      },
+      "question": {
+        "framework": "MECH",
+        "summary": "健常成人の歩行中に視覚を一過性に遮断したとき、四肢の歩行位相、多筋EMG最小化、referent body configurationの移動速度がどう変化し、二層referent-control/CPG機序の予測と整合するかを検討した。",
+        "population": "健常成人10名（女性6名、男性4名、31.5 ± 3.8歳）。",
+        "intervention_or_index": "トレッドミル歩行中の液晶眼鏡による視覚遮断と、歩行位相・3D運動・16筋surface EMG・床反力の計測。",
+        "comparator_or_reference": "視覚遮断前、遮断中、視覚回復後の歩行周期。",
+        "outcome": "四肢のphase resetting、歩行時空間特性、多筋EMG minima、EMG minima位置から推定したreferent-shift rateとトレッドミル速度の対応。",
+        "time": "pre/during/postの各条件で8 gait cyclesを解析。視覚遮断開始前に少なくとも10 cyclesを歩行し、postでは前半4 cyclesと後半4 cyclesを比較。"
+      },
+      "radar": {
+        "design": 4,
+        "internal_validity": 3,
+        "statistical_credibility": 2,
+        "effect_practical": 1,
+        "external_validity": 1,
+        "feasibility": 2,
+        "transparency_reproducibility": 2,
+        "safety_burden": 2
+      },
+      "radar_notes": [
+        {
+          "claim": "視覚遮断前後を同一参加者内で比較する機序実験として設計は問いに概ね適合するが、臨床効果やCPG因果を直接検証する設計ではない。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.4-6, Introduction, Materials and methods",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "同一参加者内のpre/during/post比較と複数計測は内的妥当性を支える一方、順序効果・解析単位・交絡調整の報告は不十分である。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.5-7, Experimental procedure, Data analysis, Statistical analysis",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "統計手法と主要p値は記載されるが、未補正多重比較、効果量・群全体CI不足、等価性検定の詳細不足が残る。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.6, Statistical analysis; pp.7-8, Results",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "phase shiftやEMG minimaの方向は示されるが、MCIDや臨床的閾値はなく、実用的意義は判断できない。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.7-8, Results; pp.10-12, Discussion and Conclusions",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "健常成人10名の実験室トレッドミル条件から患者・屋外歩行・リハビリテーションへの転移は制約される。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.5, Subjects and Experimental procedure",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "装置と計測条件は比較的具体的だが、臨床運用や同一条件の再現に必要な詳細、コスト、訓練、順序制御は不足する。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.5-6, Data recording and Data analysis",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "データ取得と解析の概要は追跡可能だが、コード公開、事前登録、完全なデータ公開、解析単位の詳細は本文で確認できない。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.5-6, Methods; p.12, Data availability",
+            "status": "not_reported"
+          }
+        },
+        {
+          "claim": "安全ハーネスは報告されるが、有害事象、監視基準、負担の定量化は記載されていない。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.5, Experimental procedure; p.12, Data availability and Conclusions",
+            "status": "not_reported"
+          }
+        }
+      ],
+      "radar_gap_analysis": [
+        {
+          "axis": "design",
+          "score": 4,
+          "gaps": [
+            "同一参加者内の視覚遮断前後比較は機序の短期反応には適合するが、CPGの因果的存在や臨床効果を検証する設計ではない。",
+            "患者、屋外歩行、長期学習・適応を対象としていない。"
+          ],
+          "what_would_raise_score": "機序仮説を識別できる対照摂動、事前規定された推定対象、患者または異なる歩行環境での検証を追加する。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.4-5, Hypotheses and Subjects; pp.10-12, Discussion",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "internal_validity",
+          "score": 3,
+          "gaps": [
+            "視覚遮断の順序は固定されており、順序効果・時間経過・慣れの切り分けは本文で確認できない。",
+            "8 cyclesを被験者内でどのように集約し、解析単位をどう扱ったかの詳細が不足する。",
+            "同一参加者内比較でも、視覚遮断以外の変化を完全には除けない。"
+          ],
+          "what_would_raise_score": "順序のランダム化または対照順序、解析単位と欠測処理の明示、事前規定したモデルと感度分析を提示する。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.5, Experimental procedure; pp.6-7, Data analysis and Statistical analysis",
+            "status": "not_reported"
+          }
+        },
+        {
+          "axis": "statistical_credibility",
+          "score": 2,
+          "gaps": [
+            "Fisher LSDとDunnの未補正多重比較により、複数アウトカム・複数比較で偶然の有意差が増える可能性がある。",
+            "主要結果の群全体効果量と信頼区間がほぼ示されず、精度を評価できない。",
+            "equivalenceの±50%基準は記載されるが、等価性マージンの臨床的根拠、CI包含条件、TOST相当の実装詳細は本文で確認できない。",
+            "非有意なlimb effectは等価性や同等性の証明ではない。"
+          ],
+          "what_would_raise_score": "多重性を制御し、主要推定値の効果量・95% CI・解析単位・事前規定、等価性マージンの根拠と検定詳細を提示する。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.6, Statistical analysis; p.7, Phase resetting results; p.8, Testing hypothesis 3",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "effect_practical",
+          "score": 1,
+          "gaps": [
+            "phase resetting、EMG minima減少・回復、rate equivalenceの方向は示されるが、効果量・CI・MCIDがない。",
+            "観察されたphase shiftやEMG minimaが歩行能力、転倒、リハビリ成績をどの程度変えるかは評価されていない。"
+          ],
+          "what_would_raise_score": "効果量とCI、最小意味差、歩行機能・安全性アウトカムとの関連、独立コホートでの再現を示す。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.7-8, Results; pp.10-12, Discussion and Conclusions",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "external_validity",
+          "score": 1,
+          "gaps": [
+            "対象は健康な若年から中年の成人10名で、病態、年齢幅、歩行障害を代表しない。",
+            "手すりなしトレッドミルと液晶眼鏡による視覚遮断は、日常・屋外・臨床歩行と異なる。",
+            "外部検証や施設間再現は報告されていない。"
+          ],
+          "what_would_raise_score": "高齢者・神経疾患・整形外科疾患、屋外歩行、複数施設での外部検証を追加する。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.5, Subjects and Experimental procedure; pp.11-12, Discussion",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "feasibility",
+          "score": 2,
+          "gaps": [
+            "Optotrak、16筋EMG、force plates、液晶眼鏡を必要とし、通常の臨床ワークフローには負担が大きい。",
+            "計測・解析の主要条件は報告されるが、実装コスト、訓練、所要時間、参加者遵守の詳細は記載なし。",
+            "研究上のEMG minima推定を臨床意思決定へ変換する手順がない。"
+          ],
+          "what_would_raise_score": "簡便な計測への縮約、標準化プロトコル、解析コード、所要時間・費用・再現性の報告、臨床判断との接続を示す。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.5-6, Data recording and Data analysis; p.12, Data availability",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "transparency_reproducibility",
+          "score": 2,
+          "gaps": [
+            "研究対象、装置、フィルタ、閾値、解析式は一定程度報告される。",
+            "個別データ、コード、事前登録、完全な解析計画、解析単位・欠測処理は本文で確認できない。",
+            "データは対応著者への合理的請求で入手可能とされ、公開データではない。"
+          ],
+          "what_would_raise_score": "事前登録、匿名化個別データ、コード、解析計画、完全な補足表と再現用データ辞書を公開する。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.5-8, Methods and Results; p.12, Data availability",
+            "status": "reported"
+          }
+        },
+        {
+          "axis": "safety_burden",
+          "score": 2,
+          "gaps": [
+            "安全ハーネスは使用されたが、有害事象の定義・発生数・監視基準・中止基準は記載なし。",
+            "視覚遮断歩行と手すりなしトレッドミルは実験上の転倒リスクを伴いうるが、臨床安全性の評価ではない。",
+            "時間、費用、装着負担、皮膚刺激などの負担は定量化されていない。"
+          ],
+          "what_would_raise_score": "有害事象と中止基準を分母付きで報告し、監視体制、負担、対象別の禁忌・適応範囲を明示する。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.5, Experimental procedure; p.12, Conclusions and Data availability",
+            "status": "not_reported"
+          }
+        }
+      ],
+      "tier": {
+        "label": "C3",
+        "letter": "C",
+        "number": 3,
+        "rationale": [
+          "primary_family=MECHの機序研究であり、ルート上限はC。",
+          "credibility axesの平均は(4+3+2+2)/4=2.75で、決定論的基準ではC3。",
+          "視覚遮断に伴うphase resettingとEMG変化は機序仮説を支持するが、CPGの因果的実証、臨床的有用性、患者への外挿を示す研究ではない。"
+        ],
+        "model_proposed_label": "C3",
+        "caps_applied": [],
+        "quality_mean": 2.75
+      },
+      "outcomes": [
+        {
+          "name": "四肢のlong-lasting phase resetting",
+          "timepoint": "視覚遮断中と視覚回復後、post前半4 cyclesと後半4 cycles",
+          "direction": "4肢すべてで視覚遮断後も位相シフトが維持され、少なくとも3 cycles続くと解釈された。",
+          "effect": {
+            "sample_size": 10,
+            "statistics": "右脚F(2,18)=10.41,p=.001; 左脚F(2,18)=10.16,p=.001; 右腕F(2,18)=8.39,p=.003; 左腕F(2,18)=13.51,p=.000。pre-vs-during p<.001、pre-vs-post p<.05、during-vs-post p>.05。post前半/後半差 p>.05。",
+            "confidence_interval": "記載なし",
+            "effect_size": "η2はlimb effectについてのみp8に.157と報告。phase resetting各比較の効果量は記載なし。"
+          },
+          "clinical_or_practical_meaning": "視覚遮断が歩行の時間位相を短期的に変更する機序所見としては整合的だが、CPGが原因であることや転倒予防・リハビリ効果を証明しない。",
+          "verdict": "条件付き採用（機序仮説の支持としてのみ）",
+          "harms_or_burden": "安全ハーネスは報告されるが、有害事象数・監視基準は記載なし。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.7, Results/Hypothesis 1 and Fig.3; p.8, limb effect",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "歩行時空間特性の回復",
+          "timepoint": "pre/during/post; post後3-4 cycles",
+          "direction": "多くの変数は3-4 cyclesで回復し、cycle duration差は有意でなかった。stance timeとlengthの回復は遅れた。",
+          "effect": {
+            "sample_size": 10,
+            "statistics": "cycle durationのpre/during/post差 p>.05。その他の変数の個別効果量・CIは記載なし。",
+            "confidence_interval": "記載なし",
+            "MCID": "記載なし"
+          },
+          "clinical_or_practical_meaning": "視覚遮断後の歩行パラメータが時間経過で戻るという短期応答を示すが、歩行能力の改善や安全性の意味は判断できない。",
+          "verdict": "判断不能",
+          "harms_or_burden": "視覚遮断歩行の負担・有害事象は定量化されていない。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.8, Results, spatio-temporal gait characteristics and Fig.4",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "多筋EMG minimaの数と位置",
+          "timepoint": "pre/during/postの8 gait cycles",
+          "direction": "EMG minima数は視覚遮断中に減少し、postでpre水準へ回復した。gait cycle内の3 binの分布も条件で異なった。",
+          "effect": {
+            "sample_size": 10,
+            "statistics": "総数χ2=15.8,p=.000。duringはpreよりp<.001、postよりp=.003少なく、pre-vs-post p>.05。Fig.5-6にboxplots。",
+            "confidence_interval": "記載なし",
+            "threshold": "各筋をtrial内最大burstで正規化し、maxEMGが最大振幅の15%以下かつ持続>50msをminimumと定義。"
+          },
+          "clinical_or_practical_meaning": "多筋活動の一時的な最小化パターンはreferent-control解釈と整合するが、測定指標の外部妥当性や臨床的閾値は検証されていない。",
+          "verdict": "条件付き採用（EMGパターンの記述としてのみ）",
+          "harms_or_burden": "16筋surface EMGの装着負担、皮膚刺激、所要時間は定量化されていない。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.6, Testing hypothesis 2; p.8, Presence and location of EMG minima; Figs.4-6",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "referent-shift rateと歩行速度の対応",
+          "timepoint": "pre/during/post",
+          "direction": "EMG minima位置の移動速度とトレッドミル速度は、著者定義のequivalence testで各条件に類似すると判定された。",
+          "effect": {
+            "sample_size": 10,
+            "statistics": "paired equivalence test: pre p=.005、during p=.023、post p=.003。",
+            "equivalence_bounds": "2値の最大95% CIの大きさの±50%以内という定義。CI自体、マージンの事前根拠、検定実装詳細は記載なし。",
+            "confidence_interval": "記載なし"
+          },
+          "clinical_or_practical_meaning": "referent-controlモデルの予測と整合する分析だが、等価性の妥当性とCPG因果、臨床的意義は判断できない。",
+          "verdict": "判断不能",
+          "harms_or_burden": "臨床適用を想定した負担・安全性評価ではない。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.6, Testing hypothesis 3 and Statistical analysis; p.8, Testing hypothesis 3",
+            "status": "reported"
+          }
+        },
+        {
+          "name": "二層referent-control/CPG解釈",
+          "timepoint": "研究全体の解釈",
+          "direction": "著者は観察されたphase resetting、EMG minima、速度対応が、referent body configurationの移動と二次的CPGリズムという二層構造と整合すると結論づけた。",
+          "effect": null,
+          "clinical_or_practical_meaning": "これは機序仮説への整合性であり、CPGの因果的存在、神経回路の同定、治療効果を直接実証するものではない。",
+          "verdict": "判断不能",
+          "harms_or_burden": "臨床介入・処方ではない。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.1-4, Abstract and Introduction; pp.10-12, Discussion and Conclusions",
+            "status": "inferred"
+          }
+        }
+      ],
+      "plain_language_explanations": [
+        {
+          "term": "phase resetting",
+          "category": "歩行リズム",
+          "plain_language": "歩行の周期そのものが続いていても、外からの刺激でリズムの開始位置が前後にずれる現象。",
+          "why_it_matters": "この研究の主要アウトカムだが、ずれが長く続くことはCPGの因果的証明ではない。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.4, Vision in the context of referent control; p.7, Results/Hypothesis 1",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "Hilbert transformation",
+          "category": "信号解析",
+          "plain_language": "波形から瞬間的な位相を推定する数学的処理。歩行の波のどの位置にいるかを数値化する。",
+          "why_it_matters": "腕と脚の振動の位相差を計算するために使われたが、推定値の外部妥当性は別途必要である。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.6, Testing hypothesis 1",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "maxEMG and EMG minima",
+          "category": "表面筋電図",
+          "plain_language": "8筋のうちその時点で最も強く活動している筋の値をまとめた曲線と、その曲線が低くなる時間帯。",
+          "why_it_matters": "多筋活動の最小化を記述する指標だが、歩行能力や筋力の臨床的改善を直接表す指標ではない。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.6, Testing hypothesis 2; Figs.4-6",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "equivalence test",
+          "category": "統計解析",
+          "plain_language": "2つの値が違わないことではなく、あらかじめ決めた許容範囲内に十分入ることを調べる検定。",
+          "why_it_matters": "この研究では速度とreferent-shift rateの類似性を調べたが、許容範囲の根拠と詳細な実装が不足する。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.6, Statistical analysis; p.8, Testing hypothesis 3",
+            "status": "reported"
+          }
+        },
+        {
+          "term": "central pattern generator (CPG)",
+          "category": "神経機序の仮説",
+          "plain_language": "歩行のような繰り返し運動のリズムを生む神経回路の概念。",
+          "why_it_matters": "本論文はCPGの直接活動を記録したのではなく、行動・EMG所見をCPGを含むモデルと整合的に解釈している。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.1-4, Abstract and Introduction; pp.10-12, Discussion",
+            "status": "inferred"
+          }
+        }
+      ],
+      "practical_summary": {
+        "research_question": "視覚を一過性に遮断すると、健常成人歩行の四肢位相、多筋EMG minima、referent-shift rateはどう変わるか。",
+        "who": "健常成人10名。患者や歩行障害者は含まれない。",
+        "what": "手すりなしトレッドミル歩行中に液晶眼鏡で視覚を遮断し、3D運動、床反力、両側16筋surface EMGを計測。",
+        "dose": "歩行速度1.09 ± 0.18 m/s。preで少なくとも10 cycles歩行後、視覚遮断中と回復後を含む各条件8 cyclesを解析。遮断時間の正確な長さは記載なし。",
+        "result": "四肢のphase resetting、視覚遮断中のEMG minima減少と回復、速度とのrate equivalenceが報告されたが、効果量・CIは限定的で、CPG因果や臨床効果は証明されない。",
+        "use": "実生活では治療や転倒予防にそのまま使わず、referent control/CPG仮説を考えるための機序研究として参照する。患者・屋外歩行・臨床介入への適用には別の検証が必要。",
+        "locator": {
+          "source": "CPG.pdf",
+          "location": "pp.1,5-8, Abstract, Methods and Results; pp.10-12, Discussion and Conclusions",
+          "status": "reported"
+        }
+      },
+      "implementation": {
+        "who": "健常成人10名。",
+        "what": "液晶眼鏡による視覚遮断を含むトレッドミル歩行実験。",
+        "how": "手すりなしの電動トレッドミルで歩行し、安全ハーネスを着用。Optotrak 3D kinematics、16筋surface EMG、force platesを同期計測し、phaseとEMG minimaを解析。",
+        "duration": "視覚遮断前に少なくとも10 cycles、pre/during/post各8 cyclesを解析。視覚遮断の正確な持続時間は記載なし。",
+        "dose": "歩行速度1.09 ± 0.18 m/s。視覚遮断は右脚toe-off時に開始し、歩行継続中に回復。",
+        "setting": "研究室内の手すりなしトレッドミル。",
+        "equipment": "液晶眼鏡、Bertec treadmill、Optotrak Certus、Noraxon 16-channel sEMG、force plates、active markers。",
+        "supervision": "安全ハーネスを使用し、トレッドミルの進行方向に歩くよう指示。監視者の配置や中止基準は記載なし。",
+        "adherence_and_fidelity": "各条件8 cyclesを選択して解析したことは報告されるが、欠測、除外、遵守率、試行間変動の詳細は記載なし。",
+        "adaptation_boundary": "研究プロトコルの記述であり、視覚遮断歩行やEMG minima解析を患者の訓練・診断・転倒予防へ適応する処方ではない。"
+      },
+      "safety": {
+        "adverse_events": "有害事象の定義、発生数、分母、重症度は記載なし。",
+        "contraindications": "視覚遮断歩行や手すりなしトレッドミルの禁忌・除外基準は、一般的な病歴による健康確認以外は記載なし。",
+        "monitoring": "安全ハーネスは使用されたが、監視手順、中止基準、救助手順は記載なし。",
+        "burden_cost_time": "トレッドミル歩行、液晶眼鏡、16筋EMG、3D計測、ハーネスの装着負担がある。費用・所要時間・皮膚負担は記載なし。",
+        "unknowns": [
+          "視覚遮断中の不快感・めまい・転倒未遂の発生状況",
+          "患者、高齢者、前庭・視覚障害者への安全性",
+          "同一プロトコルを臨床環境で実施した場合の監視要件"
+        ]
+      },
+      "provenance": [
+        {
+          "claim": "タイトル、著者、掲載誌、年、巻頁、DOIはPDFの冒頭とメタデータで確認した。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.1 and PDF metadata",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "健常成人10名、実験手順、視覚遮断、計測機器は本文に記載される。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.5, Subjects, Experimental procedure, Data recording",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "phase、EMG minima、統計解析の定義と主要なp値は本文に記載される。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.6-8, Data analysis, Statistical analysis and Results",
+            "status": "reported"
+          }
+        },
+        {
+          "claim": "CPG/二層referent-controlの位置づけは著者の機序解釈であり、直接測定による因果証明ではない。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "pp.10-12, Discussion and Conclusions",
+            "status": "inferred"
+          }
+        },
+        {
+          "claim": "原データは対応著者への合理的請求で入手可能と記載される。",
+          "locator": {
+            "source": "CPG.pdf",
+            "location": "p.12, Data availability",
+            "status": "reported"
+          }
+        }
+      ],
+      "q_and_a": [],
+      "audit": {
+        "hard_flags": [
+          "MECHルート上限によりA/Bには上がらない",
+          "n=10の健常成人のみ",
+          "未補正Fisher LSD/Dunnによる多重性リスク",
+          "群全体の効果量・CI・MCIDが限定的または未報告",
+          "患者・臨床アウトカム・外部検証なし",
+          "解析単位、順序効果対策、事前登録、コード公開、有害事象の報告範囲が不明"
+        ],
+        "uncertainties": [
+          "8 cyclesを被験者内でどのように集約したか、独立観測として扱っていないかは本文で判断不能。",
+          "視覚遮断の順序は記載されるが、順序のランダム化や慣れへの対策は本文で確認できない。",
+          "equivalence testの±50% CI基準は記載されるが、臨床的根拠、CI包含条件、TOST相当の詳細は判断不能。",
+          "CPG二層機序は観察所見と整合する著者解釈であり、直接神経活動や因果操作の証拠ではない。",
+          "有害事象、登録、コード公開、完全な個別データ公開は本文で確認できない。"
+        ],
+        "verification": {
+          "identity": "PDF p.1、PDF metadata、DOIのタイトル・著者・掲載情報が一致。",
+          "duplicate_preflight": "normalized titleで既存libraryに重複なし。",
+          "external_status": "外部の出版情報でDOIと掲載情報の一致を確認。訂正・撤回の最終状態は出版社レコードを完全取得できず、未確認として扱う。",
+          "source_review": "13ページをテキスト抽出し、方法・結果・図（pp.5-10）を視覚確認。"
+        },
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "max",
+        "rubric_version": "0.1.0",
+        "generated_at": "2026-08-20T18:30:00+09:00"
+      }
     }
   ]
 }
@@ -5085,7 +5601,7 @@
       function renderOutcomes(r) {
         const outcomes = arr(r.outcomes);
         if (!outcomes.length) return `<p class="muted">アウトカム別の結果は未登録です。校正後に主要・副次アウトカムを分けて記録します。</p>`;
-        return `<div class="table-wrap"><table><thead><tr><th>アウトカム</th><th>方向／効果量</th><th>生活・治療への意味（やさしく）</th><th>ロケータ</th></tr></thead><tbody>${outcomes.map(o=>`<tr><td>${esc(o.name || o.outcome || '—')}</td><td>${esc(o.direction || '—')}<br>${esc(o.effect_size || o.estimate || '—')}</td><td>${esc(o.plain_language_meaning || o.practical_meaning || o.verdict || '—')}</td><td>${esc(locator(o.locator))}</td></tr>`).join('')}</tbody></table></div>`;
+        return `<div class="table-wrap"><table><thead><tr><th>アウトカム</th><th>方向／効果量</th><th>臨床的意味</th><th>ロケータ</th></tr></thead><tbody>${outcomes.map(o=>`<tr><td>${esc(o.name || o.outcome || '—')}</td><td>${esc(o.direction || '—')}<br>${esc(o.effect_size || o.estimate || '—')}</td><td>${esc(o.practical_meaning || o.verdict || '—')}</td><td>${esc(locator(o.locator))}</td></tr>`).join('')}</tbody></table></div>`;
       }
       function renderRecord(r) {
         const meta=r.metadata||{}, cls=r.classification||{}, q=r.question||{}, tier=r.tier||{};
@@ -5154,29 +5670,25 @@
          return Object.entries(effect).map(([key, value]) => `${effectKey(key)}: ${formatEffectValue(value)}`).join(' · ');
        }
        function outcomesSummary(r) {
-         return arr(r.outcomes).slice(0, 2).map(o => [o?.name, o?.direction, o?.plain_language_meaning || o?.clinical_or_practical_meaning || o?.verdict].filter(Boolean).join('：')).filter(Boolean).join('；');
+         return arr(r.outcomes).slice(0, 2).map(o => [o?.name, o?.direction, o?.clinical_or_practical_meaning || o?.verdict].filter(Boolean).join('：')).filter(Boolean).join('；');
        }
-       function practicalTranslation(r) {
-         const q = r.question || {}, practical = r.practical_summary || {}, impl = r.implementation || {};
-         const plain = practical.life_plain || {};
-         return {
-           question: practical.research_question || q.summary || '研究の問いは未登録',
-           who: plain.who || practical.who || impl.who || q.population || '研究対象者',
-           what: plain.what || practical.what || impl.what || q.intervention_or_index || '研究で調べた方法',
-           compared_with: plain.compared_with || q.comparator_or_reference || '比較対象は未記載',
-           outcome: plain.outcome || practical.result || outcomesSummary(r) || '主な結果は未登録'
-         };
-       }
-       function renderPracticalTranslation(r) {
-         const practical = practicalTranslation(r);
-         const rows = [
-           ['誰に', practical.who],
-           ['何をしたら', practical.what],
-           ['何と比べて', practical.compared_with],
-           ['どんな指標がどんなふうになるか', practical.outcome]
-         ];
-         const rowHtml = rows.map(([label, value]) => `<div class="practical-line"><span>${esc(label)}</span><p>${esc(value)}</p></div>`).join('');
-         return `<div class="one-liner-question"><span class="one-liner-subhead">研究の問い</span><p>${esc(practical.question)}</p></div><span class="one-liner-subhead">実生活に置き換えると</span><div class="practical-translation">${rowHtml}</div>`;
+       function researchOneLiner(r) {
+         const practical = r.practical_summary || {};
+         if (practical.research_question && practical.who && practical.what && practical.dose && practical.result && practical.use) {
+           return `研究の問い：${practical.research_question}。実生活に置き換えると、誰に：${practical.who}／何を：${practical.what}／どれだけ：${practical.dose} → 結果：${practical.result}。実生活では${practical.use}。`;
+         }
+         const q = r.question || {}, impl = r.implementation || {}, cls = r.classification || {};
+         const who = impl.who || q.population || '研究対象者';
+         const outcomeNames = arr(r.outcomes).map(o => o && o.name).filter(Boolean).slice(0, 2);
+         const goal = q.outcome || outcomeNames.join('・') || '主要アウトカム';
+         const what = impl.what || q.intervention_or_index || '研究手法';
+         const dose = [impl.dose, impl.duration].filter(Boolean).join('・') || '研究記載の条件';
+         const result = outcomesSummary(r);
+         const use = impl.adaptation_boundary || '研究対象・設定の範囲で参考にする';
+         const family = cls.primary_family || '';
+         const purpose = family === 'INT' ? '改善するために' : family === 'ENG' || family === 'MEAS' ? '測定・予測できるか確かめるために' : family === 'CON' || family === 'MECH' ? '仕組みを明らかにするために' : '関連や効果を明らかにするために';
+         const verb = family === 'INT' ? '行う' : family === 'SYN' ? '比較・統合する' : family === 'ENG' || family === 'MEAS' ? '検証する' : '評価する';
+         return `研究の問い：${q.summary || `${goal}を${purpose}検証する`}。実生活に置き換えると、誰に：${who}／何を：${what}／どれだけ：${dose} → 結果：${result || `${goal}を${purpose}評価` }。実生活では${use}。`;
        }
        function renderConditions(r) {
          const impl = r.implementation || {}, outcomes = arr(r.outcomes);
@@ -5191,7 +5703,7 @@
        renderOutcomes = function(r) {
          const outcomes = arr(r.outcomes);
          if (!outcomes.length) return baseRenderOutcomes(r);
-         return `<div class="table-wrap"><table><thead><tr><th>アウトカム</th><th>方向・効果量</th><th>生活・治療への意味（やさしく）</th><th>判定</th><th>ロケータ</th></tr></thead><tbody>${outcomes.map(o=>`<tr><td>${esc(o.name || o.outcome || '—')}<br><span class="muted">${esc(o.timepoint || '')}</span></td><td><span class="effect-values">${esc(o.direction || '方向未報告')}</span><br><span class="effect-values">${esc(effectText(o.effect_size ?? o.estimate ?? o.effect))}</span></td><td>${esc(o.plain_language_meaning || o.clinical_or_practical_meaning || o.practical_meaning || '—')}</td><td>${esc(o.verdict || '—')}<br><span class="muted">${esc(o.harms_or_burden || '')}</span></td><td>${esc(locator(o.locator))}</td></tr>`).join('')}</tbody></table></div>`;
+         return `<div class="table-wrap"><table><thead><tr><th>アウトカム</th><th>方向・効果量</th><th>臨床的意味</th><th>判定</th><th>ロケータ</th></tr></thead><tbody>${outcomes.map(o=>`<tr><td>${esc(o.name || o.outcome || '—')}<br><span class="muted">${esc(o.timepoint || '')}</span></td><td><span class="effect-values">${esc(o.direction || '方向未報告')}</span><br><span class="effect-values">${esc(effectText(o.effect_size ?? o.estimate ?? o.effect))}</span></td><td>${esc(o.clinical_or_practical_meaning || o.practical_meaning || '—')}</td><td>${esc(o.verdict || '—')}<br><span class="muted">${esc(o.harms_or_burden || '')}</span></td><td>${esc(locator(o.locator))}</td></tr>`).join('')}</tbody></table></div>`;
        };
        function renderPlainLanguage(r) {
          const items = arr(r.plain_language_explanations);
@@ -5200,7 +5712,7 @@
        }
        renderRecord = function(r) {
          const html = baseRenderRecord(r);
-         return html.replace('<div class="detail">', `<div class="detail"><div class="one-liner"><span class="one-liner-label">研究の問いを実生活の言葉に置き換える</span>${renderPracticalTranslation(r)}</div>${renderConditions(r)}`);
+         return html.replace('<div class="detail">', `<div class="detail"><div class="one-liner"><span class="one-liner-label">研究の問い → 実生活に置き換えると</span><strong>${esc(researchOneLiner(r))}</strong></div>${renderConditions(r)}`);
        };
        function radarReason(r, axis) {
         const notes = arr(r.radar_notes);
@@ -5221,7 +5733,7 @@
       function renderOutcomes(r) {
         const outcomes = arr(r.outcomes);
         if (!outcomes.length) return `<p class="muted">アウトカム別の結果は未登録です。校正後に主要・副次アウトカムを分けて記録します。</p>`;
-        return `<p class="muted outcome-note">「差があった」ことと「治療で良くなる」ことは同じではありません。ここでは、研究結果が日常生活や治療判断にどう関係するかを、一般向けに短く言い換えています。</p><div class="table-wrap"><table><thead><tr><th>アウトカム</th><th>方向・効果量</th><th>生活・治療への意味（やさしく）</th><th>実務上の判定</th><th>ロケータ</th></tr></thead><tbody>${outcomes.map(o=>`<tr><td>${esc(o.name || o.outcome || '—')}<br><span class="muted">${esc(o.timepoint || '')}</span></td><td>${esc(o.direction || '—')}<br><pre class="effect-json">${esc(effectText(o.effect_size ?? o.estimate ?? o.effect))}</pre></td><td>${esc(o.plain_language_meaning || o.clinical_or_practical_meaning || o.practical_meaning || '—')}</td><td>${esc(o.verdict || '—')}<br><span class="muted">${esc(o.harms_or_burden || '')}</span></td><td>${esc(locator(o.locator))}</td></tr>`).join('')}</tbody></table></div>`;
+        return `<div class="table-wrap"><table><thead><tr><th>アウトカム</th><th>方向・効果量</th><th>臨床的意味</th><th>実務上の判定</th><th>ロケータ</th></tr></thead><tbody>${outcomes.map(o=>`<tr><td>${esc(o.name || o.outcome || '—')}<br><span class="muted">${esc(o.timepoint || '')}</span></td><td>${esc(o.direction || '—')}<br><pre class="effect-json">${esc(effectText(o.effect_size ?? o.estimate ?? o.effect))}</pre></td><td>${esc(o.clinical_or_practical_meaning || o.practical_meaning || '—')}</td><td>${esc(o.verdict || '—')}<br><span class="muted">${esc(o.harms_or_burden || '')}</span></td><td>${esc(locator(o.locator))}</td></tr>`).join('')}</tbody></table></div>`;
       }
       function matches(r, query, condition, family, status) {
         const blob=JSON.stringify(r).toLowerCase();
